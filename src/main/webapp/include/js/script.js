@@ -2,15 +2,12 @@ let outputView = document.getElementById("chatOutput");
 let inputField = document.getElementById("chatInput");
 let submitButton = document.getElementById("submit");
 
-let getNickname = () => {
-    let nickname = window.location.href.split('?')[1];
-    nickname = nickname.split('=')[1];
-    return nickname;
-}
+let nickname = window.location.href.split('?')[1];
+nickname = nickname.split('=')[1];
 
 let sendMsg = () => {
     outputView.value += '\n';
-    outputView.value += '[' + new Date().toLocaleTimeString() + `] ${getNickname()}: ` + inputField.value;
+    outputView.value += '[' + new Date().toLocaleTimeString() + `] ${nickname}: ` + inputField.value;
     inputField.value = '';
 }
 
