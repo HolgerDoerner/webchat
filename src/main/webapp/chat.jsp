@@ -22,7 +22,6 @@
                             <legend>Userlist</legend>
                             <p>
                                 <i><%= nickname %></i><br>
-                                <i>Guest</i><br>
                             </p>
                         </fieldset>
                     </td>
