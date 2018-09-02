@@ -1,6 +1,6 @@
-let output = document.getElementById("chatOutput");
-let input = document.getElementById("chatInput");
-let submit = document.getElementById("submit");
+let outputView = document.getElementById("chatOutput");
+let inputField = document.getElementById("chatInput");
+let submitButton = document.getElementById("submit");
 
 let getNickname = () => {
     let nickname = window.location.href.split('?')[1];
@@ -9,13 +9,13 @@ let getNickname = () => {
 }
 
 let sendMsg = () => {
-    output.value += '\n';
-    output.value += '[' + new Date().toLocaleTimeString() + `] ${getNickname()}: ` + input.value;
-    input.value = '';
+    outputView.value += '\n';
+    outputView.value += '[' + new Date().toLocaleTimeString() + `] ${getNickname()}: ` + inputField.value;
+    inputField.value = '';
 }
 
-input.onkeypress = e => {
+inputField.onkeypress = e => {
     if (e.keyCode == 10) sendMsg();
 }
 
-submit.onclick = sendMsg;
+submitButton.onclick = sendMsg;
