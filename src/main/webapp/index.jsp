@@ -16,7 +16,7 @@
             <div style="text-align: left">
             <fieldset style="width: fit-content;margin: auto">
                 <legend>Choose nickname</legend>
-                <form action="/newsession" method="get">
+                <form action="/newsession" method="post">
                     <input type="text" name="nickname" required="required" autofocus autocomplete="nickname">
                     <input type="submit" id="submit">
                 </form>
