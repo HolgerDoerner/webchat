@@ -5,7 +5,6 @@ let submit = document.getElementById("submit");
 let getNickname = () => {
     let nickname = window.location.href.split('?')[1];
     nickname = nickname.split('=')[1];
-    nickname = nickname.replace(' ', '_');
     return nickname;
 }
 
