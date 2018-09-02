@@ -21,6 +21,8 @@
     height:100%;
     padding:0px;
     margin:0px;
+    resize: none;
+    overflow: auto;
 }
 
 .chatInput-fieldset {
@@ -30,6 +32,8 @@
 .chatInput-textarea {
     width:100%;
     margin:0px;
-    padding:0px;
+    padding:5px;
+    resize: none;
+    overflow: auto;
 }
 

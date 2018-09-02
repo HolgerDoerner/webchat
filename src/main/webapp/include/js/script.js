@@ -9,6 +9,7 @@ let sendMsg = () => {
     outputView.value += '\n';
     outputView.value += '[' + new Date().toLocaleTimeString() + `] ${nickname}: ` + inputField.value;
     inputField.value = '';
+    outputView.scrollTop = outputView.scrollHeight;
 }
 
 inputField.onkeypress = e => {
