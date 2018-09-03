@@ -4,14 +4,16 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
-
 import javax.enterprise.context.ApplicationScoped;
+import javax.websocket.EncodeException;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
+
+import de.demoapps.webchat.classes.Message;
 
 @ApplicationScoped
 @ServerEndpoint("/chat")
@@ -32,11 +34,9 @@ public class ChatEndpoint {
         chatEndpoints.add(this);
         users.put(session.getId(), nickname);
 
-        for (Session s : session.getOpenSessions()) {
-            if (s.isOpen()) {
-                s.getBasicRemote().sendText(">>> " + nickname + " has joined the chat!");
-            }
-        }
+        Message message = new Message();
+        message.setNickname(nickname);
+        message.setContent(">>> " + nickname + " has joined the chat!");
     }
     
     @OnMessage
@@ -59,5 +59,16 @@ public class ChatEndpoint {
     public void onError(Session session, Throwable throwable) {
         
         System.out.println("Error in Client " + session.getId() + ": " + throwable.getMessage());
+    }
+
+    public void broadcast(Message message) throws IOException, EncodeException {
+
+        chatEndpoints.forEach(endpoint -> {
+            try {
+                endpoint.session.getBasicRemote().sendObject(message);
+            } catch (IOException | EncodeException e) {
+                // todo
+            }
+        });
     }
 }
