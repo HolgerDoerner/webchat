@@ -5,7 +5,6 @@ let submitButton = document.getElementById("submit");
 let decodedCookie = decodeURIComponent(document.cookie);
 let cookie = decodedCookie.split(';');
 let nickname = cookie[0].split('=')[1];
-let sid = cookie[1].split('=')[1];
 
 let sendMsg = () => {
     outputView.value += '\n';

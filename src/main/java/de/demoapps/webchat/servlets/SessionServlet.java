@@ -25,10 +25,8 @@ public class SessionServlet extends HttpServlet {
         session.setAttribute("user", user);
 
         Cookie nickname = new Cookie("nickname", user.getNickname());
-        Cookie sid = new Cookie("sid", user.getSid());
 
         response.addCookie(nickname);
-        response.addCookie(sid);
 
         response.sendRedirect("chat.jsp");
     }
