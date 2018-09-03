@@ -2,8 +2,10 @@ let outputView = document.getElementById("chatOutput");
 let inputField = document.getElementById("chatInput");
 let submitButton = document.getElementById("submit");
 
-let nickname = window.location.href.split('?')[1];
-nickname = nickname.split('=')[1];
+let decodedCookie = decodeURIComponent(document.cookie);
+let cookie = decodedCookie.split(';');
+let nickname = cookie[0].split('=')[1];
+let sid = cookie[1].split('=')[1];
 
 let sendMsg = () => {
     outputView.value += '\n';

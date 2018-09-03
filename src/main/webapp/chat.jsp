@@ -1,8 +1,6 @@
 <%@page language="java" contentType="UTF-8" %>
 
-<%
-    String nickname = request.getParameter("nickname").replace(" ", "_");
-%>
+<jsp:useBean id="user" scope="session" class="de.demoapps.webchat.classes.User" />
 
 <!DOCTYPE html>
 <html>
@@ -10,7 +8,7 @@
         <meta charset="UTF-8" lang="en">
         <link rel="stylesheet" href="include/css/style.css">
         <title>
-            GFN-Students WebChat
+            Simple WebChat
         </title>
     </head>
     <body>
@@ -21,7 +19,12 @@
                         <fieldset class="userList-fieldset">
                             <legend>Userlist</legend>
                             <p>
-                                <i><%= nickname %></i><br>
+                                <i><%= user.getNickname() %></i><br>
+                                <i>...</i><br>
+                                <i>...</i><br>
+                                <i>...</i><br>
+                                <i>...</i><br>
+                                <i>...</i><br>
                             </p>
                         </fieldset>
                     </td>

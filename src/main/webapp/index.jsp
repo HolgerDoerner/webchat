@@ -5,18 +5,17 @@
         <meta charset="UTF-8" lang="en">
         <link rel="stylesheet" href="include/css/style.css">
         <title>
-            GFN-Students WebChat
+            Simple WebChat
         </title>
     </head>
     <body>
         <div style="text-align: center">
-            <h1>GFN-Students WebChat</h1>
-            <h2>... chat like in the '90s</h2>
+            <h1>Simple WebChat</h1>
             <br>
             <div style="text-align: left">
             <fieldset style="width: fit-content;margin: auto">
                 <legend>Choose nickname</legend>
-                <form action="/newsession" method="post">
+                <form action="sessionmanager" method="post">
                     <input type="text" name="nickname" required="required" autofocus autocomplete="nickname">
                     <input type="submit" id="submit">
                 </form>

@@ -17,10 +17,13 @@
 }
 
 .chatOutput-textarea {
-    width:100%;
-    height:100%;
-    padding:0px;
-    margin:0px;
+    width: 100%;
+    height: 100%;
+    padding: 0px;
+    margin: 0px;
+    resize: none;
+    overflow: auto;
+    border-width: 0px;
 }
 
 .chatInput-fieldset {
@@ -28,8 +31,10 @@
 }
 
 .chatInput-textarea {
-    width:100%;
-    margin:0px;
-    padding:0px;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    resize: none;
+    overflow: auto;
 }
 
