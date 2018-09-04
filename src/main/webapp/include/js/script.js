@@ -1,20 +1,34 @@
-let outputView = document.getElementById("chatOutput");
-let inputField = document.getElementById("chatInput");
-let submitButton = document.getElementById("submit");
+let chatOutput = null;
+let chatInput = null;
+
+window.onload = () => {
+    chatOutput = document.getElementById("chatOutput");
+    chatInput = document.getElementById("chatInput");
+}
 
 let decodedCookie = decodeURIComponent(document.cookie);
 let cookie = decodedCookie.split(';');
 let nickname = cookie[0].split('=')[1];
 
+let socket = new WebSocket(`ws://10.100.5.15/webchat/chat/${nickname}`);
+
+socket.onmessage = event => {
+    let message = JSON.parse(event.data);
+    chatOutput.value += '\n' + '[' + (new Date().toLocaleTimeString()) + '] ' + message.from + ': ' + message.content;
+}
+
 let sendMsg = () => {
-    outputView.value += '\n';
-    outputView.value += '[' + new Date().toLocaleTimeString() + `] ${nickname}: ` + inputField.value;
-    inputField.value = '';
-    outputView.scrollTop = outputView.scrollHeight;
-}
+    let message = {
+        from: '',
+        to: '',
+        content: ''
+    }
 
-inputField.onkeypress = e => {
-    if (e.keyCode == 10) sendMsg();
-}
+    message.from = nickname;
+    message.content = chatInput.value;
 
-submitButton.onclick = sendMsg;
+    socket.send(JSON.stringify(message));
+
+    chatInput.value = '';
+    chatInput.focus();
+}

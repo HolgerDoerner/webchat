@@ -5,11 +5,12 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <title>
+                Simple WebChat
+        </title>
         <meta charset="UTF-8" lang="en">
         <link rel="stylesheet" href="include/css/style.css">
-        <title>
-            Simple WebChat
-        </title>
+        <script src="include/js/script.js"></script>
     </head>
     <body>
         <table class="mainTable">
@@ -34,7 +35,7 @@
                             <textarea id="chatOutput"
                                         class="chatOutput-textarea"
                                         rows="30"
-                                        readonly="readonly">a little example text to see how this stuff works ...</textarea>
+                                        readonly="readonly"></textarea>
                         </fieldset>
                     </td>
                 </tr>
@@ -48,15 +49,12 @@
                                         autofocus></textarea>
                             <br>
                             <div style="text-align: right">
-                                <small>('STRG + ENTER' sends message)</small>
-                                <input type="submit" id="submit">
+                                <input type="submit" id="submit" onclick=sendMsg()>
                             </div>
                         </fieldset>
                     </td>
                 </tr>
             </tbody>
         </table>
-        
-        <script src="include/js/script.js"></script>
     </body>
 </html>
