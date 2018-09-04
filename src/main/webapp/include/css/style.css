@@ -10,10 +10,22 @@
 .userList-fieldset {
     height: max-content;
     width: 200px;
+    border-radius: 10px;
+}
+
+.userlistOutput-textarea {
+    width: 100%;
+    height: 100px;
+    padding: 0px;
+    margin: 0px;
+    resize: none;
+    overflow: auto;
+    border-width: 0px;
 }
 
 .chatOutput-fieldset {
     width: 800px;
+    border-radius: 10px;
 }
 
 .chatOutput-textarea {
@@ -28,6 +40,7 @@
 
 .chatInput-fieldset {
     width: 800px;
+    border-radius: 10px;
 }
 
 .chatInput-textarea {

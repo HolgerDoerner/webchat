@@ -19,14 +19,7 @@
                     <td class="userList-td" rowspan="2">
                         <fieldset class="userList-fieldset">
                             <legend>Userlist</legend>
-                            <p>
-                                <i><%= user.getNickname() %></i><br>
-                                <i>...</i><br>
-                                <i>...</i><br>
-                                <i>...</i><br>
-                                <i>...</i><br>
-                                <i>...</i><br>
-                            </p>
+                            <textarea class="userlistOutput-textarea" id="userlist" readonly></textarea>
                         </fieldset>
                     </td>
                     <td>

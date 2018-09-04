@@ -39,20 +39,38 @@ public class ChatEndpoint {
         users.put(session.getId(), nickname);
 
         Message message = new Message();
+
+        // build and broadcast join-message
         message.setFrom(nickname);
-        message.setContent("<<<< has joined the chat !");
+        message.setContent("<<<< has joined !");
 
         broadcast(message);
+
+        // build and send userlist to the ne user
+        message.setFrom("server");
+        message.setSubject("userlist");
+
+        StringBuilder content = new StringBuilder();
+        users.values().forEach(user -> {
+            content.append(user + ";");
+        });
+
+        message.setContent(content.toString());
+
+        broadcast(message);
+
+        // send MOTD to the new user
+        sendMOTD(session);
 
         // for debugging
         debugOutput(true, nickname, session.getId(), "joined chat");
         printEndpoints();
     }
-    
+
     @OnMessage
     public void onMessage(Session session, Message message) throws IOException, EncodeException {
 
-        if (message.getContent().startsWith("/userlist")) {
+        if (message.getContent().toLowerCase().startsWith("/userlist")) {
 
             StringBuilder userList = new StringBuilder();
 
@@ -64,6 +82,14 @@ public class ChatEndpoint {
             message.setFrom("Server");
             message.setTo(session.getId());
             message.setContent(userList.toString());
+            
+            sendToUser(message, session);
+        }
+        else if (message.getContent().toLowerCase().startsWith("/help")) {
+
+            message.setFrom("Server");
+            message.setTo(session.getId());
+            message.setContent("Sorry, no help yet... xP");
             
             sendToUser(message, session);
         }
@@ -83,19 +109,34 @@ public class ChatEndpoint {
 
         Message message = new Message();
         message.setFrom(users.get(session.getId()));
-        message.setContent("<<<< has left the chat !");
+        message.setContent("<<<< has left !");
+
+        broadcast(message);
+
+        users.remove(session.getId());
+
+        // broadcast neu userlist
+        message.setFrom("server");
+        message.setSubject("userlist");
+
+        StringBuilder content = new StringBuilder();
+        users.values().forEach(user -> {
+            content.append(user + ";");
+        });
+
+        message.setContent(content.toString());
 
         broadcast(message);
 
         // for debugging
         debugOutput(false, message.getFrom(), session.getId(), "left chat");
-        printEndpoints();;
+        printEndpoints();
     }
 
     @OnError
     public void onError(Session session, Throwable throwable) {
         
-        System.out.println("Error in Client " + session.getId() + ": " + throwable.getMessage());
+        System.out.println("Error in Client " + session.getId() + ": " + throwable.getStackTrace());
     }
 
     public void broadcast(Message message) {
@@ -112,17 +153,36 @@ public class ChatEndpoint {
         });
     }
 
+    private void sendMOTD(Session session) {
+        StringBuilder content = new StringBuilder();
+
+        content.append("! ! !  M O T D  ! ! !\n");
+        content.append(">>\n");
+        content.append(">> Welcome to Simple WebChat-Demo !!\n");
+        content.append(">>\n");
+        content.append(">> Version: 0.1\n");
+        content.append(">> Author: Holger Dörner\n");
+        content.append(">>\n");
+        content.append(">> Help: /help\n");
+        content.append(">>\n");
+
+        Message message = new Message();
+        message.setFrom("server");
+        message.setTo(session.getId());
+        message.setContent(content.toString());
+
+        sendToUser(message, session);
+    }
+
+    // send a message to a specific user only
     public void sendToUser(Message message, Session session) {
 
-        chatEndpoints.forEach(endpoint -> {
-            if (session.equals(endpoint.session)) {
-                try {
-                    endpoint.session.getBasicRemote().sendObject(message);
-                } catch (IOException | EncodeException e) {
-                    System.out.println(e.getMessage());
-                }
-            }
-        });
+        try {
+            session.getBasicRemote().sendObject(message);
+        }
+        catch (EncodeException | IOException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     // print debug output
