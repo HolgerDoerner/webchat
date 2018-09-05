@@ -12,7 +12,7 @@ let decodedCookie = decodeURIComponent(document.cookie);
 let cookie = decodedCookie.split(';');
 let nickname = cookie[0].split('=')[1];
 
-let socket = new WebSocket(`ws://localhost:8080/webchat/chat/${nickname}`);
+let socket = new WebSocket(`ws://10.100.5.15:8080/webchat/chat/${nickname}`);
 
 socket.onmessage = event => {
     let message = JSON.parse(event.data);
@@ -24,7 +24,15 @@ socket.onmessage = event => {
 
         default:
             chatOutput.value += '\n' + '[' + (new Date().toLocaleTimeString()) + '] ' + message.from + ': ' + message.content;
+            chatOutput.scrollTop = chatOutput.scrollHeight;
             break;
+    }
+}
+
+let onKeyDown = event => {
+
+    if (event.ctrlKey && event.keyCode == 13) {
+        sendMsg();
     }
 }
 

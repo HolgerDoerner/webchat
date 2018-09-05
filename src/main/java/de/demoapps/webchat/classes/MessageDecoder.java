@@ -21,15 +21,15 @@ public class MessageDecoder implements Decoder.Text<Message> {
     }
 
     @Override
-    public Message decode(String s) throws DecodeException {
+    public Message decode(String message) throws DecodeException {
 
-        return gson.fromJson(s, Message.class);
+        return gson.fromJson(message, Message.class);
     }
 
     @Override
-    public boolean willDecode(String s) {
+    public boolean willDecode(String message) {
 
-		return (s != null);
+		return (message != null);
 	}
 
 }

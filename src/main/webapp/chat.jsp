@@ -18,13 +18,16 @@
                 <tr>
                     <td class="userList-td" rowspan="2">
                         <fieldset class="userList-fieldset">
-                            <legend>Userlist</legend>
-                            <textarea class="userlistOutput-textarea" id="userlist" readonly></textarea>
+                            <legend><b>Userlist</b></legend>
+                            <textarea class="userlistOutput-textarea"
+                                        id="userlist"
+                                        rows="30"
+                                        readonly></textarea>
                         </fieldset>
                     </td>
                     <td>
                         <fieldset class="chatOutput-fieldset">
-                            <legend>Chat</legend>
+                            <legend><b>Chat</b></legend>
                             <textarea id="chatOutput"
                                         class="chatOutput-textarea"
                                         rows="30"
@@ -35,13 +38,15 @@
                 <tr>
                     <td>
                         <fieldset class="chatInput-fieldset">
-                            <legend>Enter</legend>
+                            <legend><b>Enter</b></legend>
                             <textarea id="chatInput"
                                         rows="4"
                                         class="chatInput-textarea"
+                                        onkeydown=onKeyDown(event)
                                         autofocus></textarea>
                             <br>
                             <div style="text-align: right">
+                                <small>(CTRL + ENTER to send a Message)</small>&nbsp;
                                 <input type="submit" id="submit" onclick=sendMsg()>
                             </div>
                         </fieldset>

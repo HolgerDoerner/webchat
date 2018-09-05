@@ -1,5 +1,6 @@
 .mainTable {
     margin: auto;
+    border-spacing: 15px;
 }
 
 .userList-td {
@@ -11,21 +12,30 @@
     height: max-content;
     width: 200px;
     border-radius: 10px;
+    border-color: cornflowerblue;
+    box-shadow: 10px 10px 5px grey;
 }
 
 .userlistOutput-textarea {
     width: 100%;
-    height: 100px;
+    height: 100%;
     padding: 0px;
     margin: 0px;
     resize: none;
     overflow: auto;
-    border-width: 0px;
+    border: none;
+}
+
+.userlistOutput-textarea:focus {
+    border: none;
+    outline: none;
 }
 
 .chatOutput-fieldset {
     width: 800px;
     border-radius: 10px;
+    border-color: cornflowerblue;
+    box-shadow: 10px 10px 5px grey;
 }
 
 .chatOutput-textarea {
@@ -38,9 +48,16 @@
     border-width: 0px;
 }
 
+.chatOutput-textarea:focus {
+    border: none;
+    outline: none;
+}
+
 .chatInput-fieldset {
     width: 800px;
     border-radius: 10px;
+    border-color: cornflowerblue;
+    box-shadow: 10px 10px 5px grey;
 }
 
 .chatInput-textarea {
@@ -50,4 +67,3 @@
     resize: none;
     overflow: auto;
 }
-
