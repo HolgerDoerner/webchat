@@ -13,7 +13,12 @@
             <h1>Simple WebChat</h1>
             <br>
             <div style="text-align: left">
-            <fieldset style="width: fit-content;margin: auto;border-radius: 10px;border-color: cornflowerblue;box-shadow: 10px 10px 5px grey">
+            <fieldset style="width: fit-content;
+                            margin: auto;
+                            border-radius: 10px;
+                            border-color: cornflowerblue;
+                            box-shadow: 10px 10px 5px grey;
+                            font-weight: bold">
                 <legend><b>Choose nickname</b></legend>
                 <form action="sessionmanager" method="post">
                     <input type="text" name="nickname" required="required" autofocus autocomplete="nickname">

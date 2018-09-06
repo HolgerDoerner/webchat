@@ -18,7 +18,7 @@
                 <tr>
                     <td class="userList-td" rowspan="2">
                         <fieldset class="userList-fieldset">
-                            <legend><b>Userlist</b></legend>
+                            <legend id="userList-legend"></legend>
                             <textarea class="userlistOutput-textarea"
                                         id="userlist"
                                         rows="30"
@@ -45,6 +45,10 @@
                                         onkeydown=onKeyDown(event)
                                         autofocus></textarea>
                             <br>
+                            <div class="smileyPopup-div" onclick=openSmileyPopup()>
+                                😃
+                                <span class="smileyPopup-content" id="smileyPopup-window"><%@include file="smileyPopup.jspf" %></span>
+                            </div>
                             <div style="text-align: right">
                                 <small>(CTRL + ENTER to send a Message)</small>&nbsp;
                                 <input type="submit" id="submit" onclick=sendMsg()>

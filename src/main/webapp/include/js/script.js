@@ -1,19 +1,28 @@
 let chatOutput = null;
 let chatInput = null;
 let userlist = null;
+let userList_legend = null;
+let smileyPopup = null;
 
+// initializes the values when page is fully loaded.
 window.onload = () => {
-    chatOutput = document.getElementById("chatOutput");
-    chatInput = document.getElementById("chatInput");
-    userlist = document.getElementById("userlist")
+    chatOutput = document.getElementById('chatOutput');
+    chatInput = document.getElementById('chatInput');
+    userlist = document.getElementById('userlist');
+    userList_legend = document.getElementById('userList-legend');
+    smileyPopup = document.getElementById('smileyPopup-window');
 }
 
+// read the cookie to get the username.
 let decodedCookie = decodeURIComponent(document.cookie);
 let cookie = decodedCookie.split(';');
 let nickname = cookie[0].split('=')[1];
 
+// create the websocket-connection to the server-endpoint.
 let socket = new WebSocket(`ws://10.100.5.15:8080/webchat/chat/${nickname}`);
 
+// handler for inkomming messages.
+// takes the JSON-string and parses it to an object.
 socket.onmessage = event => {
     let message = JSON.parse(event.data);
 
@@ -29,6 +38,8 @@ socket.onmessage = event => {
     }
 }
 
+// key-eventhandler for chat input box.
+// sends message by pressing 'CTRL+ENTER'.
 let onKeyDown = event => {
 
     if (event.ctrlKey && event.keyCode == 13) {
@@ -36,9 +47,12 @@ let onKeyDown = event => {
     }
 }
 
+// converts the message to JSON-string and sends it to the server
+// over open WebSocket connection.
 let sendMsg = () => {
 
     let message = {
+        subject: '',
         from: '',
         to: '',
         content: ''
@@ -53,15 +67,37 @@ let sendMsg = () => {
     chatInput.focus();
 }
 
+// updates the userlist.
 let updateUserlist = list => {
-
+    
     let users = list.split(';');
+    users.pop(); // removes empty element at end of list
+
+    // write new header with updated usercount
+    if (userList_legend.hasChildNodes()) {
+        userList_legend.removeChild(userList_legend.firstChild);
+    }
+    
+    let node = document.createElement('b');
+    let textNode = document.createTextNode('Users (' + users.length + ')');
+    node.appendChild(textNode);
+    userList_legend.appendChild(node);
 
     userlist.value = '';
 
     users.forEach(user => {
-        if (user !== '' | null) {
-            userlist.value += user + '\n';
-        }
+        userlist.value += user + '\n';
     });
+}
+
+// handler for opening the smiley-popup window.
+let openSmileyPopup = () => {
+    smileyPopup.classList.toggle('show');
+}
+
+// handler for adding the selected smiley to the inputbox.
+let addSmiley= (smileyId) => {
+    let smiley = document.getElementById(smileyId).innerHTML;
+    chatInput.value += smiley;
+    chatInput.focus();
 }
