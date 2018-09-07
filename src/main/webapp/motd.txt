@@ -1,9 +1,10 @@
 >>
 >> Welcome to Simple WebChat-Demo!
 >>
->> ---------------------------------------------------------------
->> ! ! Under continous construction, restarts may happen often ! !
->> ---------------------------------------------------------------
+>> ---------------------------------------------------------------------
+>>      Softwareupdates usually betwen 04:00 pm an 04:30 pm (Mo-Fr).
+>>      Updates and Restarts because of bug may happen any time 😅.
+>> ---------------------------------------------------------------------
 >>
 >> Commands:
 >>     /help        - prints help message

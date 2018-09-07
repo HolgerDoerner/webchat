@@ -11,6 +11,10 @@ window.onload = () => {
     userlist = document.getElementById('userlist');
     userList_legend = document.getElementById('userList-legend');
     smileyPopup = document.getElementById('smileyPopup-window');
+
+    if(window.Notification || window.webkitNotifications || navigator.mozNotification) {
+        Notification.requestPermission();
+    }
 }
 
 // read the cookie to get the username.
@@ -19,7 +23,9 @@ let cookie = decodedCookie.split(';');
 let nickname = cookie[0].split('=')[1];
 
 // create the websocket-connection to the server-endpoint.
-let socket = new WebSocket(`ws://10.100.5.15:8080/webchat/chat/${nickname}`);
+// TODO: change ws-adress bevor deploying to the server !!!!
+//let socket = new WebSocket(`wss://10.100.5.15:8443/webchat/chat/${nickname}`); // production
+let socket = new WebSocket(`wss://10.100.5.15:8446/webchat/chat/${nickname}`); // development
 
 // handler for inkomming messages.
 // takes the JSON-string and parses it to an object.
@@ -34,6 +40,14 @@ socket.onmessage = event => {
         default:
             chatOutput.value += '\n' + '[' + (new Date().toLocaleTimeString()) + '] ' + message.from + ': ' + message.content;
             chatOutput.scrollTop = chatOutput.scrollHeight;
+
+            if(Notification.name && (Notification.permission === 'granted') && message.from !== 'server' && message.from !== nickname && !document.hasFocus()) {
+                let notification = new Notification(`${message.from}`, { body: message.content.substring(0,21) });
+                notification.onclick = event => {
+                    event.preventDefault();
+                    window.focus();
+                }
+            }
             break;
     }
 }
@@ -58,7 +72,9 @@ let sendMsg = () => {
         content: ''
     }
 
+    message.subject = '';
     message.from = nickname;
+    message.to = '';
     message.content = chatInput.value;
 
     socket.send(JSON.stringify(message));

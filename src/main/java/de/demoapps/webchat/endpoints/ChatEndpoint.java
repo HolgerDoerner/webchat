@@ -25,9 +25,7 @@ import de.demoapps.webchat.classes.MessageEncoder;
 
 /**
  * ChatEndpoint registers a WebSocket-server.
- * 
- * TODO: https://unicode.org/emoji/charts/full-emoji-list.html
- * 
+ *  
  * @author Holger Dörner
  */
 @ApplicationScoped
@@ -66,7 +64,7 @@ public class ChatEndpoint {
         message.setFrom(nickname);
         message.setContent("<<<< has joined !");
 
-        broadcast(message);
+        broadcastMessage(message);
 
         // build and send userlist to the ne user
         message.setFrom("server");
@@ -79,11 +77,7 @@ public class ChatEndpoint {
 
         message.setContent(content.toString());
 
-        broadcast(message);
-
-        // for debugging
-        debugOutput(true, nickname, session.getId(), "joined chat");
-        printEndpoints();
+        broadcastMessage(message);
     }
 
     /**
@@ -99,18 +93,7 @@ public class ChatEndpoint {
 
         if (message.getContent().toLowerCase().startsWith("/userlist")) {
 
-            StringBuilder userList = new StringBuilder();
-
-            userList.append(">>> Userlist <<<");
-            users.values().forEach(user -> {
-                userList.append("\n" + user);
-            });
-
-            message.setFrom("Server");
-            message.setTo(session.getId());
-            message.setContent(userList.toString());
-            
-            sendToUser(message, session);
+            sendUserlist(session);
         }
         else if (message.getContent().toLowerCase().startsWith("/motd")) {
 
@@ -118,19 +101,16 @@ public class ChatEndpoint {
         }
         else if (message.getContent().toLowerCase().startsWith("/help")) {
 
-            message.setFrom("Server");
-            message.setTo(session.getId());
-            message.setContent("Sorry, no help yet... xP");
+            sendHelp(session);
+        }
+        else if (message.getContent().toLowerCase().startsWith("/@")) {
+
             
-            sendToUser(message, session);
         }
         else {
             message.setFrom(users.get(session.getId()));
-            broadcast(message);
+            broadcastMessage(message);
         }
-
-        // for debugging
-        debugOutput(false, message.getFrom(), session.getId(), message.getContent());
     }
 
     /**
@@ -149,7 +129,7 @@ public class ChatEndpoint {
         message.setFrom(users.get(session.getId()));
         message.setContent("<<<< has left !");
 
-        broadcast(message);
+        broadcastMessage(message);
 
         users.remove(session.getId());
 
@@ -164,11 +144,7 @@ public class ChatEndpoint {
 
         message.setContent(content.toString());
 
-        broadcast(message);
-
-        // for debugging
-        debugOutput(false, message.getFrom(), session.getId(), "left chat");
-        printEndpoints();
+        broadcastMessage(message);
     }
 
     /**
@@ -188,7 +164,7 @@ public class ChatEndpoint {
      * 
      * @param message
      */
-    public void broadcast(Message message) {
+    public void broadcastMessage(Message message) {
 
         chatEndpoints.forEach(endpoint -> {
             synchronized (endpoint) {
@@ -203,7 +179,46 @@ public class ChatEndpoint {
     }
 
     /**
-     * reads the motd.txt from the document-root and sends the message to the user.
+     * send a message to a specific user only
+     * 
+     * @param message
+     * @param session
+     */
+    public void directMessage(Message message, Session session) {
+
+        try {
+            session.getBasicRemote().sendObject(message);
+        }
+        catch (EncodeException | IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    /**
+     * sends actual userlist to client
+     * 
+     * @param session
+     */
+    public void sendUserlist(Session session) {
+
+        StringBuilder userList = new StringBuilder();
+
+        userList.append(">>> Userlist <<<");
+        users.values().forEach(user -> {
+            userList.append("\n" + user);
+        });
+
+        Message message = new Message();
+
+        message.setFrom("Server");
+        message.setTo(session.getId());
+        message.setContent(userList.toString());
+        
+        directMessage(message, session);
+    }
+
+    /**
+     * reads the motd.txt from the document-root and sends the message to the client.
      * 
      * @param session
      * @throws UnsupportedEncodingException
@@ -235,7 +250,7 @@ public class ChatEndpoint {
             message.setTo(session.getId());
             message.setContent(content.toString());
 
-            sendToUser(message, session);
+            directMessage(message, session);
         }
         catch (Exception e) {
             System.out.println(e.getMessage());
@@ -247,37 +262,18 @@ public class ChatEndpoint {
     }
 
     /**
-     * send a message to a specific user only
+     * sends help-message to the client
      * 
-     * @param message
      * @param session
      */
-    public void sendToUser(Message message, Session session) {
+    public void sendHelp(Session session) {
 
-        try {
-            session.getBasicRemote().sendObject(message);
-        }
-        catch (EncodeException | IOException e) {
-            System.out.println(e.getMessage());
-        }
-    }
+        Message message = new Message();
 
-    /**
-     * print debug output
-     * 
-     * @param isNew
-     * @param nickname
-     * @param uid
-     * @param content
-     */
-    private void debugOutput(boolean isNew, String nickname, String uid, String content) {
-        System.out.println("new user: " + isNew + "\nnick: " + nickname + "\nuid: " + uid + "\ncontent: " + content);
-    }
-
-    /**
-     * print debug output
-     */
-    private void printEndpoints() {
-        System.out.println("entpoints total: " + chatEndpoints.size());
+        message.setFrom("Server");
+        message.setTo(session.getId());
+        message.setContent("Sorry, no help yet... xP");
+        
+        directMessage(message, session);
     }
 }
