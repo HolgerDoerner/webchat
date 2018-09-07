@@ -103,10 +103,6 @@ public class ChatEndpoint {
 
             sendHelp(session);
         }
-        else if (message.getContent().toLowerCase().startsWith("/@")) {
-
-            
-        }
         else {
             message.setFrom(users.get(session.getId()));
             broadcastMessage(message);
@@ -132,6 +128,8 @@ public class ChatEndpoint {
         broadcastMessage(message);
 
         users.remove(session.getId());
+
+        session.close();
 
         // broadcast neu userlist
         message.setFrom("server");

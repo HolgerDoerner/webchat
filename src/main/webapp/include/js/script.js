@@ -12,9 +12,13 @@ window.onload = () => {
     userList_legend = document.getElementById('userList-legend');
     smileyPopup = document.getElementById('smileyPopup-window');
 
-    if(window.Notification || window.webkitNotifications || navigator.mozNotification) {
+    if (window.Notification || window.webkitNotifications || navigator.mozNotification && Notification.permission !== 'granted') {
         Notification.requestPermission();
     }
+}
+
+window.onfocus = () => {
+    chatInput.focus();
 }
 
 // read the cookie to get the username.
@@ -24,8 +28,9 @@ let nickname = cookie[0].split('=')[1];
 
 // create the websocket-connection to the server-endpoint.
 // TODO: change ws-adress bevor deploying to the server !!!!
-//let socket = new WebSocket(`wss://10.100.5.15:8443/webchat/chat/${nickname}`); // production
-let socket = new WebSocket(`wss://10.100.5.15:8446/webchat/chat/${nickname}`); // development
+//let socket = new WebSocket(`wss://10.100.5.15:8443/webchat/chat/${nickname}`); // production work
+//let socket = new WebSocket(`wss://10.100.5.15:8446/webchat/chat/${nickname}`); // development work
+let socket = new WebSocket(`wss://192.168.178.100:8446/webchat/chat/${nickname}`); // development home
 
 // handler for inkomming messages.
 // takes the JSON-string and parses it to an object.
@@ -41,12 +46,27 @@ socket.onmessage = event => {
             chatOutput.value += '\n' + '[' + (new Date().toLocaleTimeString()) + '] ' + message.from + ': ' + message.content;
             chatOutput.scrollTop = chatOutput.scrollHeight;
 
-            if(Notification.name && (Notification.permission === 'granted') && message.from !== 'server' && message.from !== nickname && !document.hasFocus()) {
+            if (Notification.name && (Notification.permission === 'granted') && message.from !== 'server' && message.from !== nickname && !document.hasFocus()) {
                 let notification = new Notification(`${message.from}`, { body: message.content.substring(0,21) });
                 notification.onclick = event => {
-                    event.preventDefault();
-                    window.focus();
+                    //event.preventDefault();
+                    //window.focus();
+                    parent.focus();
+                    event.target.close();
                 }
+
+                // notification.onshow = event => {
+                //     setTimeout(notification.close(), 4000);
+                // }
+
+                // notification.addEventListener('show', event => {
+                //     setTimeout(notification.close(), 4000);
+                // })
+
+                // notification.addEventListener('click', event => {
+                //     parent.focus();
+                //     event.target.close();
+                // })
             }
             break;
     }
