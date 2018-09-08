@@ -1,25 +1,10 @@
 let chatOutput = null;
 let chatInput = null;
-let userlist = null;
+let userList = null;
 let userList_legend = null;
 let smileyPopup = null;
-
-// initializes the values when page is fully loaded.
-window.onload = () => {
-    chatOutput = document.getElementById('chatOutput');
-    chatInput = document.getElementById('chatInput');
-    userlist = document.getElementById('userlist');
-    userList_legend = document.getElementById('userList-legend');
-    smileyPopup = document.getElementById('smileyPopup-window');
-
-    if (window.Notification || window.webkitNotifications || navigator.mozNotification && Notification.permission !== 'granted') {
-        Notification.requestPermission();
-    }
-}
-
-window.onfocus = () => {
-    chatInput.focus();
-}
+let imagePopup = null;
+let urlPopup = null;
 
 // read the cookie to get the username.
 let decodedCookie = decodeURIComponent(document.cookie);
@@ -32,18 +17,61 @@ let nickname = cookie[0].split('=')[1];
 //let socket = new WebSocket(`wss://10.100.5.15:8446/webchat/chat/${nickname}`); // development work
 let socket = new WebSocket(`wss://192.168.178.100:8446/webchat/chat/${nickname}`); // development home
 
+// initializes the values when page is fully loaded.
+window.onload = () => {
+    chatOutput = document.getElementById('chatOutput');
+    chatInput = document.getElementById('chatInput');
+    userList = document.getElementById('userList');
+    userList_legend = document.getElementById('userList-legend');
+    smileyPopup = document.getElementById('smileyPopup-window');
+    imagePopup = document.getElementById('imagePopup-window');
+    urlPopup = document.getElementById('urlPopup-window');
+
+    // set the initial size for the elements
+    chatOutput.style.height = chatOutput.style.minHeight = chatOutput.style.maxHeight = chatOutput.offsetHeight + 'px';
+    chatInput.style.height = chatInput.style.minHeight = chatInput.style.maxHeight = chatInput.offsetHeight + 'px';
+
+    chatInput.onkeydown = onKeyDown;
+
+    if (window.Notification || window.webkitNotifications || navigator.mozNotification && Notification.permission !== 'granted') {
+        Notification.requestPermission();
+    }
+}
+
+window.onfocus = () => {
+    chatInput.focus();
+}
+
+// set max-height of chat-output-container on window resize
+// otherwise scrolling won't work propperly.
+window.onresize = () => {
+    chatOutput.style.height = chatOutput.style.minHeight = chatOutput.style.maxHeight = chatOutput.offsetHeight + 'px';
+    chatInput.style.height = chatInput.style.minHeight = chatInput.style.maxHeight = chatInput.offsetHeight + 'px';
+}
+
 // handler for inkomming messages.
 // takes the JSON-string and parses it to an object.
 socket.onmessage = event => {
     let message = JSON.parse(event.data);
 
     switch (message.subject) {
-        case "userlist":
+        case 'userlist':
             updateUserlist(message.content);
             break;
 
         default:
-            chatOutput.value += '\n' + '[' + (new Date().toLocaleTimeString()) + '] ' + message.from + ': ' + message.content;
+            chatOutput.innerHTML += '<br>' + '<b>[' + (new Date().toLocaleTimeString()) + '] <f style="color:red">' + message.from + '</f>:</b> ';
+            
+            if (message.subject === 'image') {
+                chatOutput.innerHTML += `<br><img src="${message.content}" style="max-width: 700px; max-height: 700px">`
+            }
+            else if (message.subject === 'url') {
+                chatOutput.innerHTML += `<a href="${message.content}" target="_blank">${message.content}</a>`
+            }
+            else {
+                chatOutput.innerHTML += textToHTML(message.content);
+            }
+
             chatOutput.scrollTop = chatOutput.scrollHeight;
 
             if (Notification.name && (Notification.permission === 'granted') && message.from !== 'server' && message.from !== nickname && !document.hasFocus()) {
@@ -55,9 +83,9 @@ socket.onmessage = event => {
                     event.target.close();
                 }
 
-                // notification.onshow = event => {
-                //     setTimeout(notification.close(), 4000);
-                // }
+                notification.onshow = event => {
+                    setTimeout(notification.close(), 40000);
+                }
 
                 // notification.addEventListener('show', event => {
                 //     setTimeout(notification.close(), 4000);
@@ -77,13 +105,13 @@ socket.onmessage = event => {
 let onKeyDown = event => {
 
     if (event.ctrlKey && event.keyCode == 13) {
-        sendMsg();
+        sendMsg(null, null, null, null);
     }
 }
 
 // converts the message to JSON-string and sends it to the server
 // over open WebSocket connection.
-let sendMsg = () => {
+let sendMsg = (subject, from, to, content) => {
 
     let message = {
         subject: '',
@@ -92,14 +120,14 @@ let sendMsg = () => {
         content: ''
     }
 
-    message.subject = '';
-    message.from = nickname;
-    message.to = '';
-    message.content = chatInput.value;
+    message.subject = subject ? subject : '';
+    message.from = from ? from : nickname;
+    message.to = to ? to : '';
+    message.content = content ? content : chatInput.innerHTML.replace('&nbsp;', ' ');
 
     socket.send(JSON.stringify(message));
 
-    chatInput.value = '';
+    chatInput.innerHTML = '';
     chatInput.focus();
 }
 
@@ -119,13 +147,21 @@ let updateUserlist = list => {
     node.appendChild(textNode);
     userList_legend.appendChild(node);
 
-    userlist.value = '';
+    // render updated userlist
+    // userlist.value = '';
+
+    // users.forEach(user => {
+    //     userlist.value += user + '\n';
+    // });
+
+    userList.innerHTML = '';
 
     users.forEach(user => {
-        userlist.value += user + '\n';
-    });
+        userList.innerHTML += '<b>' + user + '</b><br>';
+    })
 }
 
+//#region smiley popup
 // handler for opening the smiley-popup window.
 let openSmileyPopup = () => {
     smileyPopup.classList.toggle('show');
@@ -134,6 +170,52 @@ let openSmileyPopup = () => {
 // handler for adding the selected smiley to the inputbox.
 let addSmiley= (smileyId) => {
     let smiley = document.getElementById(smileyId).innerHTML;
-    chatInput.value += smiley;
+    chatInput.innerHTML += smiley;
     chatInput.focus();
+}
+//#endregion smiley popup
+
+//#region image popup
+// handler for opening the image-popup window.
+let openImagePopup = () => {
+    imagePopup.classList.toggle('show');
+    document.getElementById('imageUrlInput').focus();
+}
+
+// handler for sending the image-url.
+let sendImageUrl = () => {
+    let url = document.getElementById('imageUrlInput').value;
+    document.getElementById('imageUrlInput').value = '';
+    sendMsg('image', null, null, url);
+    chatInput.focus();
+}
+//#endregion image popup
+
+//#region url popup
+// handler for opening the url-popup window.
+let openUrlPopup = () => {
+    urlPopup.classList.toggle('show');
+    document.getElementById('urlInput').focus();
+}
+
+// handler for sending the url.
+let sendUrl = () => {
+    let url = document.getElementById('urlInput').value;
+    document.getElementById('urlInput').value = '';
+    sendMsg('url', null, null, url);
+    chatInput.focus();
+}
+//#endregion image popup
+
+// render HTML-output for the viewport
+let textToHTML = text => {
+    let output = ''
+    let textArray = [];
+    textArray = text.split('\n');
+
+    textArray.forEach(line => {
+        output += line + '<br>';
+    })
+
+    return output;
 }

@@ -16,58 +16,65 @@
         <table class="mainTable">
             <tbody>
                 <tr>
-                    <td class="userList-td" rowspan="2">
+                    <td class="userList-td">
                         <fieldset class="userList-fieldset">
                             <legend id="userList-legend"></legend>
-                            <textarea class="userlistOutput-textarea"
-                                        id="userlist"
-                                        rows="30"
-                                        readonly></textarea>
+                            <div class="userListOutput-div" id="userList">
+                            </div>
                         </fieldset>
                     </td>
-                    <td>
+                    <td class="chatOutput-td">
                         <fieldset class="chatOutput-fieldset">
                             <legend><b>Chat</b></legend>
-                            <textarea id="chatOutput"
-                                        class="chatOutput-textarea"
-                                        rows="30"
-                                        readonly="readonly"></textarea>
+                            <div class="chatOutput-div" id="chatOutput"></div>
                         </fieldset>
                     </td>
                 </tr>
                 <tr>
-                    <td>
+                    <td></td>
+                    <td class="chatInput-td">
                         <fieldset class="chatInput-fieldset">
                             <legend><b>Enter</b></legend>
-                            <textarea id="chatInput"
-                                        rows="4"
-                                        class="chatInput-textarea"
-                                        onkeydown=onKeyDown(event)
-                                        autofocus></textarea>
-                            <br>
-                            <div class="smileyPopup-div" onclick=openSmileyPopup()>
-                                😃
-                                <span class="smileyPopup-content" id="smileyPopup-window"><%@include file="smileyPopup.jspf" %></span>
-                            </div>
-                            <div style="text-align: right">
-                                <small>(CTRL + ENTER to send a Message)</small>&nbsp;
-                                <input type="submit" id="submit" onclick=sendMsg()>
-                            </div>
+                            <div class="chatInput-div" id="chatInput" contentEditable="true"></div><br>
+                            <table style="width: 100%; table-layout: auto; margin: 0px; padding: 0px;">
+                                <tr>
+                                    <td style="text-align: left">
+                                        <div class="smileyPopup-div" onclick=openSmileyPopup()>
+                                            <img src="include/img/smiley.png" width="20px" height="20px">
+                                            <span class="smileyPopup-content" id="smileyPopup-window"><%@include file="smileyPopup.jspf" %></span>
+                                        </div>&nbsp;
+                                        <div class="imagePopup-div" onclick=openImagePopup()>
+                                            <img src="include/img/pic2.png" width="20px" height="20px">
+                                            <span class="imagePopup-content" id="imagePopup-window">
+                                                <input type="url" id="imageUrlInput"> <input type="submit" onclick=sendImageUrl()>
+                                            </span>
+                                        </div>&nbsp;
+                                        <div class="urlPopup-div" onclick=openUrlPopup()>
+                                            <img src="include/img/link.png" width="20px" height="20px">
+                                            <span class="urlPopup-content" id="urlPopup-window">
+                                                <input type="url" id="urlInput"> <input type="submit" onclick=sendUrl()>
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td style="text-align: right">
+                                        <input type="submit" id="submit" onclick=sendMsg()>
+                                    </td>
+                                </tr>
+                            </table>
                         </fieldset>
                     </td>
                 </tr>
             </tbody>
         </table>
+		
         <footer style="text-align: center">
-            <br>
-            <b>DISCLAIMER:</b><br>
-            <i>For educational and informational purpose ONLY, no warranty!!</i><br>
-            <br>
-            This Software is published under the terms of the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">GNU Public License (GPL) v3</a>, 
-            developed by <a href="https://github.com/holgerdoerner" taget="_blank">Holger Dörner</a>.<br>
-            <br>
-            Project Sourcecode is hosted at <a href="https://github.com/holgerdoerner/webchat" target="_blank">Github</a>.<br>
-            Bug-Reports, Suggestions and Participation are welcome!
+		<small>
+            <b>DISCLAIMER:</b> <i>For educational and informational purpose ONLY, no warranty!!</i><br>
+            This Software is published under the terms of the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">GNU Public License (GPL) v3</a>, developed by <a href="https://github.com/holgerdoerner" taget="_blank">Holger Dörner</a>.<br>
+            Project Sourcecode is hosted at <a href="https://github.com/holgerdoerner/webchat" target="_blank">Github</a>. Bug-Reports, Suggestions and Participation are welcome!
+		</small>
         </footer>
+		
     </body>
 </html>
+
