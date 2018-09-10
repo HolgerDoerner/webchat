@@ -35,7 +35,8 @@
                     <td class="chatInput-td">
                         <fieldset class="chatInput-fieldset">
                             <legend><b>Enter</b></legend>
-                            <div class="chatInput-div" id="chatInput" contentEditable="true"></div><br>
+                            <%-- <div class="chatInput-div" id="chatInput" contentEditable="true"></div> --%>
+                            <textarea id="chatInput" class="chatInput-text"></textarea><input style="height: 2em" type="submit" id="submit" value="=>" onclick=sendMsg()><br>
                             <table style="width: 100%; table-layout: auto; margin: 0px; padding: 0px;">
                                 <tr>
                                     <td style="text-align: left">
@@ -46,18 +47,15 @@
                                         <div class="imagePopup-div" onclick=openImagePopup()>
                                             <img src="include/img/pic2.png" width="20px" height="20px">
                                             <span class="imagePopup-content" id="imagePopup-window">
-                                                <input type="url" id="imageUrlInput"> <input type="submit" onclick=sendImageUrl()>
+                                                <input type="url" id="imageUrlInput" placeholder="paste Image-URL here ..."> <input type="submit" onclick=sendImageUrl()>
                                             </span>
                                         </div>&nbsp;
                                         <div class="urlPopup-div" onclick=openUrlPopup()>
                                             <img src="include/img/link.png" width="20px" height="20px">
                                             <span class="urlPopup-content" id="urlPopup-window">
-                                                <input type="url" id="urlInput"> <input type="submit" onclick=sendUrl()>
+                                                <input type="url" id="urlInput" placeholder="paste URL here ..."> <input type="submit" onclick=sendUrl()>
                                             </span>
                                         </div>
-                                    </td>
-                                    <td style="text-align: right">
-                                        <input type="submit" id="submit" onclick=sendMsg()>
                                     </td>
                                 </tr>
                             </table>

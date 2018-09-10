@@ -3,7 +3,7 @@
 >>
 >> ---------------------------------------------------------------------
 >>      Softwareupdates usually betwen 04:00 pm an 04:30 pm (Mo-Fr).
->>      Updates and Restarts because of bugs may happen any time 😅.
+>>      Updates and Restarts because of bugs may happen any time.
 >> ---------------------------------------------------------------------
 >>
 >> Commands:

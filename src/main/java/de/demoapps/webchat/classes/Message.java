@@ -2,12 +2,21 @@ package de.demoapps.webchat.classes;
 
 public class Message {
 
+    private String timestamp;
     private String subject;
     private String from;
     private String to;
     private String content;
 
     public Message() {}
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
 
     public void setSubject(String subject) {
         this.subject = subject;

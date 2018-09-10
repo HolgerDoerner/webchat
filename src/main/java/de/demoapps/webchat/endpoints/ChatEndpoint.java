@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Set;
@@ -164,6 +166,10 @@ public class ChatEndpoint {
      */
     public void broadcastMessage(Message message) {
 
+        Date timestamp = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+        message.setTimestamp(formatter.format(timestamp));
+        
         chatEndpoints.forEach(endpoint -> {
             synchronized (endpoint) {
                 try {
@@ -183,6 +189,10 @@ public class ChatEndpoint {
      * @param session
      */
     public void directMessage(Message message, Session session) {
+
+        Date timestamp = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+        message.setTimestamp(formatter.format(timestamp));
 
         try {
             session.getBasicRemote().sendObject(message);

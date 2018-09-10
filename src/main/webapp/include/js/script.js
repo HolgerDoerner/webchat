@@ -11,11 +11,13 @@ let decodedCookie = decodeURIComponent(document.cookie);
 let cookie = decodedCookie.split(';');
 let nickname = cookie[0].split('=')[1];
 
+if (!nickname) window.location.replace('index.jsp');
+
 // create the websocket-connection to the server-endpoint.
 // TODO: change ws-adress bevor deploying to the server !!!!
 //let socket = new WebSocket(`wss://10.100.5.15:8443/webchat/chat/${nickname}`); // production work
-//let socket = new WebSocket(`wss://10.100.5.15:8446/webchat/chat/${nickname}`); // development work
-let socket = new WebSocket(`wss://192.168.178.100:8446/webchat/chat/${nickname}`); // development home
+let socket = new WebSocket(`wss://10.100.5.15:8446/webchat/chat/${nickname}`); // development work
+//let socket = new WebSocket(`wss://192.168.178.100:8446/webchat/chat/${nickname}`); // development home
 
 // initializes the values when page is fully loaded.
 window.onload = () => {
@@ -29,7 +31,6 @@ window.onload = () => {
 
     // set the initial size for the elements
     chatOutput.style.height = chatOutput.style.minHeight = chatOutput.style.maxHeight = chatOutput.offsetHeight + 'px';
-    chatInput.style.height = chatInput.style.minHeight = chatInput.style.maxHeight = chatInput.offsetHeight + 'px';
 
     chatInput.onkeydown = onKeyDown;
 
@@ -46,7 +47,6 @@ window.onfocus = () => {
 // otherwise scrolling won't work propperly.
 window.onresize = () => {
     chatOutput.style.height = chatOutput.style.minHeight = chatOutput.style.maxHeight = chatOutput.offsetHeight + 'px';
-    chatInput.style.height = chatInput.style.minHeight = chatInput.style.maxHeight = chatInput.offsetHeight + 'px';
 }
 
 // handler for inkomming messages.
@@ -60,7 +60,7 @@ socket.onmessage = event => {
             break;
 
         default:
-            chatOutput.innerHTML += '<br>' + '<b>[' + (new Date().toLocaleTimeString()) + '] <f style="color:red">' + message.from + '</f>:</b> ';
+            chatOutput.innerHTML += `<br><b>[${message.timestamp}] <f style="color:red">${message.from}</f>:</b> `;
             
             if (message.subject === 'image') {
                 chatOutput.innerHTML += `<br><img src="${message.content}" style="max-width: 700px; max-height: 700px">`
@@ -75,7 +75,7 @@ socket.onmessage = event => {
             chatOutput.scrollTop = chatOutput.scrollHeight;
 
             if (Notification.name && (Notification.permission === 'granted') && message.from !== 'server' && message.from !== nickname && !document.hasFocus()) {
-                let notification = new Notification(`${message.from}`, { body: message.content.substring(0,21) });
+                let notification = new Notification(`[${message.timestamp}] ${message.from}`, { body: message.content.substring(0,21) });
                 notification.onclick = event => {
                     //event.preventDefault();
                     //window.focus();
@@ -83,9 +83,9 @@ socket.onmessage = event => {
                     event.target.close();
                 }
 
-                notification.onshow = event => {
-                    setTimeout(notification.close(), 40000);
-                }
+                // notification.onshow = event => {
+                //     setTimeout(notification.close(), 40000);
+                // }
 
                 // notification.addEventListener('show', event => {
                 //     setTimeout(notification.close(), 4000);
@@ -114,6 +114,7 @@ let onKeyDown = event => {
 let sendMsg = (subject, from, to, content) => {
 
     let message = {
+        timestamp: '',
         subject: '',
         from: '',
         to: '',
@@ -123,11 +124,11 @@ let sendMsg = (subject, from, to, content) => {
     message.subject = subject ? subject : '';
     message.from = from ? from : nickname;
     message.to = to ? to : '';
-    message.content = content ? content : chatInput.innerHTML.replace('&nbsp;', ' ');
+    message.content = content ? content : chatInput.value;
 
     socket.send(JSON.stringify(message));
 
-    chatInput.innerHTML = '';
+    chatInput.value = '';
     chatInput.focus();
 }
 
@@ -143,7 +144,7 @@ let updateUserlist = list => {
     }
     
     let node = document.createElement('b');
-    let textNode = document.createTextNode('Users (' + users.length + ')');
+    let textNode = document.createTextNode(`Users ( ${users.length} )`);
     node.appendChild(textNode);
     userList_legend.appendChild(node);
 
@@ -170,7 +171,7 @@ let openSmileyPopup = () => {
 // handler for adding the selected smiley to the inputbox.
 let addSmiley= (smileyId) => {
     let smiley = document.getElementById(smileyId).innerHTML;
-    chatInput.innerHTML += smiley;
+    chatInput.value += smiley;
     chatInput.focus();
 }
 //#endregion smiley popup

@@ -1,5 +1,5 @@
 html {
-	height: 100%;
+	height: 90%;
 	width: 100%;
 }
 body {
@@ -109,19 +109,24 @@ body {
     border-radius: 10px;
     border-color: cornflowerblue;
     box-shadow: 10px 10px 5px grey;
+    text-align: center;
+    vertical-align: top;
 }
 
-.chatInput-textarea {
-    width: auto;
+.chatInput-text {
+    width: 80%;
+    height: 2em;
     margin: 0px;
     padding: 0px;
     resize: none;
-    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    font-family: 'Segoe UI', 'Lucida Grande', 'Ubuntu', 'sans-serif';
 }
 
 .chatInput-div {
     height: 3em;
-    width: 100%;
+    width: 80%;
     max-height: inherit;
     max-width: 100%;
     margin: 0px;
