@@ -47,7 +47,6 @@
                     </div>
                 </div>
                 <small style="width: 100%; text-align: center">
-                    <b>DISCLAIMER:</b> <i>For educational and informational purpose ONLY, no warranty!!</i><br>
                     This Software is published under the terms of the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">GNU Public License (GPL) v3</a>, developed by <a href="https://github.com/holgerdoerner" taget="_blank">Holger Dörner</a>.<br>
                     Project Sourcecode is hosted at <a href="https://github.com/holgerdoerner/webchat" target="_blank">Github</a>. Bug-Reports, Suggestions and Participation are welcome!
                 </small>
