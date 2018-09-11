@@ -29,9 +29,6 @@ window.onload = () => {
     imagePopup = document.getElementById('imagePopup-window');
     urlPopup = document.getElementById('urlPopup-window');
 
-    // set the initial size for the elements
-    chatOutput.style.height = chatOutput.style.minHeight = chatOutput.style.maxHeight = chatOutput.offsetHeight + 'px';
-
     chatInput.onkeydown = onKeyDown;
 
     if (window.Notification || window.webkitNotifications || navigator.mozNotification && Notification.permission !== 'granted') {
@@ -41,12 +38,6 @@ window.onload = () => {
 
 window.onfocus = () => {
     chatInput.focus();
-}
-
-// set max-height of chat-output-container on window resize
-// otherwise scrolling won't work propperly.
-window.onresize = () => {
-    chatOutput.style.height = chatOutput.style.minHeight = chatOutput.style.maxHeight = chatOutput.offsetHeight + 'px';
 }
 
 // handler for inkomming messages.
@@ -60,38 +51,31 @@ socket.onmessage = event => {
             break;
 
         default:
-            chatOutput.innerHTML += `<br><b>[${message.timestamp}] <f style="color:red">${message.from}</f>:</b> `;
-            
-            if (message.subject === 'image') {
-                chatOutput.innerHTML += `<br><img src="${message.content}" style="max-width: 700px; max-height: 700px">`
-            }
-            else if (message.subject === 'url') {
-                chatOutput.innerHTML += `<a href="${message.content}" target="_blank">${message.content}</a>`
-            }
-            else {
-                chatOutput.innerHTML += textToHTML(message.content);
-            }
+            // process the incomming message and render HTML
+            displayMessage(message);
 
+            // auto-scroll for chat window
             chatOutput.scrollTop = chatOutput.scrollHeight;
 
             if (Notification.name && (Notification.permission === 'granted') && message.from !== 'server' && message.from !== nickname && !document.hasFocus()) {
-                let notification = new Notification(`[${message.timestamp}] ${message.from}`, { body: message.content.substring(0,21) });
+                let notification = new Notification(`[${message.timestamp}] ${message.from}`, { body: message.content.substring(0,31) });
                 notification.onclick = event => {
                     //event.preventDefault();
                     //window.focus();
-                    parent.focus();
+                    window.focus();
                     event.target.close();
                 }
 
-                // notification.onshow = event => {
-                //     setTimeout(notification.close(), 40000);
-                // }
+                notification.onshow = event => {
+                    setTimeout(() => { notification.close() }, 10000);
+                }
 
                 // notification.addEventListener('show', event => {
-                //     setTimeout(notification.close(), 4000);
+                //     setTimeout(notification.close(), 10000);
                 // })
 
                 // notification.addEventListener('click', event => {
+                //     event.preventDefault();
                 //     parent.focus();
                 //     event.target.close();
                 // })
@@ -132,6 +116,23 @@ let sendMsg = (subject, from, to, content) => {
     chatInput.focus();
 }
 
+let displayMessage = (message) => {
+
+    let output = `<p class="message"><b>[${message.timestamp}] <f style="color:red">${message.from}</f>:</b> `;
+            
+    if (message.subject === 'image') {
+        output += `<br><img src="${message.content}" style="max-width: 700px; max-height: 700px; padding 0px; margin: 10px"></p>`
+    }
+    else if (message.subject === 'url') {
+        output += `<a href="${message.content}" target="_blank">${message.content}</a></p>`
+    }
+    else {
+        output += textToHTML(message.content) + '</p>';
+    }
+
+    chatOutput.innerHTML += output;
+}
+
 // updates the userlist.
 let updateUserlist = list => {
     
@@ -148,17 +149,10 @@ let updateUserlist = list => {
     node.appendChild(textNode);
     userList_legend.appendChild(node);
 
-    // render updated userlist
-    // userlist.value = '';
-
-    // users.forEach(user => {
-    //     userlist.value += user + '\n';
-    // });
-
     userList.innerHTML = '';
 
     users.forEach(user => {
-        userList.innerHTML += '<b>' + user + '</b><br>';
+        userList.innerHTML += '* <b>' + user + '</b><br>';
     })
 }
 
