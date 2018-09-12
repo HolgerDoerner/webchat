@@ -121,7 +121,7 @@ let displayMessage = (message) => {
     let output = `<p class="message"><b>[${message.timestamp}] <f style="color:red">${message.from}</f>:</b> `;
             
     if (message.subject === 'image') {
-        output += `<br><img src="${message.content}" style="max-width: 700px; max-height: 700px; padding 0px; margin: 10px"></p>`
+        output += `<br><picture><img src="${message.content}" style="max-width: 700px; max-height: 500px" alt="img"></picture></p>`
     }
     else if (message.subject === 'url') {
         output += `<a href="${message.content}" target="_blank">${message.content}</a></p>`
@@ -131,6 +131,7 @@ let displayMessage = (message) => {
     }
 
     chatOutput.innerHTML += output;
+    chatOutput.innerHTML += '<hr style="width: 100%; height: 1em; border: 0px; margin: 0px; padding: 0px">';
 }
 
 // updates the userlist.

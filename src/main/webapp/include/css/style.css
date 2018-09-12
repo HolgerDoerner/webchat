@@ -56,6 +56,14 @@ body {
     font-family: 'Segoe UI', 'Lucida Grande', 'Ubuntu', 'sans-serif';
 }
 
+p.message {
+    width: 100%;
+    height: max-content;
+    padding: 0px;
+    margin: 10px;
+    display: inline-block;
+}
+
 /* #REGION userlist-area */
 .userList-fieldset {
     height: max-content;
@@ -93,14 +101,6 @@ body {
     overflow-y: scroll;
     border: 0px;
 }
-
-p.message {
-    width: 100%;
-    height: max-content;
-    padding: 0px;
-    margin: 10px;
-    display: inline-block;
-}
 /* #ENDREGION output-area */
 
 /* #REGION input-area */
@@ -113,9 +113,7 @@ p.message {
 
 .chatInput-text {
     width: 80%;
-    height: 2em;
     margin: 0px;
-    padding: 0px;
     resize: none;
     overflow-x: hidden;
     overflow-y: auto;
