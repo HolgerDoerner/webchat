@@ -10,4 +10,5 @@
 >>     /help        - prints help message
 >>     /motd        - prints actual message of the day
 >>     /userlist    - prints the actual list of active users
+>>     /clear       - clears output area
 >>

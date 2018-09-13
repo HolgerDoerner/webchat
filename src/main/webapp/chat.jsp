@@ -15,7 +15,7 @@
     <body>
         <div class="grid-container" id="grid-container">
             <div class="item1">
-            <h1>Simple WebChat-Demo</h1>
+                <h1>#Simple WebChat</h1>
             </div>
             <div class="item2">
                 <fieldset class="userList-fieldset">
@@ -28,9 +28,15 @@
             </div>
             <div class="item4">
                 <div class="chatInput-td">
-                    <div style="padding: 0px;margin-bottom: 5px; text-align: top">
-                        <input type="text" id="chatInput" class="chatInput-text"><input style="margin: 0px; vertical-align: top" type="submit" id="submit" value="=>" onclick=sendMsg() style="display: inline-block"><br>
-                    </div>
+                    <span style="width: fit-content;
+                                padding: 5px;
+                                margin-bottom: 5px;
+                                background-color: whitesmoke;
+                                border: 1px solid black;
+                                vertical-align: middle">
+                        <input type="text" id="chatInput" class="chatInput-text"><input class="submitMessage" type="submit" id="submit" onclick=sendMsg()>
+                    </span>
+                    <hr style="border: 0px;">
                     <div class="smileyPopup-div" onclick=openSmileyPopup()>
                         <img src="include/img/smiley.png" width="20px" height="20px">
                         <span class="smileyPopup-content" id="smileyPopup-window"><%@include file="smileyPopup.jspf" %></span>
@@ -47,6 +53,8 @@
                             <input type="url" id="urlInput" placeholder="paste URL here ..."> <input type="submit" onclick=sendUrl()>
                         </span>
                     </div>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="checkbox" name="selectSendMethod" id="selectSendMethod" checked="checked" style="width: 1em; height: 1em; border-radius: 0px; border: 1px solid black"><label for="selectSendMethod">Enter sends Message</label>
                     <br>
                     <br>
                     <small style="width: 100%; text-align: center">

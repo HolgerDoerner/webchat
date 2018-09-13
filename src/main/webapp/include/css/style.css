@@ -7,6 +7,7 @@
     background-color: darkgray;
     text-align: center;
     vertical-align: middle;
+    text-shadow: 5px 5px 2px gray;
 }
 
 .item2 {
@@ -112,13 +113,39 @@ p.message {
 }
 
 .chatInput-text {
-    width: 80%;
+    min-width: 10em;
+    width: 40em;
     margin: 0px;
     resize: none;
     overflow-x: hidden;
     overflow-y: auto;
     font-family: 'Segoe UI', 'Lucida Grande', 'Ubuntu', 'sans-serif';
     font-weight: bold;
+    border: 0px;
+    background-color: whitesmoke;
+}
+
+.chatInput-text:focus, .submitMessage:focus {
+    outline: 0px;
+}
+
+.submitMessage {
+    border: 0px;
+    box-shadow: 0px;
+    margin: 0px;
+    padding: 0px;
+    background-color: whitesmoke;
+    font-weight: bold;
+    color: grey;
+    vertical-align: middle;
+}
+
+.submitMessage:hover, .submitMessage:focus {
+    color: lightgray;
+}
+
+.submitMessage:active {
+    color: black;
 }
 /* #ENDREGION input-area */
 

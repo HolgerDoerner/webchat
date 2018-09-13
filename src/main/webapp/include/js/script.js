@@ -15,8 +15,8 @@ if (!nickname) window.location.replace('index.jsp');
 
 // create the websocket-connection to the server-endpoint.
 // TODO: change ws-adress bevor deploying to the server !!!!
-//let socket = new WebSocket(`wss://10.100.5.15:8443/webchat/chat/${nickname}`); // production work
-let socket = new WebSocket(`wss://10.100.5.15:8446/webchat/chat/${nickname}`); // development work
+let socket = new WebSocket(`wss://10.100.5.15:8443/webchat/chat/${nickname}`); // production work
+//let socket = new WebSocket(`wss://10.100.5.15:8446/webchat/chat/${nickname}`); // development work
 //let socket = new WebSocket(`wss://192.168.178.100:8446/webchat/chat/${nickname}`); // development home
 
 // initializes the values when page is fully loaded.
@@ -29,7 +29,7 @@ window.onload = () => {
     imagePopup = document.getElementById('imagePopup-window');
     urlPopup = document.getElementById('urlPopup-window');
 
-    chatInput.onkeydown = onKeyDown;
+    chatInput.onkeypress = onKeyPress;
 
     if (window.Notification || window.webkitNotifications || navigator.mozNotification && Notification.permission !== 'granted') {
         Notification.requestPermission();
@@ -86,10 +86,15 @@ socket.onmessage = event => {
 
 // key-eventhandler for chat input box.
 // sends message by pressing 'CTRL+ENTER'.
-let onKeyDown = event => {
-
-    if (event.ctrlKey && event.keyCode == 13) {
-        sendMsg(null, null, null, null);
+let onKeyPress = event => {
+    if (event.keyCode == 13 && document.getElementById('selectSendMethod').checked == true) {
+        if (chatInput.value === '/clear') {
+            chatOutput.innerHTML = '';
+            chatInput.value = '';
+        }
+        else {
+            sendMsg(null, null, null, null);
+        }
     }
 }
 
