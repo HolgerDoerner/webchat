@@ -115,6 +115,7 @@ p.message {
 .chatInput-text {
     min-width: 10em;
     width: 40em;
+    padding: 0px 0px 3px 0px;
     margin: 0px;
     resize: none;
     overflow-x: hidden;
@@ -123,6 +124,7 @@ p.message {
     font-weight: bold;
     border: 0px;
     background-color: whitesmoke;
+    vertical-align: middle;
 }
 
 .chatInput-text:focus, .submitMessage:focus {
@@ -133,7 +135,7 @@ p.message {
     border: 0px;
     box-shadow: 0px;
     margin: 0px;
-    padding: 0px;
+    padding: 0px 0px 3px 0px;
     background-color: whitesmoke;
     font-weight: bold;
     color: grey;

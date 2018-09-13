@@ -273,15 +273,42 @@ public class ChatEndpoint {
      * sends help-message to the client
      * 
      * @param session
+     * @throws UnsupportedEncodingException
      */
-    public void sendHelp(Session session) {
+    public void sendHelp(Session session) throws UnsupportedEncodingException {
 
-        Message message = new Message();
+        StringBuilder content = new StringBuilder();
 
-        message.setFrom("Server");
-        message.setTo(session.getId());
-        message.setContent("Sorry, no help yet... xP");
-        
-        directMessage(message, session);
+        // get path of webcontent-folder
+        String path = this.getClass().getClassLoader().getResource("").getPath();
+        String fullPath = URLDecoder.decode(path, "UTF-8");
+        String pathArr[] = fullPath.split("/WEB-INF/classes/");
+        fullPath = pathArr[0];
+
+        // to read a file from webcontent
+        Scanner scanner = null;
+
+        try {
+            scanner = new Scanner(new File(new File(fullPath).getPath() + File.separatorChar + "help.txt"));
+
+            content.append("- - - HELP - - -\n\n");
+
+            while (scanner.hasNext()) {
+                content.append(scanner.nextLine() + "\n");
+            }
+
+            Message message = new Message();
+            message.setFrom("server");
+            message.setTo(session.getId());
+            message.setContent(content.toString());
+
+            directMessage(message, session);
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        finally {
+            scanner.close();
+        }
     }
 }

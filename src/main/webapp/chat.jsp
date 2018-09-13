@@ -28,14 +28,15 @@
             </div>
             <div class="item4">
                 <div class="chatInput-td">
-                    <span style="width: fit-content;
+                    <div style="width: fit-content;
+                                height: fit-content;
                                 padding: 5px;
-                                margin-bottom: 5px;
+                                margin: 0px;
                                 background-color: whitesmoke;
                                 border: 1px solid black;
                                 vertical-align: middle">
-                        <input type="text" id="chatInput" class="chatInput-text"><input class="submitMessage" type="submit" id="submit" onclick=sendMsg()>
-                    </span>
+                        <textarea id="chatInput" class="chatInput-text" rows="1" autofocus></textarea><input class="submitMessage" type="submit" id="submit" onclick=sendMsg()>
+                    </div>
                     <hr style="border: 0px;">
                     <div class="smileyPopup-div" onclick=openSmileyPopup()>
                         <img src="include/img/smiley.png" width="20px" height="20px">

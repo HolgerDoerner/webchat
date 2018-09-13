@@ -15,9 +15,9 @@ if (!nickname) window.location.replace('index.jsp');
 
 // create the websocket-connection to the server-endpoint.
 // TODO: change ws-adress bevor deploying to the server !!!!
-let socket = new WebSocket(`wss://10.100.5.15:8443/webchat/chat/${nickname}`); // production work
+//let socket = new WebSocket(`wss://10.100.5.15:8443/webchat/chat/${nickname}`); // production work
 //let socket = new WebSocket(`wss://10.100.5.15:8446/webchat/chat/${nickname}`); // development work
-//let socket = new WebSocket(`wss://192.168.178.100:8446/webchat/chat/${nickname}`); // development home
+let socket = new WebSocket(`wss://192.168.178.100:8446/webchat/chat/${nickname}`); // development home
 
 // initializes the values when page is fully loaded.
 window.onload = () => {
@@ -91,9 +91,12 @@ let onKeyPress = event => {
         if (chatInput.value === '/clear') {
             chatOutput.innerHTML = '';
             chatInput.value = '';
+            event.preventDefault();
+            chatInput.focus();
         }
         else {
             sendMsg(null, null, null, null);
+            event.preventDefault();
         }
     }
 }
@@ -215,6 +218,7 @@ let textToHTML = text => {
     textArray = text.split('\n');
 
     textArray.forEach(line => {
+        console.log(line);
         output += line + '<br>';
     })
 
