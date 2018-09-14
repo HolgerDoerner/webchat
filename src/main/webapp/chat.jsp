@@ -34,7 +34,8 @@
                                 margin: 0px;
                                 background-color: whitesmoke;
                                 border: 1px solid black;
-                                vertical-align: middle">
+                                vertical-align: middle;
+                                white-space: nowrap">
                         <textarea id="chatInput" class="chatInput-text" rows="1" autofocus></textarea><input class="submitMessage" type="submit" id="submit" onclick=sendMsg()>
                     </div>
                     <hr style="border: 0px;">

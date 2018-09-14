@@ -92,8 +92,13 @@ public class ChatEndpoint {
      */
     @OnMessage
     public void onMessage(Session session, Message message) throws IOException, EncodeException {
-
-        if (message.getContent().toLowerCase().startsWith("/userlist")) {
+        if (message.getSubject().equalsIgnoreCase("#ping!")) {
+            Message pong = new Message();
+            pong.setFrom("server");
+            pong.setSubject("#pong!");
+            session.getBasicRemote().sendObject(pong);
+        }
+        else if (message.getContent().toLowerCase().startsWith("/users")) {
 
             sendUserlist(session);
         }
@@ -211,7 +216,7 @@ public class ChatEndpoint {
 
         StringBuilder userList = new StringBuilder();
 
-        userList.append(">>> Userlist <<<");
+        userList.append("- - - USERLIST - - -");
         users.values().forEach(user -> {
             userList.append("\n" + user);
         });

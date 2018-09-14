@@ -1,3 +1,3 @@
 /motd        - (re-)prints message of the day
-/userlist    - prints the actual list of active users
+/users       - prints the actual list of active users
 /clear       - clears output area

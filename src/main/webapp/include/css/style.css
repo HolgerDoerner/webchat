@@ -113,8 +113,7 @@ p.message {
 }
 
 .chatInput-text {
-    min-width: 10em;
-    width: 40em;
+    width: 50em;
     padding: 0px 0px 3px 0px;
     margin: 0px;
     resize: none;

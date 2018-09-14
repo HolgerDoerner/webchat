@@ -6,18 +6,21 @@ let smileyPopup = null;
 let imagePopup = null;
 let urlPopup = null;
 
+let pongTimeout;
+
 // read the cookie to get the username.
 let decodedCookie = decodeURIComponent(document.cookie);
 let cookie = decodedCookie.split(';');
 let nickname = cookie[0].split('=')[1];
 
+// if user is not logged in properly -> redirekt to login page
 if (!nickname) window.location.replace('index.jsp');
 
 // create the websocket-connection to the server-endpoint.
 // TODO: change ws-adress bevor deploying to the server !!!!
-//let socket = new WebSocket(`wss://10.100.5.15:8443/webchat/chat/${nickname}`); // production work
+let socket = new WebSocket(`wss://10.100.5.15:8443/webchat/chat/${nickname}`); // production work
 //let socket = new WebSocket(`wss://10.100.5.15:8446/webchat/chat/${nickname}`); // development work
-let socket = new WebSocket(`wss://192.168.178.100:8446/webchat/chat/${nickname}`); // development home
+//let socket = new WebSocket(`wss://192.168.178.100:8446/webchat/chat/${nickname}`); // development home
 
 // initializes the values when page is fully loaded.
 window.onload = () => {
@@ -34,6 +37,13 @@ window.onload = () => {
     if (window.Notification || window.webkitNotifications || navigator.mozNotification && Notification.permission !== 'granted') {
         Notification.requestPermission();
     }
+
+    setInterval(() => {
+        sendMsg("#ping!", nickname, "server", null);
+        pongTimeout = setTimeout(() => {
+            alert("Connection to Server lost, please reconnect!");
+        }, 15000);
+    }, 10000)
 }
 
 window.onfocus = () => {
@@ -48,6 +58,10 @@ socket.onmessage = event => {
     switch (message.subject) {
         case 'userlist':
             updateUserlist(message.content);
+            break;
+
+        case '#pong!':
+            clearTimeout(pongTimeout);
             break;
 
         default:
