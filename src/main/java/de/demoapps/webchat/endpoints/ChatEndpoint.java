@@ -60,7 +60,7 @@ public class ChatEndpoint {
         // send MOTD to the new user
         sendMOTD(session);
 
-        broadcastMessage(new Message("", nickname, "", "## Hi there ! ##"));
+        broadcastMessage(new Message("", nickname, "", "## Hi there !"));
 
         StringBuilder content = new StringBuilder();
         users.values().forEach(user -> {
@@ -114,7 +114,7 @@ public class ChatEndpoint {
 
         chatEndpoints.remove(this);
 
-        broadcastMessage(new Message("", users.get(session.getId()), "", "## Bye bye ! ##"));
+        broadcastMessage(new Message("", users.get(session.getId()), "", "## Bye bye !"));
 
         users.remove(session.getId());
 
