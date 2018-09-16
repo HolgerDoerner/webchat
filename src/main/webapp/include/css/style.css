@@ -166,6 +166,10 @@ div.message blockquote {
     padding-left: 5px;
 }
 
+code {
+    font-family: monospace;
+}
+
 div.message p code {
     background-color: lightgrey;
     padding: 0px 4px 0px 4px;

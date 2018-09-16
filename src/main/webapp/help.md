@@ -1,3 +1,4 @@
+# Help
 
 | Command           |       | Description                                   |
 | :---              | ---   | :---                                          | 

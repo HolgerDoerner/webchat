@@ -1,17 +1,17 @@
-# Markdown formatting #
+# Markdown formatting
 
-### Text formatting ###
+## Text formatting
 | Symbol | Usage | Description |
 | --- | --- | --- |
-| \# | \# Hello World! \# | Header 1 |
-| \## | \## Hello World! \## | Header 2 |
-| \### | \### Hello World! \### | Header 3 |
+| \# | \# Hello World! | Header 1 |
+| \## | \## Hello World! | Header 2 |
+| \### | \### Hello World! | Header 3 |
 | \* | \* italic \* | *italic* |
 | \** | \** bold \** | **bold** |
 | \*** | \*** bold italic \*** | ***bold italic*** |
 
 
-### Presentation ###
+## Presentation
 | Symbol | Example | Description |
 | --- | --- | --- |
 | \[link](http://google.de) | [Google](http://google.de) | Link |

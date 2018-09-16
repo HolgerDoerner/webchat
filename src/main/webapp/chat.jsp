@@ -14,6 +14,14 @@
         <link rel="shortcut icon" href="include/img/icon-512x512.png">
 
         <!--
+            highlight.js code highlighting
+        
+        <link rel="stylesheet" href="highlight/styles/default.css">
+        <script src="highlight/highlight.pack.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+        -->
+
+        <!--
             including markdown-it from CDN-Repository for markdown-formatted in-/output.
             also including the emoji-plugin.
         -->
