@@ -12,22 +12,18 @@
 
 .item2 {
     grid-area: navigation;
-    background-color: grey;
-}
-
-.item2-toggle {
-    width: 1em;
+    background-color: lightgray;
 }
 
 .item3 {
     grid-area: main;
-    background-color: whitesmoke;
+    background-color: lightgray;
     overflow: auto;
 }
 
 .item4 {
     grid-area: footer;
-    background-color: darkgray;
+    background-color: lightgray;
 }
 
 .grid-container {
@@ -55,44 +51,96 @@ body {
     padding: 0px;
     margin: 0px;
     font-family: 'Segoe UI', 'Lucida Grande', 'Ubuntu', 'sans-serif';
+    font-size: 14px;
 }
 
-p.message {
-    width: 100%;
-    height: max-content;
-    padding: 0px;
-    margin: 10px;
-    display: inline-block;
+a, a:visited {
+    color: orange;
+    text-decoration: none;
+}
+
+a:hover, a:active {
+    color: orangered;
+    text-decoration: none;
 }
 
 /* #REGION userlist-area */
 .userList-fieldset {
     height: max-content;
     width: max-content;
-    border: 0px;
-    margin: 0px;
+    margin: 10px 0px 0px 0px;
     padding: 0px 0px 0px 5px;
+    border: 0px;
 }
 
 .userList-legend {
-    color: lightgreen;
+    color: orangered;
+    font-size: 1em;
+    font-weight: bold;
+    vertical-align: text-top;
 }
 
 .userListOutput-div {
-    width: max-content;
-    height: max-content;
-    padding: 0px 0px 0px 10px;
+    width: 100%;
+    height: auto;
+    padding: 0px 0px 10px 10px;
     margin: 0px;
     resize: none;
     overflow: auto;
-    border: none;
+    border: 0px;
     font-weight: bold;
-    color: lightgray;
+    color: gray;
+    display: inline-block;
 }
 /* #ENDREGION userlist-area */
 
+/* #REGION options-area */
+.optionsFieldset {
+    height: max-content;
+    width: max-content;
+    margin: 10px 0px 0px 0px;
+    padding: 0px 0px 0px 5px;
+    border: 0px;
+}
+
+.optionsLegend {
+    color: orangered;
+    font-size: 1em;
+    font-weight: bold;
+    vertical-align: text-top;
+}
+
+.optionsContent {
+    width: 100%;
+    height: auto;
+    padding: 0px 0px 0px 15px;
+    margin: 0px;
+    resize: none;
+    overflow: auto;
+    border: 0px;
+    font-weight: normal;
+    color: black;
+    display: none;
+}
+
+.optionsContent-toggle {
+    display: inline-block;
+}
+
+.optionsContent input[type=checkbox] {
+    transform: scale(1.2);
+    color: orangered;
+}
+
+img.optionsButton {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+/* #ENDREGION options-area */
+
 /* #REGION output-area */
-.chatOutput-div {
+.chatOutput {
     width: 100%;
     height: 100%;
     padding: 0px;
@@ -102,13 +150,50 @@ p.message {
     overflow-y: scroll;
     border: 0px;
 }
+
+div.message {
+    width: 95%;
+    height: max-content;
+    padding: 10px;
+    margin: 5px 0px 0px 20px;
+    font-size: inherit;
+    background-color: whitesmoke;
+}
+
+div.message blockquote {
+    background-color: lightgray;
+    border-left: 5px solid gray;
+    padding-left: 5px;
+}
+
+div.message p code {
+    background-color: lightgrey;
+    padding: 0px 4px 0px 4px;
+    border-radius: 4px;
+    border: 1px solid grey;
+}
+
+div.message pre {
+    height: fit-content;
+    width: fit-content;
+    background-color: lightgrey;
+    padding: 5px;
+    margin-left: 20px;
+}
+
+div.message img {
+    max-width: 700px;
+    max-height: 700px;
+}
+
+div.message table {
+    display: table;
+}
 /* #ENDREGION output-area */
 
 /* #REGION input-area */
 .chatInput-td {
-    height: auto;
-    width: 85%;
-	margin: 10px 0px 0px 10px;
+	margin: 10px 0px 0px 0px;
 	padding: 0px;
 }
 
@@ -120,7 +205,7 @@ p.message {
     overflow-x: hidden;
     overflow-y: auto;
     font-family: 'Segoe UI', 'Lucida Grande', 'Ubuntu', 'sans-serif';
-    font-weight: bold;
+    font-size: 1.5em;
     border: 0px;
     background-color: whitesmoke;
     vertical-align: middle;
@@ -142,127 +227,10 @@ p.message {
 }
 
 .submitMessage:hover, .submitMessage:focus {
-    color: lightgray;
+    color: orangered;
 }
 
 .submitMessage:active {
-    color: black;
+    color: orange;
 }
 /* #ENDREGION input-area */
-
-/* #REGION smiley popup */
-.smileyPopup-div {
-    position: relative;
-    display: inline-block;
-    cursor: pointer;
-    text-align: left;
-}
-
-.smileyPopup-div .smileyPopup-content {
-    visibility: hidden;
-    width: 300px;
-    background-color: lightblue;
-    color: black;
-    text-align: center;
-    border-radius: 6px;
-    padding: 8px 0;
-    position: absolute;
-    z-index: 1;
-    bottom: 125%;
-    left: 50%;
-    margin-left: -80px;
-}
-
-.smileyPopup-div .smileyPopup-content::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: #555 transparent transparent transparent;
-}
-
-.smileyPopup-div .show {
-    visibility: visible;
-}
-/* #ENDREGION smiley popup */
-
-/* #REGION image popup */
-.imagePopup-div {
-    position: relative;
-    display: inline-block;
-    cursor: pointer;
-    text-align: left;
-}
-
-.imagePopup-div .imagePopup-content {
-    visibility: hidden;
-    width: 300px;
-    background-color: lightblue;
-    color: black;
-    text-align: center;
-    border-radius: 6px;
-    padding: 8px 0;
-    position: absolute;
-    z-index: 1;
-    bottom: 125%;
-    left: 50%;
-    margin-left: -80px;
-}
-
-.imagePopup-div .imagePopup-content::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: #555 transparent transparent transparent;
-}
-
-.imagePopup-div .show {
-    visibility: visible;
-}
-/* #ENDREGION image popup */
-
-/* #REGION url popup */
-.urlPopup-div {
-    position: relative;
-    display: inline-block;
-    cursor: pointer;
-    text-align: left;
-}
-
-.urlPopup-div .urlPopup-content {
-    visibility: hidden;
-    width: 300px;
-    background-color: lightblue;
-    color: black;
-    text-align: center;
-    border-radius: 6px;
-    padding: 8px 0;
-    position: absolute;
-    z-index: 1;
-    bottom: 125%;
-    left: 50%;
-    margin-left: -80px;
-}
-
-.urlPopup-div .urlPopup-content::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: #555 transparent transparent transparent;
-}
-
-.urlPopup-div .show {
-    visibility: visible;
-}
-/* #ENDREGION url popup */

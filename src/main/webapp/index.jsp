@@ -20,7 +20,7 @@
 .nicknameSubmit {
     border: 0px;
     background-color: white;
-    box-shadow: 0px;
+    box-shadow: none;
     font-family: 'Segoe UI', 'Lucida Grande', 'Ubuntu', 'sans-serif';
     font-weight: bold;
     color: grey;
@@ -71,10 +71,12 @@
 
 <html>
     <head>
-        <meta charset="UTF-8" lang="en">
         <title>
             Simple WebChat
         </title>
+        <meta charset="UTF-8" lang="en">
+        <link rel="shortcut icon" href="include/img/icon-512x512.png">
+        <link rel="manifest" href="manifest.json">
     </head>
     <body>
         <div class="grid-container">
@@ -89,7 +91,13 @@
                                 background-color: lightgrey;
                                 width: fit-content;
                                 height: fit-content">
-                    <span style="border: 1px solid black; background-color: white; margin: 0px; padding: 5px">
+                    <span style="border-top: 0px;
+                                border-left: 0px;
+                                border-right: 0px;
+                                border-bottom: 2px solid orangered;
+                                background-color: white;
+                                margin: 0px;
+                                padding: 5px">
                         <input id="nickname"
                                 class="nicknameInput"
                                 type="text"
@@ -97,7 +105,9 @@
                                 required="required"
                                 autofocus
                                 autocomplete="nickname"
-                                placeholder="Nickname"><input class="nicknameSubmit" type="submit" id="submit">
+                                placeholder="Nickname"
+                                minlength="4"
+                                maxlength="20"><input class="nicknameSubmit" type="submit" id="submit">
                     </span>
                 </form>
             </div>

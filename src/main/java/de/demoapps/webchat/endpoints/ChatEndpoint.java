@@ -60,26 +60,14 @@ public class ChatEndpoint {
         // send MOTD to the new user
         sendMOTD(session);
 
-        Message message = new Message();
-
-        // build and broadcast join-message
-        message.setFrom(nickname);
-        message.setContent("<<<< has joined !");
-
-        broadcastMessage(message);
-
-        // build and send userlist to the ne user
-        message.setFrom("server");
-        message.setSubject("userlist");
+        broadcastMessage(new Message("", nickname, "", "## Hi there ! ##"));
 
         StringBuilder content = new StringBuilder();
         users.values().forEach(user -> {
             content.append(user + ";");
         });
 
-        message.setContent(content.toString());
-
-        broadcastMessage(message);
+        broadcastMessage(new Message("userlist", "server", "", content.toString()));
     }
 
     /**
@@ -92,13 +80,7 @@ public class ChatEndpoint {
      */
     @OnMessage
     public void onMessage(Session session, Message message) throws IOException, EncodeException {
-        if (message.getSubject().equalsIgnoreCase("#ping!")) {
-            Message pong = new Message();
-            pong.setFrom("server");
-            pong.setSubject("#pong!");
-            session.getBasicRemote().sendObject(pong);
-        }
-        else if (message.getContent().toLowerCase().startsWith("/users")) {
+        if (message.getContent().toLowerCase().startsWith("/users")) {
 
             sendUserlist(session);
         }
@@ -109,6 +91,10 @@ public class ChatEndpoint {
         else if (message.getContent().toLowerCase().startsWith("/help")) {
 
             sendHelp(session);
+        }
+        else if (message.getContent().toLowerCase().startsWith("/mdhelp")) {
+
+            sendMdhelp(session);
         }
         else {
             message.setFrom(users.get(session.getId()));
@@ -128,28 +114,18 @@ public class ChatEndpoint {
 
         chatEndpoints.remove(this);
 
-        Message message = new Message();
-        message.setFrom(users.get(session.getId()));
-        message.setContent("<<<< has left !");
-
-        broadcastMessage(message);
+        broadcastMessage(new Message("", users.get(session.getId()), "", "## Bye bye ! ##"));
 
         users.remove(session.getId());
 
         session.close();
-
-        // broadcast neu userlist
-        message.setFrom("server");
-        message.setSubject("userlist");
 
         StringBuilder content = new StringBuilder();
         users.values().forEach(user -> {
             content.append(user + ";");
         });
 
-        message.setContent(content.toString());
-
-        broadcastMessage(message);
+        broadcastMessage(new Message("userlist", "server", "", content.toString()));
     }
 
     /**
@@ -172,7 +148,7 @@ public class ChatEndpoint {
     public void broadcastMessage(Message message) {
 
         Date timestamp = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+        SimpleDateFormat formatter = new SimpleDateFormat("E.',' dd.MM.yy 'at' hh:mm:ss");
         message.setTimestamp(formatter.format(timestamp));
         
         chatEndpoints.forEach(endpoint -> {
@@ -196,7 +172,7 @@ public class ChatEndpoint {
     public void directMessage(Message message, Session session) {
 
         Date timestamp = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+        SimpleDateFormat formatter = new SimpleDateFormat("E.',' dd.MM.yy 'at' hh:mm:ss");
         message.setTimestamp(formatter.format(timestamp));
 
         try {
@@ -216,18 +192,11 @@ public class ChatEndpoint {
 
         StringBuilder userList = new StringBuilder();
 
-        userList.append("- - - USERLIST - - -");
         users.values().forEach(user -> {
             userList.append("\n" + user);
         });
-
-        Message message = new Message();
-
-        message.setFrom("Server");
-        message.setTo(session.getId());
-        message.setContent(userList.toString());
         
-        directMessage(message, session);
+        directMessage(new Message("", "_SERVER_", users.get(session.getId()), userList.toString()), session);
     }
 
     /**
@@ -250,20 +219,14 @@ public class ChatEndpoint {
         Scanner scanner = null;
 
         try {
-            scanner = new Scanner(new File(new File(fullPath).getPath() + File.separatorChar + "motd.txt"));
+            scanner = new Scanner(new File(new File(fullPath).getPath() + File.separatorChar + "motd.md"));
 
-            content.append("- - - MESSAGE OF THE DAY - - -\n\n");
 
             while (scanner.hasNext()) {
                 content.append(scanner.nextLine() + "\n");
             }
 
-            Message message = new Message();
-            message.setFrom("server");
-            message.setTo(session.getId());
-            message.setContent(content.toString());
-
-            directMessage(message, session);
+            directMessage(new Message("", "_SERVER_", users.get(session.getId()), content.toString()), session);
         }
         catch (Exception e) {
             System.out.println(e.getMessage());
@@ -294,20 +257,51 @@ public class ChatEndpoint {
         Scanner scanner = null;
 
         try {
-            scanner = new Scanner(new File(new File(fullPath).getPath() + File.separatorChar + "help.txt"));
+            scanner = new Scanner(new File(new File(fullPath).getPath() + File.separatorChar + "help.md"));
 
-            content.append("- - - HELP - - -\n\n");
 
             while (scanner.hasNext()) {
                 content.append(scanner.nextLine() + "\n");
             }
 
-            Message message = new Message();
-            message.setFrom("server");
-            message.setTo(session.getId());
-            message.setContent(content.toString());
+            directMessage(new Message("", "_SERVER_", users.get(session.getId()), content.toString()), session);
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        finally {
+            scanner.close();
+        }
+    }
 
-            directMessage(message, session);
+    /**
+     * sends markdown help-message to the client
+     * 
+     * @param session
+     * @throws UnsupportedEncodingException
+     */
+    public void sendMdhelp(Session session) throws UnsupportedEncodingException {
+
+        StringBuilder content = new StringBuilder();
+
+        // get path of webcontent-folder
+        String path = this.getClass().getClassLoader().getResource("").getPath();
+        String fullPath = URLDecoder.decode(path, "UTF-8");
+        String pathArr[] = fullPath.split("/WEB-INF/classes/");
+        fullPath = pathArr[0];
+
+        // to read a file from webcontent
+        Scanner scanner = null;
+
+        try {
+            scanner = new Scanner(new File(new File(fullPath).getPath() + File.separatorChar + "mdhelp.md"));
+
+
+            while (scanner.hasNext()) {
+                content.append(scanner.nextLine() + "\n");
+            }
+
+            directMessage(new Message("", "_SERVER_", users.get(session.getId()), content.toString()), session);
         }
         catch (Exception e) {
             System.out.println(e.getMessage());

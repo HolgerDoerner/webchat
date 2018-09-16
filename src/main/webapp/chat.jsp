@@ -5,12 +5,25 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="UTF-8" lang="en">
-        <link rel="stylesheet" href="include/css/style.css">
-        <script src="include/js/script.js"></script>
         <title>
-            Simple WebChat
+            #Simple WebChat
         </title>
+        <meta charset="UTF-8" lang="en">
+        <link rel="manifest" href="manifest.json">
+        <link rel="stylesheet" href="include/css/style.css">
+        <link rel="shortcut icon" href="include/img/icon-512x512.png">
+
+        <!--
+            including markdown-it from CDN-Repository for markdown-formatted in-/output.
+            also including the emoji-plugin.
+        -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/8.4.2/markdown-it.js" integrity="sha256-L6nwQfrUv4YrDu/OyAjehTyMjZ7d0n0tjm8aBxHEn18=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it-emoji/1.4.0/markdown-it-emoji.js" integrity="sha256-Edk9UUpic1HZ4H8YiZcvrh/DScIVt1M1ZTdGy8ndonQ=" crossorigin="anonymous"></script>
+
+        <!--
+            main JavaScript code.
+        -->
+        <script src="include/script/main.js"></script>
     </head>
     <body>
         <div class="grid-container" id="grid-container">
@@ -22,9 +35,20 @@
                     <legend class="userList-legend" id="userList-legend"></legend>
                     <div class="userListOutput-div" id="userList"></div>
                 </fieldset>
+                <hr style="border: 0px">
+                <fieldset class="optionsFieldset">
+                    <legend class="optionsLegend">
+                        <a href="index.jsp" target="_self" id="logout"><img class="optionsButton" id="logoutButton" src="include/img/logout-512x512.png" alt="Logout" title="Logout"></a>
+                        <img class="optionsButton" id="optionsButton" src="include/img/options-512x512.png" alt="Options" title="Options" onclick=toggleOptions()>
+                    </legend>
+                    <div class="optionsContent" id="optionsContent">
+                        <label for="selectSendMethod">Send with Enter:</label> <input type="checkbox" name="selectSendMethod" id="selectSendMethod" checked="checked"><br>
+                        <label for="showActialFontSize">Font size:</label> <img src="include/img/decrease-512x512.png" width="10px" height="10px" onclick=changeFontSize(-1)> <b id="showActualFontSize"></b> <img src="include/img/increase-512x512.png" width="10px" height="10px" onclick=changeFontSize(1)>
+                    </div>
+                </fieldset>
             </div>
             <div class="item3">
-                <div class="chatOutput-div" id="chatOutput"></div>
+                <div class="chatOutput" id="chatOutput"></div>
             </div>
             <div class="item4">
                 <div class="chatInput-td">
@@ -33,35 +57,17 @@
                                 padding: 5px;
                                 margin: 0px;
                                 background-color: whitesmoke;
-                                border: 1px solid black;
+                                border-top: 0px;
+                                border-left: 0px;
+                                border-right: 0px;
+                                border-bottom: 2px solid orangered;
                                 vertical-align: middle;
                                 white-space: nowrap">
-                        <textarea id="chatInput" class="chatInput-text" rows="1" autofocus></textarea><input class="submitMessage" type="submit" id="submit" onclick=sendMsg()>
+                        <textarea id="chatInput" class="chatInput-text" rows="3" autofocus></textarea> <input class="submitMessage" type="submit" id="submit" value="Send" onclick=sendMsg()>
                     </div>
-                    <hr style="border: 0px;">
-                    <div class="smileyPopup-div" onclick=openSmileyPopup()>
-                        <img src="include/img/smiley.png" width="20px" height="20px">
-                        <span class="smileyPopup-content" id="smileyPopup-window"><%@include file="smileyPopup.jspf" %></span>
-                    </div>&nbsp;
-                    <div class="imagePopup-div" onclick=openImagePopup()>
-                        <img src="include/img/pic2.png" width="20px" height="20px">
-                        <span class="imagePopup-content" id="imagePopup-window">
-                            <input type="url" id="imageUrlInput" placeholder="paste Image-URL here ..."> <input type="submit" onclick=sendImageUrl()>
-                        </span>
-                    </div>&nbsp;
-                    <div class="urlPopup-div" onclick=openUrlPopup()>
-                        <img src="include/img/link.png" width="20px" height="20px">
-                        <span class="urlPopup-content" id="urlPopup-window">
-                            <input type="url" id="urlInput" placeholder="paste URL here ..."> <input type="submit" onclick=sendUrl()>
-                        </span>
-                    </div>
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="checkbox" name="selectSendMethod" id="selectSendMethod" checked="checked" style="width: 1em; height: 1em; border-radius: 0px; border: 1px solid black"><label for="selectSendMethod">Enter sends Message</label>
-                    <br>
-                    <br>
-                    <small style="width: 100%; text-align: center">
-                        This Software is published under the terms of the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">GNU Public License (GPL) v3</a>, developed by <a href="https://github.com/holgerdoerner" taget="_blank">Holger Dörner</a>.<br>
-                        Project Sourcecode is hosted at <a href="https://github.com/holgerdoerner/webchat" target="_blank">Github</a>. Bug-Reports, Suggestions and Participation are welcome!
+                    <small>
+                        This Software is published under the terms of the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">GNU Public License (GPL) v3</a>, developed by <a href="https://github.com/holgerdoerner" taget="_blank">Holger Dörner</a>. Project Sourcecode is hosted at <a href="https://github.com/holgerdoerner/webchat" target="_blank">Github</a>. Bug-Reports, Suggestions and Participation are welcome!<br>
+                        Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
                     </small>
                 </div>
             </div>

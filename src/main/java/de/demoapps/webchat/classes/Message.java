@@ -10,6 +10,13 @@ public class Message {
 
     public Message() {}
 
+    public Message(String subject, String from, String to, String content) {
+        this.subject = subject;
+        this.from = from;
+        this.to = to;
+        this.content = content;
+    }
+
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
