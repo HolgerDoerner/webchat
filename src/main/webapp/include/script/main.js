@@ -19,9 +19,22 @@ if (!nickname) window.location.replace('index.jsp');
 
 // create the websocket-connection to the server-endpoint.
 // TODO: change ws-adress bevor deploying to the server !!!!
-//let socket = new WebSocket(`wss://10.100.5.15:8443/webchat/chat/${nickname}`); // production work
-//let socket = new WebSocket(`wss://10.100.5.15:8446/webchat/chat/${nickname}`); // development work
-let socket = new WebSocket(`wss://192.168.178.100:8446/webchat/chat/${nickname}`); // development home
+//let wsServer = `wss://10.100.5.15:8443/webchat/chat/${nickname}`; // production work
+//let wsServer = `wss://10.100.5.15:8446/webchat/chat/${nickname}`; // development work
+let wsServer = `wss://192.168.178.100:8446/webchat/chat/${nickname}`; // development home
+let socket = new WebSocket(wsServer);
+
+// ------------------------------------------------------
+// WebSocket error-handler
+// ------------------------------------------------------
+socket.addEventListener('error', event => {
+
+    // TODO: make something usefull here...
+    alert('WebSocket connection error! Trying to reconnect ...');
+
+    socket = null;
+    socket = new WebSocket(wsServer);
+})
 
 // ------------------------------------------------------
 // initializes the values when page is fully loaded.
@@ -39,10 +52,13 @@ window.onload = () => {
     imagePopup = document.getElementById('imagePopup-window');
     urlPopup = document.getElementById('urlPopup-window');
 
-    // setting initial font-size of the chat-output
-    chatOutput.style.fontSize = '14px';
-    document.getElementById('showActualFontSize').innerHTML = chatOutput.style.fontSize;
+    // setting initial font-size of the in- and output
+    chatOutput.style.fontSize = '15px';
+    document.getElementById('showActualOutputFontSize').innerHTML = chatOutput.style.fontSize;
+    chatInput.style.fontSize = '15px';
+    document.getElementById('showActualInputFontSize').innerHTML = chatInput.style.fontSize;
 
+    // event-handler for sending messages with 'Enter'
     chatInput.onkeypress = onKeyPress;
 
     // request permission to display desktop-notifications.
@@ -95,15 +111,6 @@ socket.addEventListener('message', event => {
             }
             break;
     }
-})
-
-// ------------------------------------------------------
-// WebSocket error-handler
-// ------------------------------------------------------
-socket.addEventListener('error', event => {
-
-    // TODO: make something usefull here...
-    alert('WebSocket connection error!');
 })
 
 // ------------------------------------------------------
@@ -163,6 +170,11 @@ let displayMessage = (message) => {
     output += '</div>';
 
     chatOutput.innerHTML += output;
+
+    // call highlight.js
+    window.hljs.initHighlighting.called = false;
+    window.hljs.configure({tabReplace: '    '});
+    window.hljs.initHighlighting();
 }
 
 // ------------------------------------------------------
@@ -191,12 +203,37 @@ let toggleOptions = () => {
 }
 
 // ------------------------------------------------------
-// incrasing and decrasing the font-size of the output window
+// change the font-size of the output view
 // ------------------------------------------------------
-let changeFontSize = value => {
+let changeOutputFontSize = action => {
 
-    chatOutput.style.fontSize = Number.parseInt(chatOutput.style.fontSize) + value + 'px';
-    document.getElementById('showActualFontSize').innerHTML = chatOutput.style.fontSize;
+    let currentFontSize = Number.parseInt(chatOutput.style.fontSize);
+
+    if (currentFontSize > 10 && action == '-') {
+        let newFontSize = currentFontSize + -1 + 'px';
+        document.getElementById('showActualOutputFontSize').innerHTML = chatOutput.style.fontSize = newFontSize;
+    }
+    if (currentFontSize < 25 && action == '+') {
+        let newFontSize = currentFontSize + 1 + 'px';
+        document.getElementById('showActualOutputFontSize').innerHTML = chatOutput.style.fontSize = newFontSize;
+    }
+}
+
+// ------------------------------------------------------
+// change the font-size of the input field
+// ------------------------------------------------------
+let changeInputFontSize = action => {
+
+    let currentFontSize = Number.parseInt(chatInput.style.fontSize);
+
+    if (currentFontSize > 10 && action == '-') {
+        let newFontSize = currentFontSize + -1 + 'px';
+        document.getElementById('showActualInputFontSize').innerHTML = chatInput.style.fontSize = newFontSize;
+    }
+    if (currentFontSize < 20 && action == '+') {
+        let newFontSize = currentFontSize + 1 + 'px';
+        document.getElementById('showActualInputFontSize').innerHTML = chatInput.style.fontSize = newFontSize;
+    }
 }
 
 //

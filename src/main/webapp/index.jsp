@@ -72,7 +72,7 @@
 <html>
     <head>
         <title>
-            Simple WebChat
+            #Student WebChat
         </title>
         <meta charset="UTF-8" lang="en">
         <link rel="shortcut icon" href="include/img/icon-512x512.png">
@@ -81,7 +81,7 @@
     <body>
         <div class="grid-container">
             <div class="item1">
-                #Simple WebChat
+                #Student WebChat
             </div>
             <div class="item2">
                 <form action="sessionmanager"

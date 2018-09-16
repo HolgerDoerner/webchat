@@ -9,7 +9,7 @@
   <version>1.0</version>
   <packaging>war</packaging>
 
-  <name>Simple WebChat</name>
+  <name>Student WebChat</name>
   <url>https://10.100.5.15:8443/webchat</url>
 
   <properties>

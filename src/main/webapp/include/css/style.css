@@ -51,7 +51,7 @@ body {
     padding: 0px;
     margin: 0px;
     font-family: 'Segoe UI', 'Lucida Grande', 'Ubuntu', 'sans-serif';
-    font-size: 14px;
+    font-size: 15px;
 }
 
 a, a:visited {
@@ -113,7 +113,7 @@ a:hover, a:active {
 .optionsContent {
     width: 100%;
     height: auto;
-    padding: 0px 0px 0px 15px;
+    padding: 0px 0px 0px 10px;
     margin: 0px;
     resize: none;
     overflow: auto;
@@ -186,8 +186,8 @@ div.message pre {
 }
 
 div.message img {
-    max-width: 700px;
-    max-height: 700px;
+    max-width: 80%;
+    max-height: 80%;
 }
 
 div.message table {
@@ -209,7 +209,7 @@ div.message table {
     overflow-x: hidden;
     overflow-y: auto;
     font-family: 'Segoe UI', 'Lucida Grande', 'Ubuntu', 'sans-serif';
-    font-size: 1.5em;
+    font-size: 15px;
     border: 0px;
     background-color: whitesmoke;
     vertical-align: middle;

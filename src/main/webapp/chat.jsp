@@ -1,12 +1,12 @@
-<%@page language="java" contentType="UTF-8" %>
+<!DOCTYPE html>
 
+<%@page language="java" contentType="UTF-8" %>
 <jsp:useBean id="user" scope="session" class="de.demoapps.webchat.classes.User" />
 
-<!DOCTYPE html>
 <html>
     <head>
         <title>
-            #Simple WebChat
+            #Student WebChat
         </title>
         <meta charset="UTF-8" lang="en">
         <link rel="manifest" href="manifest.json">
@@ -15,11 +15,9 @@
 
         <!--
             highlight.js code highlighting
-        
+        -->
         <link rel="stylesheet" href="highlight/styles/default.css">
         <script src="highlight/highlight.pack.js"></script>
-        <script>hljs.initHighlightingOnLoad();</script>
-        -->
 
         <!--
             including markdown-it from CDN-Repository for markdown-formatted in-/output.
@@ -36,7 +34,7 @@
     <body>
         <div class="grid-container" id="grid-container">
             <div class="item1">
-                <h1>#Simple WebChat</h1>
+                <h1>#Student WebChat</h1>
             </div>
             <div class="item2">
                 <fieldset class="userList-fieldset">
@@ -50,8 +48,38 @@
                         <img class="optionsButton" id="optionsButton" src="include/img/options-512x512.png" alt="Options" title="Options" onclick=toggleOptions()>
                     </legend>
                     <div class="optionsContent" id="optionsContent">
-                        <label for="selectSendMethod">Send with Enter:</label> <input type="checkbox" name="selectSendMethod" id="selectSendMethod" checked="checked"><br>
-                        <label for="showActialFontSize">Font size:</label> <img src="include/img/decrease-512x512.png" width="10px" height="10px" onclick=changeFontSize(-1)> <b id="showActualFontSize"></b> <img src="include/img/increase-512x512.png" width="10px" height="10px" onclick=changeFontSize(1)>
+                        <table style="margin: 0px; padding: 0px; border: 0px; border-spacing: 0px; border-collapse: collapse">
+                            <tr>
+                                <td>
+                                    <label for="selectSendMethod">'Enter' sends:</label>
+                                </td>
+                                <td width="10px">
+                                </td>
+                                <td>
+                                    <input type="checkbox" name="selectSendMethod" id="selectSendMethod" checked="checked">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="showActialFontSize">Output Size:</label>
+                                </td>
+                                <td width="10px">
+                                </td>
+                                <td>
+                                    <img src="include/img/decrease-512x512.png" width="15px" height="15px" onclick=changeOutputFontSize('-')> <b id="showActualOutputFontSize"></b> <img src="include/img/increase-512x512.png" width="15px" height="15px" onclick=changeOutputFontSize('+')>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="showActialFontSize">Input Size:</label>
+                                </td>
+                                <td width="10px">
+                                </td>
+                                <td>
+                                    <img src="include/img/decrease-512x512.png" width="15px" height="15px" onclick=changeInputFontSize('-')> <b id="showActualInputFontSize"></b> <img src="include/img/increase-512x512.png" width="15px" height="15px" onclick=changeInputFontSize('+')>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                 </fieldset>
             </div>
@@ -74,8 +102,7 @@
                         <textarea id="chatInput" class="chatInput-text" rows="3" autofocus></textarea> <input class="submitMessage" type="submit" id="submit" value="Send" onclick=sendMsg()>
                     </div>
                     <small>
-                        This Software is published under the terms of the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">GNU Public License (GPL) v3</a>, developed by <a href="https://github.com/holgerdoerner" taget="_blank">Holger Dörner</a>. Project Sourcecode is hosted at <a href="https://github.com/holgerdoerner/webchat" target="_blank">Github</a>. Bug-Reports, Suggestions and Participation are welcome!<br>
-                        Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
+                        This Software is published under the terms of the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">GNU Public License (GPL) v3</a>, developed by <a href="https://github.com/holgerdoerner" taget="_blank">Holger Dörner</a>. Project Sourcecode is hosted at <a href="https://github.com/holgerdoerner/webchat" target="_blank">Github</a>. Bug-Reports, Suggestions and Participation are welcome! Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
                     </small>
                 </div>
             </div>
