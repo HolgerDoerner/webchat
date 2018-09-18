@@ -100,7 +100,12 @@
                                 vertical-align: middle;
                                 white-space: nowrap"
                                 id="input-container">
-                        <div id="chatInput" class="chatInput-text" contentEditable="true" autofocus></div> <input class="submitMessage" type="submit" id="submit" value="Send" onclick=sendMsg()>
+                        <div id="chatInput" class="chatInput-text" contentEditable="true" autofocus></div>
+                        <div style="display: inline-block; vertical-align: middle">
+                            <input class="inputButtons" type="submit" id="submit" value="Send" onclick=sendMsg()><br>
+                            <input class="inputButtons" type="reset" id="reset" value="Reset" onclick=resetInput()><br>
+                            <input class="inputButtons" Type="button" id="preview" value="Preview" onclick=messagePreview() disabled="disabled">
+                        </div>
                     </div>
 
                     <!--

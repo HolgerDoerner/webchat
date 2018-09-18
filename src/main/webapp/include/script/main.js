@@ -20,8 +20,8 @@ if (!nickname) window.location.replace('index.jsp');
 // create the websocket-connection to the server-endpoint.
 // TODO: change ws-adress bevor deploying to the server !!!!
 //let wsServer = `wss://10.100.5.15:8443/webchat/chat/${nickname}`; // production work
-let wsServer = `wss://10.100.5.15:8446/webchat/chat/${nickname}`; // development work
-//let wsServer = `wss://192.168.178.100:8446/webchat/chat/${nickname}`; // development home
+//let wsServer = `wss://10.100.5.15:8446/webchat/chat/${nickname}`; // development work
+let wsServer = `wss://192.168.178.100:8446/webchat/chat/${nickname}`; // development home
 let socket = new WebSocket(wsServer);
 
 // ------------------------------------------------------
@@ -187,6 +187,22 @@ let displayMessage = (message) => {
     window.hljs.initHighlighting.called = false;
     window.hljs.configure({tabReplace: '    '});
     window.hljs.initHighlighting();
+}
+
+// ------------------------------------------------------
+// resets input-field
+// ------------------------------------------------------
+let resetInput = () => {
+    chatInput.innerHTML = '';
+    chatInput.focus();
+}
+
+// ------------------------------------------------------
+// shows message preview
+// ------------------------------------------------------
+let messagePreview = () => {
+
+    // TODO:
 }
 
 // ------------------------------------------------------

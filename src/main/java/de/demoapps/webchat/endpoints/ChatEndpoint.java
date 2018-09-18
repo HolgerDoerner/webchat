@@ -60,8 +60,10 @@ public class ChatEndpoint {
         // send MOTD to the new user
         sendMOTD(session);
 
+        // broadcast welcome-message to channel
         broadcastMessage(new Message("", nickname, "", "## Hi there !"));
 
+        // broadcast updated userlist
         StringBuilder content = new StringBuilder();
         users.values().forEach(user -> {
             content.append(user + ";");
@@ -80,11 +82,7 @@ public class ChatEndpoint {
      */
     @OnMessage
     public void onMessage(Session session, Message message) throws IOException, EncodeException {
-        if (message.getContent().toLowerCase().startsWith("/users")) {
-
-            sendUserlist(session);
-        }
-        else if (message.getContent().toLowerCase().startsWith("/motd")) {
+        if (message.getContent().toLowerCase().startsWith("/motd")) {
 
             sendMOTD(session);
         }
@@ -188,22 +186,6 @@ public class ChatEndpoint {
     }
 
     /**
-     * sends actual userlist to client
-     * 
-     * @param session
-     */
-    public void sendUserlist(Session session) {
-
-        StringBuilder userList = new StringBuilder();
-
-        users.values().forEach(user -> {
-            userList.append("\n" + user);
-        });
-        
-        directMessage(new Message("", "_SERVER_", users.get(session.getId()), userList.toString()), session);
-    }
-
-    /**
      * reads the motd.txt from the document-root and sends the message to the client.
      * 
      * @param session
@@ -211,34 +193,8 @@ public class ChatEndpoint {
      */
     private void sendMOTD(Session session) throws UnsupportedEncodingException {
 
-        StringBuilder content = new StringBuilder();
-
-        // get path of webcontent-folder
-        String path = this.getClass().getClassLoader().getResource("").getPath();
-        String fullPath = URLDecoder.decode(path, "UTF-8");
-        String pathArr[] = fullPath.split("/WEB-INF/classes/");
-        fullPath = pathArr[0];
-
-        // to read a file from webcontent
-        Scanner scanner = null;
-
-        try {
-            scanner = new Scanner(new File(new File(fullPath).getPath() + File.separatorChar + "motd.md"));
-
-
-            while (scanner.hasNext()) {
-                content.append(scanner.nextLine() + "\n");
-            }
-
-            directMessage(new Message("", "_SERVER_", users.get(session.getId()), content.toString()), session);
-        }
-        catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        finally {
-            scanner.close();
-        }
-        
+        StringBuilder content = readLocalFile("motd.md");
+        directMessage(new Message("", "_SERVER_", users.get(session.getId()), content.toString()), session);        
     }
 
     /**
@@ -249,33 +205,8 @@ public class ChatEndpoint {
      */
     public void sendHelp(Session session) throws UnsupportedEncodingException {
 
-        StringBuilder content = new StringBuilder();
-
-        // get path of webcontent-folder
-        String path = this.getClass().getClassLoader().getResource("").getPath();
-        String fullPath = URLDecoder.decode(path, "UTF-8");
-        String pathArr[] = fullPath.split("/WEB-INF/classes/");
-        fullPath = pathArr[0];
-
-        // to read a file from webcontent
-        Scanner scanner = null;
-
-        try {
-            scanner = new Scanner(new File(new File(fullPath).getPath() + File.separatorChar + "help.md"));
-
-
-            while (scanner.hasNext()) {
-                content.append(scanner.nextLine() + "\n");
-            }
-
-            directMessage(new Message("", "_SERVER_", users.get(session.getId()), content.toString()), session);
-        }
-        catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        finally {
-            scanner.close();
-        }
+        StringBuilder content = readLocalFile("help.md");
+        directMessage(new Message("", "_SERVER_", users.get(session.getId()), content.toString()), session);
     }
 
     /**
@@ -286,63 +217,42 @@ public class ChatEndpoint {
      */
     public void sendMdhelp(Session session) throws UnsupportedEncodingException {
 
-        StringBuilder content = new StringBuilder();
-
-        // get path of webcontent-folder
-        String path = this.getClass().getClassLoader().getResource("").getPath();
-        String fullPath = URLDecoder.decode(path, "UTF-8");
-        String pathArr[] = fullPath.split("/WEB-INF/classes/");
-        fullPath = pathArr[0];
-
-        // to read a file from webcontent
-        Scanner scanner = null;
-
-        try {
-            scanner = new Scanner(new File(new File(fullPath).getPath() + File.separatorChar + "mdhelp.md"));
-
-
-            while (scanner.hasNext()) {
-                content.append(scanner.nextLine() + "\n");
-            }
-
-            directMessage(new Message("", "_SERVER_", users.get(session.getId()), content.toString()), session);
-        }
-        catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        finally {
-            scanner.close();
-        }
+        StringBuilder content = readLocalFile("mdhelp.md");
+        directMessage(new Message("", "_SERVER_", users.get(session.getId()), content.toString()), session);
     }
 
     /**
-     * sends markdown help-message to the client
+     * sends overview of supported smileys to the client
      * 
      * @param session
      * @throws UnsupportedEncodingException
      */
     public void sendSmileys(Session session) throws UnsupportedEncodingException {
 
+        StringBuilder content = readLocalFile("smileys.md");
+        directMessage(new Message("", "_SERVER_", users.get(session.getId()), content.toString()), session);
+    }
+
+    public StringBuilder readLocalFile(String file) throws UnsupportedEncodingException {
+
         StringBuilder content = new StringBuilder();
 
         // get path of webcontent-folder
         String path = this.getClass().getClassLoader().getResource("").getPath();
         String fullPath = URLDecoder.decode(path, "UTF-8");
-        String pathArr[] = fullPath.split("/WEB-INF/classes/");
-        fullPath = pathArr[0];
+        String temp[] = fullPath.split("/WEB-INF/classes/");
+        fullPath = temp[0];
 
         // to read a file from webcontent
         Scanner scanner = null;
 
         try {
-            scanner = new Scanner(new File(new File(fullPath).getPath() + File.separatorChar + "smileys.md"));
+            scanner = new Scanner(new File(new File(fullPath).getPath() + File.separatorChar + file));
 
 
             while (scanner.hasNext()) {
                 content.append(scanner.nextLine() + "\n");
             }
-
-            directMessage(new Message("", "_SERVER_", users.get(session.getId()), content.toString()), session);
         }
         catch (Exception e) {
             System.out.println(e.getMessage());
@@ -350,5 +260,7 @@ public class ChatEndpoint {
         finally {
             scanner.close();
         }
+
+        return content;
     }
 }

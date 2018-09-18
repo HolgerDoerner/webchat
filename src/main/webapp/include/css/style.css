@@ -217,28 +217,29 @@ div.message table {
     display: inline-block;
 }
 
-.chatInput-text:focus, .submitMessage:focus {
+.chatInput-text:focus, .inputButtons:focus {
     outline: 0px;
 }
 
-.submitMessage {
+.inputButtons {
     width: 60px;
     height: 30px;
     border: 0px;
     box-shadow: 0px;
-    margin: 0px;
-    padding: 0px 0px 3px 0px;
+    margin: 5px 0px 0px 0px;
+    padding: 0px;
     background-color: whitesmoke;
     font-weight: bold;
     color: grey;
     vertical-align: middle;
+    display: inline-block;
 }
 
-.submitMessage:hover, .submitMessage:focus {
+.inputButtons:hover, .inputButtons:focus {
     color: orangered;
 }
 
-.submitMessage:active {
+.inputButtons:active {
     color: orange;
 }
 /* #ENDREGION input-area */
