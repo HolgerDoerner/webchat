@@ -66,7 +66,7 @@
                                 <td width="10px">
                                 </td>
                                 <td>
-                                    <img src="include/img/decrease-512x512.png" width="15px" height="15px" onclick=changeOutputFontSize('-')> <b id="showActualOutputFontSize"></b> <img src="include/img/increase-512x512.png" width="15px" height="15px" onclick=changeOutputFontSize('+')>
+                                    <b style="color: darkgrey; cursor: pointer" onclick="changeOutputFontSize('-')">&#x25C0;</b> <b id="showActualOutputFontSize"></b> <b style="color: darkgrey; cursor: pointer" onclick="changeOutputFontSize('+')">&#x25B6;</b>
                                 </td>
                             </tr>
                             <tr>
@@ -76,7 +76,7 @@
                                 <td width="10px">
                                 </td>
                                 <td>
-                                    <img src="include/img/decrease-512x512.png" width="15px" height="15px" onclick=changeInputFontSize('-')> <b id="showActualInputFontSize"></b> <img src="include/img/increase-512x512.png" width="15px" height="15px" onclick=changeInputFontSize('+')>
+                                    <b style="color: darkgrey; cursor: pointer" onclick="changeInputFontSize('-')">&#x25C0;</b> <b id="showActualInputFontSize"></b> <b style="color: darkgrey; cursor: pointer" onclick="changeInputFontSize('+')">&#x25B6;</b>
                                 </td>
                             </tr>
                         </table>
@@ -88,8 +88,8 @@
             </div>
             <div class="item4">
                 <div class="chatInput-td">
-                    <div style="width: fit-content;
-                                height: fit-content;
+                    <div style="width: 95%;
+                                height: 120px;
                                 padding: 5px;
                                 margin: 0px;
                                 background-color: whitesmoke;
@@ -98,12 +98,16 @@
                                 border-right: 0px;
                                 border-bottom: 2px solid orangered;
                                 vertical-align: middle;
-                                white-space: nowrap">
-                        <textarea id="chatInput" class="chatInput-text" rows="3" autofocus></textarea> <input class="submitMessage" type="submit" id="submit" value="Send" onclick=sendMsg()>
+                                white-space: nowrap"
+                                id="input-container">
+                        <div id="chatInput" class="chatInput-text" contentEditable="true" autofocus></div> <input class="submitMessage" type="submit" id="submit" value="Send" onclick=sendMsg()>
                     </div>
+
+                    <!--
                     <small>
                         This Software is published under the terms of the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">GNU Public License (GPL) v3</a>, developed by <a href="https://github.com/holgerdoerner" taget="_blank">Holger Dörner</a>. Project Sourcecode is hosted at <a href="https://github.com/holgerdoerner/webchat" target="_blank">Github</a>. Bug-Reports, Suggestions and Participation are welcome! Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
                     </small>
+                    -->
                 </div>
             </div>
         </div>

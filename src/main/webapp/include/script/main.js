@@ -20,8 +20,8 @@ if (!nickname) window.location.replace('index.jsp');
 // create the websocket-connection to the server-endpoint.
 // TODO: change ws-adress bevor deploying to the server !!!!
 //let wsServer = `wss://10.100.5.15:8443/webchat/chat/${nickname}`; // production work
-//let wsServer = `wss://10.100.5.15:8446/webchat/chat/${nickname}`; // development work
-let wsServer = `wss://192.168.178.100:8446/webchat/chat/${nickname}`; // development home
+let wsServer = `wss://10.100.5.15:8446/webchat/chat/${nickname}`; // development work
+//let wsServer = `wss://192.168.178.100:8446/webchat/chat/${nickname}`; // development home
 let socket = new WebSocket(wsServer);
 
 // ------------------------------------------------------
@@ -68,10 +68,23 @@ window.onload = () => {
     if (window.Notification || window.webkitNotifications || navigator.mozNotification && Notification.permission !== 'granted') {
         Notification.requestPermission();
     }
+
+    // set initial height for input-box
+    chatInput.style.width = Number.parseInt(getComputedStyle(document.getElementById('input-container')).width) - 60 + 'px';
 }
 
+// ------------------------------------------------------
+// automaticxl set focus on input-box
+// ------------------------------------------------------
 window.onfocus = () => {
     chatInput.focus();
+}
+
+// ------------------------------------------------------
+// set new width of input-box when window gets resized
+// ------------------------------------------------------
+window.onresize = () => {
+    chatInput.style.width = Number.parseInt(getComputedStyle(document.getElementById('input-container')).width) - 60 + 'px';
 }
 
 // ------------------------------------------------------
@@ -104,10 +117,6 @@ socket.addEventListener('message', event => {
                     event.target.close();
                     window.focus();
                 }
-
-                notification.onshow = event => {
-                    setTimeout(() => { notification.close() }, 10000); // currently buggy in Chrome :-/
-                }
             }
             break;
     }
@@ -130,9 +139,9 @@ let onKeyPress = event => {
 // ------------------------------------------------------
 let sendMsg = (subject, from, to, content) => {
 
-    if (chatInput.value.toLowerCase() === '/clear') {
+    if (chatInput.innerText.toLowerCase() === '/clear') {
         chatOutput.innerHTML = '';
-        chatInput.value = '';
+        chatInput.innerText = '';
         //event.preventDefault();
         chatInput.focus();
     }
@@ -148,11 +157,11 @@ let sendMsg = (subject, from, to, content) => {
         message.subject = subject ? subject : '';
         message.from = from ? from : nickname;
         message.to = to ? to : '';
-        message.content = content ? content : chatInput.value;
+        message.content = content ? content : chatInput.innerText;
     
         socket.send(JSON.stringify(message));
     
-        chatInput.value = '';
+        chatInput.innerText = '';
         chatInput.focus();
     }
 }
@@ -162,11 +171,14 @@ let sendMsg = (subject, from, to, content) => {
 // ------------------------------------------------------
 let displayMessage = (message) => {
 
+    let id = Math.floor(Math.random() * 5000);
+
     let output = '<hr style="width: 100%; height: 20px; background-color: lightgrey; border: 0px; margin: 0px; padding: 0px">';
-    output += `<b style="color: grey">Message from <i style="color: orangered">${message.from}</i> on <i>${message.timestamp}</i> :</b>`;
-    output += '<div class="message">';
+    output += `<b style="color: grey">Message from <i style="color: orangered">${message.from}</i> on <i>${message.timestamp}</i> &nbsp; <span id="messageToggle-${id}" style="cursor: pointer" onclick=toggleShow(${id})>&#x25B2;</span></b>`;
+    output += `<div class="message" id="${id}">`;
     
-    output += markdownIt.render(message.content); // translate the markdown-syntax to HTML
+    // translate the markdown-syntax to HTML
+    output += markdownIt.render(message.content);
     output += '</div>';
 
     chatOutput.innerHTML += output;
@@ -236,22 +248,17 @@ let changeInputFontSize = action => {
     }
 }
 
-//
-// TODO: not needed anymore, will be removed soon
-//
 // ------------------------------------------------------
-// render HTML-output for the viewport
+// toggles the visibility of individual messages
 // ------------------------------------------------------
-// let textToHTML = text => {
-//     let output = ''
-//     let textArray = [];
-//     textArray = text.split('\n');
+let toggleShow = id => {
 
-//     textArray.forEach(line => {
+    document.getElementById(id).classList.toggle('message-toggle');
 
-//         // add HTML linebreaks
-//         output += line + '<br>';
-//     })
-
-//     return output;
-// }
+    if (document.getElementById(id).offsetHeight === 0 && document.getElementById(id).offsetWidth === 0) {
+        document.getElementById(`messageToggle-${id}`).innerHTML = '&#x25BC;';
+    }
+    else {
+        document.getElementById(`messageToggle-${id}`).innerHTML = '&#x25B2;';
+    }
+}

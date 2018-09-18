@@ -96,6 +96,10 @@ public class ChatEndpoint {
 
             sendMdhelp(session);
         }
+        else if (message.getContent().toLowerCase().startsWith("/smileys")) {
+
+            sendSmileys(session);
+        }
         else {
             message.setFrom(users.get(session.getId()));
             broadcastMessage(message);
@@ -295,6 +299,43 @@ public class ChatEndpoint {
 
         try {
             scanner = new Scanner(new File(new File(fullPath).getPath() + File.separatorChar + "mdhelp.md"));
+
+
+            while (scanner.hasNext()) {
+                content.append(scanner.nextLine() + "\n");
+            }
+
+            directMessage(new Message("", "_SERVER_", users.get(session.getId()), content.toString()), session);
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        finally {
+            scanner.close();
+        }
+    }
+
+    /**
+     * sends markdown help-message to the client
+     * 
+     * @param session
+     * @throws UnsupportedEncodingException
+     */
+    public void sendSmileys(Session session) throws UnsupportedEncodingException {
+
+        StringBuilder content = new StringBuilder();
+
+        // get path of webcontent-folder
+        String path = this.getClass().getClassLoader().getResource("").getPath();
+        String fullPath = URLDecoder.decode(path, "UTF-8");
+        String pathArr[] = fullPath.split("/WEB-INF/classes/");
+        fullPath = pathArr[0];
+
+        // to read a file from webcontent
+        Scanner scanner = null;
+
+        try {
+            scanner = new Scanner(new File(new File(fullPath).getPath() + File.separatorChar + "smileys.md"));
 
 
             while (scanner.hasNext()) {

@@ -1,6 +1,6 @@
 {
-  "name": "#Simple WebChat",
-  "short_name": "#Simple WebChat",
+  "name": "#Student WebChat",
+  "short_name": "#Student WebChat",
   "icons": [{
     "src": "include/img/icon-16x16.png",
       "sizes": "16x16",

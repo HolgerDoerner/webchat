@@ -28,9 +28,7 @@
 
 .grid-container {
     height: 100vh;
-    min-height: 500px;
     width: 100vw;
-    min-width: 500px;
     margin: 0px;
     padding: 0px;
     display: grid;
@@ -152,12 +150,16 @@ img.optionsButton {
 }
 
 div.message {
-    width: 95%;
     height: max-content;
     padding: 10px;
-    margin: 5px 0px 0px 20px;
+    margin: 5px 20px 0px 20px;
     font-size: inherit;
     background-color: whitesmoke;
+    display: block;
+}
+
+div.message-toggle {
+    display: none;
 }
 
 div.message blockquote {
@@ -198,21 +200,21 @@ div.message table {
 /* #REGION input-area */
 .chatInput-td {
 	margin: 10px 0px 0px 0px;
-	padding: 0px;
+    padding: 0px;
 }
 
 .chatInput-text {
-    width: 50em;
-    padding: 0px 0px 3px 0px;
+    height: 120px;
     margin: 0px;
     resize: none;
-    overflow-x: hidden;
+    overflow-x: auto;
     overflow-y: auto;
     font-family: 'Segoe UI', 'Lucida Grande', 'Ubuntu', 'sans-serif';
     font-size: 15px;
     border: 0px;
     background-color: whitesmoke;
     vertical-align: middle;
+    display: inline-block;
 }
 
 .chatInput-text:focus, .submitMessage:focus {
@@ -220,6 +222,8 @@ div.message table {
 }
 
 .submitMessage {
+    width: 60px;
+    height: 30px;
     border: 0px;
     box-shadow: 0px;
     margin: 0px;
