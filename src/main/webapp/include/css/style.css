@@ -203,7 +203,7 @@ div.message table {
     padding: 0px;
 }
 
-.chatInput-text {
+.chatInput-text, .chatInput-preview {
     height: 120px;
     margin: 0px;
     resize: none;
@@ -214,6 +214,19 @@ div.message table {
     border: 0px;
     background-color: whitesmoke;
     vertical-align: middle;
+    display: inline-block;
+}
+
+.chatInput-text-toggle {
+    display: none;
+}
+
+.chatInput-preview {
+    background-color: khaki;
+    display: none;
+}
+
+.chatInput-preview-toggle {
     display: inline-block;
 }
 

@@ -20,8 +20,8 @@ if (!nickname) window.location.replace('index.jsp');
 // create the websocket-connection to the server-endpoint.
 // TODO: change ws-adress bevor deploying to the server !!!!
 //let wsServer = `wss://10.100.5.15:8443/webchat/chat/${nickname}`; // production work
-//let wsServer = `wss://10.100.5.15:8446/webchat/chat/${nickname}`; // development work
-let wsServer = `wss://192.168.178.100:8446/webchat/chat/${nickname}`; // development home
+let wsServer = `wss://10.100.5.15:8446/webchat/chat/${nickname}`; // development work
+//let wsServer = `wss://192.168.178.100:8446/webchat/chat/${nickname}`; // development home
 let socket = new WebSocket(wsServer);
 
 // ------------------------------------------------------
@@ -85,6 +85,7 @@ window.onfocus = () => {
 // ------------------------------------------------------
 window.onresize = () => {
     chatInput.style.width = Number.parseInt(getComputedStyle(document.getElementById('input-container')).width) - 60 + 'px';
+    document.getElementById('chatInput-preview').style.width = chatInput.style.width;
 }
 
 // ------------------------------------------------------
@@ -202,7 +203,11 @@ let resetInput = () => {
 // ------------------------------------------------------
 let messagePreview = () => {
 
-    // TODO:
+    chatInput.classList.toggle('chatInput-text-toggle')
+    document.getElementById('chatInput-preview').classList.toggle('chatInput-preview-toggle')
+
+    document.getElementById('chatInput-preview').innerHTML = '';
+    document.getElementById('chatInput-preview').innerHTML = markdownIt.render(chatInput.innerText);
 }
 
 // ------------------------------------------------------

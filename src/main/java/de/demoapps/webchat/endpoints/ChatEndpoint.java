@@ -61,7 +61,7 @@ public class ChatEndpoint {
         sendMOTD(session);
 
         // broadcast welcome-message to channel
-        broadcastMessage(new Message("", nickname, "", "## Hi there !"));
+        broadcastMessage(new Message("", nickname, "", "***Hi there !***"));
 
         // broadcast updated userlist
         StringBuilder content = new StringBuilder();
@@ -116,7 +116,7 @@ public class ChatEndpoint {
 
         chatEndpoints.remove(this);
 
-        broadcastMessage(new Message("", users.get(session.getId()), "", "## Bye bye !"));
+        broadcastMessage(new Message("", users.get(session.getId()), "", "***Bye bye !***"));
 
         users.remove(session.getId());
 
