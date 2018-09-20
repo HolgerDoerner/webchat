@@ -187,6 +187,9 @@ let sendMsg = (subject, from, to, content) => {
     }
 }
 
+// ------------------------------------------------------
+// function to manage websocket-reconnects
+// ------------------------------------------------------
 let wsReconnect = () => {
 
     let reconnect = setInterval(() => {
@@ -196,10 +199,13 @@ let wsReconnect = () => {
             wSocket = null;
             wSocket = new WebSocket(wsServer);
             
-            // clear the interval if connection was successfull
-            if (wSocket !== null) {
-                clearInterval(reconnect);
-            }
+            // clear the interval if connection was successfull.
+            // wait 5 seconds before checking socket state.
+            setTimeout(() => {
+                if (wSocket !== null) {
+                    clearInterval(reconnect);
+                }
+            }, 5000)
         }
         catch (error)  {
             // for debugging
