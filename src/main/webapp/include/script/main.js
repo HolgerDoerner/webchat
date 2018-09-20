@@ -15,26 +15,16 @@ let cookie = decodedCookie.split(';');
 let nickname = cookie[0].split('=')[1];
 
 // if user is not logged in properly -> redirekt to login page
-if (!nickname) window.location.replace('index.jsp');
+if (!nickname) { 
+    window.location.replace('index.jsp')
+}
 
 // create the websocket-connection to the server-endpoint.
 // TODO: change ws-adress bevor deploying to the server !!!!
 //let wsServer = `wss://10.100.5.15:8443/webchat/chat/${nickname}`; // production work
 let wsServer = `wss://10.100.5.15:8446/webchat/chat/${nickname}`; // development work
 //let wsServer = `wss://192.168.178.100:8446/webchat/chat/${nickname}`; // development home
-let socket = new WebSocket(wsServer);
-
-// ------------------------------------------------------
-// WebSocket error-handler
-// ------------------------------------------------------
-socket.addEventListener('error', event => {
-
-    // TODO: make something usefull here...
-    alert('WebSocket connection error! Trying to reconnect ...');
-
-    socket = null;
-    socket = new WebSocket(wsServer);
-})
+let wSocket = new WebSocket(wsServer);
 
 // ------------------------------------------------------
 // initializes the values when page is fully loaded.
@@ -89,10 +79,31 @@ window.onresize = () => {
 }
 
 // ------------------------------------------------------
+// WebSocket error-handler
+// ------------------------------------------------------
+wSocket.addEventListener('error', event => {
+
+    // TODO: make something usefull here...
+
+    // for debugging
+    console.error(error);
+})
+
+// ------------------------------------------------------
+// WebSocket close-handler
+// ------------------------------------------------------
+wSocket.addEventListener('close', event => {
+
+    // when ws-connection is closed, try to reconnect every 10 seconds
+    // until success.
+    wsReconnect();
+})
+
+// ------------------------------------------------------
 // WebSocket-handler for inkomming messages.
 // takes the JSON-string and parses it to an object.
 // ------------------------------------------------------
-socket.addEventListener('message', event => {
+wSocket.addEventListener('message', event => {
     let message = JSON.parse(event.data);
 
     switch (message.subject) {
@@ -128,7 +139,8 @@ socket.addEventListener('message', event => {
 // sends message by pressing 'CTRL+ENTER'.
 // ------------------------------------------------------
 let onKeyPress = event => {
-    if (event.keyCode == 13 && document.getElementById('selectSendMethod').checked == true) {
+
+    if (event.keyCode === 13 && document.getElementById('selectSendMethod').checked === true) {
         sendMsg(null, null, null, null);
         event.preventDefault();
     }
@@ -143,28 +155,57 @@ let sendMsg = (subject, from, to, content) => {
     if (chatInput.innerText.toLowerCase() === '/clear') {
         chatOutput.innerHTML = '';
         chatInput.innerText = '';
-        //event.preventDefault();
+        event.preventDefault();
         chatInput.focus();
     }
     else {
-        let message = {
-            timestamp: '',
-            subject: '',
-            from: '',
-            to: '',
-            content: ''
+
+        if (wSocket.readyState !== wSocket.CLOSED) {
+            let message = {
+                timestamp: '',
+                subject: '',
+                from: '',
+                to: '',
+                content: ''
+            }
+        
+            message.subject = subject ? subject : '';
+            message.from = from ? from : nickname;
+            message.to = to ? to : '';
+            message.content = content ? content : chatInput.innerText;
+        
+            wSocket.send(JSON.stringify(message));
+        
+            chatInput.innerText = '';
+            chatInput.focus();
         }
-    
-        message.subject = subject ? subject : '';
-        message.from = from ? from : nickname;
-        message.to = to ? to : '';
-        message.content = content ? content : chatInput.innerText;
-    
-        socket.send(JSON.stringify(message));
-    
-        chatInput.innerText = '';
-        chatInput.focus();
+        else {
+            // notify the user and try to reconnect
+            alert("Connection to Server interrupted! Trying to reconnect...");
+            wsReconnect();
+        }
     }
+}
+
+let wsReconnect = () => {
+
+    let reconnect = setInterval(() => {
+        
+        try {
+            // reset socket and try to reconnect
+            wSocket = null;
+            wSocket = new WebSocket(wsServer);
+            
+            // clear the interval if connection was successfull
+            if (wSocket !== null) {
+                clearInterval(reconnect);
+            }
+        }
+        catch (error)  {
+            // for debugging
+            console.error(error);
+        }            
+    }, 10000)
 }
 
 // ------------------------------------------------------

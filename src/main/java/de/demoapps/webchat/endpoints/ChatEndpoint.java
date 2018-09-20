@@ -149,9 +149,7 @@ public class ChatEndpoint {
      */
     public void broadcastMessage(Message message) {
 
-        Date timestamp = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("E.',' dd.MM.yy 'at' hh:mm:ss");
-        message.setTimestamp(formatter.format(timestamp));
+        message.setTimestamp(getNewTimestamp());
         
         chatEndpoints.forEach(endpoint -> {
             synchronized (endpoint) {
@@ -173,9 +171,7 @@ public class ChatEndpoint {
      */
     public void directMessage(Message message, Session session) {
 
-        Date timestamp = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("E.',' dd.MM.yy 'at' hh:mm:ss");
-        message.setTimestamp(formatter.format(timestamp));
+        message.setTimestamp(getNewTimestamp());
 
         try {
             session.getBasicRemote().sendObject(message);
@@ -262,5 +258,13 @@ public class ChatEndpoint {
         }
 
         return content;
+    }
+
+    public String getNewTimestamp() {
+
+        Date timestamp = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("E.',' dd.MM.yy 'at' HH:mm:ss");
+
+        return formatter.format(timestamp);
     }
 }
