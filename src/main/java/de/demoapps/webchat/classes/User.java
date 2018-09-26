@@ -27,7 +27,7 @@ public class User implements Serializable {
     private String password;
 
     @Column(name="SETTINGS")
-    private Map<String, Integer> settings;
+    private String settings;
 
     public User () { 
 
@@ -38,9 +38,7 @@ public class User implements Serializable {
         this.nickname = nickname;
         this.password = password;
 
-        settings.put("sendWithEnter", 1);
-        settings.put("outputFontSize", 15);
-        settings.put("inputFontSize", 15);
+        this.settings = "enter=1;outFont=15;inFont=15;";
     }
 
     public String getNickname() {
@@ -61,38 +59,12 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public Map<String, Integer> getSettings() {
+    public String getSettings() {
         return settings;
     }
 
-    public void setSettings(Integer sendWithEnter, Integer outputFontSize, Integer inputFontSize) {
-        settings.replace("sendWithEnter", sendWithEnter);
-        settings.replace("outputFontSize", outputFontSize);
-        settings.replace("inputFontSize", inputFontSize);
-    }
-
-    public Integer getSetting_sendWithEnter() {
-        return settings.get("sendWithEnter");
-    }
-
-    public void setSetting_sendWithEnter(Integer value) {
-        settings.replace("sendWithEnter", value);
-    }
-
-    public Integer getSetting_outputFontSize() {
-        return settings.get("outputFontSize");
-    }
-
-    public void setSetting_outputFontSize(Integer value) {
-        settings.replace("outputFontSize", value);
-    }
-
-    public Integer getSetting_inputFontSize() {
-        return settings.get("inputFontSize");
-    }
-
-    public void setSetting_inputFontSize(Integer value) {
-        settings.replace("inputFontSize", value);
+    public void setSettings(String setting) {
+        this.settings = setting;
     }
 
     @Override
