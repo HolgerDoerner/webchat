@@ -79,7 +79,7 @@
         <link rel="manifest" href="manifest.json">
     </head>
     <body>
-        <%-- <div class="grid-container">
+        <div class="grid-container">
             <div class="item1">
                 #Student WebChat
             </div>
@@ -111,12 +111,6 @@
                     </span>
                 </form>
             </div>
-        </div> --%>
-
-        <form action="sessionmanager" method="post">
-            <input type="text" name="nickname" id="nickname" placeholder="Nickname"> <input type="password" name="password" id="password" placeholder="Password">
-            <br>
-            <input type="submit"> <input type="reset">
-        </form>
+        </div>
     </body>
 </html>
