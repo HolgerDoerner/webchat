@@ -12,12 +12,14 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.websocket.CloseReason;
 import javax.websocket.EncodeException;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
+import javax.websocket.CloseReason.CloseCode;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
@@ -36,7 +38,7 @@ import de.demoapps.webchat.classes.MessageEncoder;
                 encoders=MessageEncoder.class)
 public class ChatEndpoint {
 
-    private Session session;
+    private Session wsSession;
     private static Set<ChatEndpoint> chatEndpoints = new CopyOnWriteArraySet<>();
     private static HashMap<String, String> users = new HashMap<>();
 
@@ -45,31 +47,44 @@ public class ChatEndpoint {
     /**
      * handels new sessions
      * 
-     * @param session
+     * @param wsSession
      * @param nickname
      * @throws IOException
      * @throws EncodeException
      */
     @OnOpen
-    public void onOpen(Session session, @PathParam("nickname") String nickname) throws IOException, EncodeException {
+    public void onOpen(Session wsSession, @PathParam("nickname") String nickname) throws IOException, EncodeException {
 
-        this.session = session;
-        chatEndpoints.add(this);
-        users.put(session.getId(), nickname);
+        this.wsSession = wsSession;
 
-        // send MOTD to the new user
-        sendMOTD(session);
+        if (!users.containsValue(nickname)) {
+            chatEndpoints.add(this);
+            users.put(wsSession.getId(), nickname);
 
-        // broadcast welcome-message to channel
-        broadcastMessage(new Message("", nickname, "", "***Hi there !***"));
+            // send MOTD to the new user
+            sendMOTD(wsSession);
+    
+            // broadcast welcome-message to channel
+            broadcastMessage(new Message("", nickname, "", "***Hi there !***"));
+    
+            // broadcast updated userlist
+            StringBuilder content = new StringBuilder();
+            users.values().forEach(user -> {
+                content.append(user + ";");
+            });
+    
+            broadcastMessage(new Message("userlist", "server", "", content.toString()));
+        }
+        else {
+            wsSession.close(new CloseReason(new CloseCode(){
+            
+                @Override
+                public int getCode() {
+                    return 4666;
+                }
+            }, "Username taken"));
+        }
 
-        // broadcast updated userlist
-        StringBuilder content = new StringBuilder();
-        users.values().forEach(user -> {
-            content.append(user + ";");
-        });
-
-        broadcastMessage(new Message("userlist", "server", "", content.toString()));
     }
 
     /**
@@ -154,7 +169,7 @@ public class ChatEndpoint {
         chatEndpoints.forEach(endpoint -> {
             synchronized (endpoint) {
                 try {
-                    endpoint.session.getBasicRemote().sendObject(message);
+                    endpoint.wsSession.getBasicRemote().sendObject(message);
                 } 
                 catch (IOException | EncodeException e) {
                     System.out.println(e.getMessage());
