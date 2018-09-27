@@ -112,11 +112,24 @@
                 </form>
             </div>
         </div> --%>
-
-        <form action="sessionmanager" method="post">
-            <input type="text" name="nickname" id="nickname" placeholder="Nickname"> <input type="password" name="password" id="password" placeholder="Password">
-            <br>
-            <input type="submit"> <input type="reset">
-        </form>
+        <fieldset>
+            <legend>Register</legend>
+            <form action="sessionmanager" method="post">
+                <input type="text" name="nickname" id="nickname" placeholder="Nickname"> <input type="password" name="password" id="password" placeholder="Password">
+                <br>
+                <input type="submit"> <input type="reset">
+                <input type="hidden" id="action" name="action" value="register">
+            </form>
+        </fieldset>
+        <br>
+        <fieldset>
+            <legend>Login</legend>
+            <form action="sessionmanager" method="post">
+                <input type="text" name="nickname" id="nickname" placeholder="Nickname"> <input type="password" name="password" id="password" placeholder="Password">
+                <br>
+                <input type="submit"> <input type="reset">
+                <input type="hidden" id="action" name="action" value="login">
+            </form>
+        </fieldset>
     </body>
 </html>

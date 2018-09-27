@@ -1,7 +1,6 @@
 package de.demoapps.webchat.classes;
 
 import java.io.Serializable;
-import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,13 +10,13 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="USERS")
+@Table(name="Users")
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
     
     @Id
     @Column(name="ID")
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
     
     @Column(name="NICKNAME")
@@ -39,6 +38,10 @@ public class User implements Serializable {
         this.password = password;
 
         this.settings = "enter=1;outFont=15;inFont=15;";
+    }
+
+    public Long getID() {
+        return id;
     }
 
     public String getNickname() {
@@ -69,6 +72,6 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "nickname: " + getNickname() + " password: " + getPassword() + " settings: " + getSettings();
+        return "ID: " + id + " nickname: " + nickname + " password: " + password;
     }
 }
