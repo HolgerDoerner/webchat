@@ -5,33 +5,35 @@
     font-family: 'Segoe UI', 'Lucida Grande', 'Ubuntu', 'sans-serif';
 }
 
-.nicknameInput {
-    font-family: 'Segoe UI', 'Lucida Grande', 'Ubuntu', 'sans-serif';
-    font-weight: bold;
+fieldset {
     border: 0px;
-    box-shadow: 0px;
-    width: 200px;
 }
 
-.nicknameInput:focus, .nicknameSubmit:focus {
-    outline: 0px;
+.login {
+    display: block;
 }
 
-.nicknameSubmit {
-    border: 0px;
-    background-color: white;
-    box-shadow: none;
-    font-family: 'Segoe UI', 'Lucida Grande', 'Ubuntu', 'sans-serif';
-    font-weight: bold;
-    color: grey;
+.login-toggle {
+    display: none;
 }
 
-.nicknameSubmit:hover, .nicknameSubmit:focus {
-    color: lightgray;
+.register {
+    display: none;
 }
 
-.nicknameSubmit:active {
-    color: black;
+.register-toggle {
+    display: block;
+}
+
+.toggleRegister, .toggleRegister:visited {
+    color: orange;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.toggleRegister:hover, .toggleRegister:active {
+    color: orangered;
+    text-decoration: none;
 }
 
 .item1 {
@@ -69,6 +71,35 @@
 }
 </style>
 
+<script>
+    let toggleRegister;
+
+    window.addEventListener('load', () => {
+
+        let request = new XMLHttpRequest();
+        let registerForm = document.getElementById('registerForm');
+
+        registerForm.addEventListener('submit', event => {
+            
+            if (document.getElementById('register_password').value !== document.getElementById('register_password_2').value) {
+                event.preventDefault();
+                alert("Passwords do not match!");
+                return;
+            }
+        })
+
+        request.addEventListener('load', event => {
+            if (event) alert(event.target.responseText);
+        })
+
+        toggleRegister = () => {
+
+            document.getElementById('login').classList.toggle('login-toggle');
+            document.getElementById('register').classList.toggle('register-toggle');
+        }
+    })
+</script>
+
 <html>
     <head>
         <title>
@@ -79,57 +110,39 @@
         <link rel="manifest" href="manifest.json">
     </head>
     <body>
-        <%-- <div class="grid-container">
+        <div class="grid-container">
             <div class="item1">
                 #Student WebChat
             </div>
             <div class="item2">
-                <form action="sessionmanager"
-                        method="post"
-                        style="padding: 30px 50px 30px 50px;
-                                text-align: center;
-                                background-color: lightgrey;
-                                width: fit-content;
-                                height: fit-content">
-                    <span style="border-top: 0px;
-                                border-left: 0px;
-                                border-right: 0px;
-                                border-bottom: 2px solid orangered;
-                                background-color: white;
-                                margin: 0px;
-                                padding: 5px">
-                        <input id="nickname"
-                                class="nicknameInput"
-                                type="text"
-                                name="nickname"
-                                required="required"
-                                autofocus
-                                autocomplete="nickname"
-                                placeholder="Nickname"
-                                minlength="4"
-                                maxlength="20"><input class="nicknameSubmit" type="submit" id="submit">
-                    </span>
-                </form>
+                <br>
+                <fieldset class="login" id="login">
+                    <legend>Login</legend>
+                    <form id="loginForm" action="sessionmanager" method="post">
+                        <input type="text" name="nickname" id="login_nickname" placeholder="Nickname" minlength="4" maxlength="20" required="required">
+                        <input type="password" name="password" id="login_password" placeholder="Password" minlength="8" maxlength="30" required="required">
+                        <br>
+                        <input type="submit"> <input type="reset">
+                        <input type="hidden" name="action" value="login">
+                    </form>
+                    <br>
+                    <center>Or <span class="toggleRegister" id="toggleRegister" onclick=toggleRegister()>sign up</span> for an account.</center>
+                </fieldset>
+                <fieldset class="register" id="register">
+                    <legend>Register</legend>
+                    <form id="registerForm" action="sessionmanager" method="post">
+                        <input type="text" name="nickname" id="register_nickname" placeholder="Nickname" minlength="4" maxlength="20" required="required">
+                        <input type="password" name="password" id="register_password" placeholder="Password" minlength="8" maxlength="30" required="required">
+                        <input type="password" name="password_2" id="register_password_2" placeholder="Retype Password" minlength="8" maxlength="30" required="required">
+                        <br>
+                        <input type="submit"> <input type="reset">
+                        <input type="hidden" name="action" value="register">
+                    </form>
+                    <br>
+                    <center>Or <span class="toggleRegister" id="toggleRegister" onclick=toggleRegister()>log in</span> with an existing account.</center>
+                </fieldset>
+                <br>
             </div>
-        </div> --%>
-        <fieldset>
-            <legend>Register</legend>
-            <form action="sessionmanager" method="post">
-                <input type="text" name="nickname" id="nickname" placeholder="Nickname"> <input type="password" name="password" id="password" placeholder="Password">
-                <br>
-                <input type="submit"> <input type="reset">
-                <input type="hidden" id="action" name="action" value="register">
-            </form>
-        </fieldset>
-        <br>
-        <fieldset>
-            <legend>Login</legend>
-            <form action="sessionmanager" method="post">
-                <input type="text" name="nickname" id="nickname" placeholder="Nickname"> <input type="password" name="password" id="password" placeholder="Password">
-                <br>
-                <input type="submit"> <input type="reset">
-                <input type="hidden" id="action" name="action" value="login">
-            </form>
-        </fieldset>
+        </div>
     </body>
 </html>
