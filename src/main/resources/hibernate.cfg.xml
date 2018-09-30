@@ -1,0 +1,30 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-configuration SYSTEM 
+"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+   <session-factory>
+   
+      <property name = "hibernate.dialect">
+         org.hibernate.dialect.MySQLDialect
+      </property>
+      
+      <property name = "hibernate.connection.driver_class">
+         com.mysql.jdbc.Driver
+      </property>
+      
+      <property name = "hibernate.connection.url">
+         jdbc:mysql://localhost:3306/UserDB?serverTimezone=Europe/Berlin
+      </property>
+      
+      <property name = "hibernate.connection.username">
+         webchat
+      </property>
+      
+      <property name = "hibernate.connection.password">
+         DasB00t
+      </property>
+
+      <mapping class="de.demoapps.webchat.classes.User" />
+      
+   </session-factory>
+</hibernate-configuration>

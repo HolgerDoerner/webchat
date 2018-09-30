@@ -73,11 +73,30 @@ fieldset {
 
 <script>
     let toggleRegister;
+    let status;
+    let registerForm;
 
     window.addEventListener('load', () => {
 
-        let request = new XMLHttpRequest();
-        let registerForm = document.getElementById('registerForm');
+        status = '<%= (request.getParameter("status") != "") ? request.getParameter("status") : null %>';
+        registerForm = document.getElementById('registerForm');
+
+        switch (status) {
+            case 'nickname_duplicate':
+                alert('Nickname already taken, please choose another one!');
+                break;
+
+            case 'register_successfull':
+                alert('Nickname successfull registered! You are now able to log in.');
+                break;
+
+            case 'login_error':
+                alert('Nickname and/or Password wrong, please try again!');
+                break;
+        
+            default:
+                break;
+        }
 
         registerForm.addEventListener('submit', event => {
             
@@ -86,10 +105,6 @@ fieldset {
                 alert("Passwords do not match!");
                 return;
             }
-        })
-
-        request.addEventListener('load', event => {
-            if (event) alert(event.target.responseText);
         })
 
         toggleRegister = () => {
@@ -119,27 +134,27 @@ fieldset {
                 <fieldset class="login" id="login">
                     <legend>Login</legend>
                     <form id="loginForm" action="sessionmanager" method="post">
-                        <input type="text" name="nickname" id="login_nickname" placeholder="Nickname" minlength="4" maxlength="20" required="required">
-                        <input type="password" name="password" id="login_password" placeholder="Password" minlength="8" maxlength="30" required="required">
+                        <input type="hidden" name="action" value="login">
+                        <input type="text" name="nickname" id="login_nickname" placeholder="Nickname" required="required" autocomplete="nickname">
+                        <input type="password" name="password" id="login_password" placeholder="Password" required="required">
                         <br>
                         <input type="submit"> <input type="reset">
-                        <input type="hidden" name="action" value="login">
                     </form>
                     <br>
-                    <center>Or <span class="toggleRegister" id="toggleRegister" onclick=toggleRegister()>sign up</span> for an account.</center>
+                    <center><span class="toggleRegister" id="toggleRegister" onclick=toggleRegister()>Sign up</span> for an account.</center>
                 </fieldset>
                 <fieldset class="register" id="register">
                     <legend>Register</legend>
                     <form id="registerForm" action="sessionmanager" method="post">
-                        <input type="text" name="nickname" id="register_nickname" placeholder="Nickname" minlength="4" maxlength="20" required="required">
-                        <input type="password" name="password" id="register_password" placeholder="Password" minlength="8" maxlength="30" required="required">
-                        <input type="password" name="password_2" id="register_password_2" placeholder="Retype Password" minlength="8" maxlength="30" required="required">
+                        <input type="hidden" name="action" value="register">
+                        <input type="text" name="nickname" id="register_nickname" placeholder="Nickname" minlength="4" maxlength="20" required="required" autocomplete="nickname">
+                        <input type="password" name="password" id="register_password" placeholder="Password" minlength="8" maxlength="30" required="required" autocomplete="new-password">
+                        <input type="password" name="password_2" id="register_password_2" placeholder="Retype Password" minlength="8" maxlength="30" required="required" autocomplete="new-password">
                         <br>
                         <input type="submit"> <input type="reset">
-                        <input type="hidden" name="action" value="register">
                     </form>
                     <br>
-                    <center>Or <span class="toggleRegister" id="toggleRegister" onclick=toggleRegister()>log in</span> with an existing account.</center>
+                    <center><span class="toggleRegister" id="toggleRegister" onclick=toggleRegister()>Log in</span> with an existing account.</center>
                 </fieldset>
                 <br>
             </div>

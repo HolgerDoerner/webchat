@@ -1,7 +1,6 @@
 package de.demoapps.webchat.servlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 
 import javax.enterprise.context.SessionScoped;
@@ -22,6 +21,11 @@ import javax.servlet.http.HttpSession;
 
 import com.google.common.hash.Hashing;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+
 import de.demoapps.webchat.classes.User;
 
 /**
@@ -35,16 +39,6 @@ public class SessionServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // final User user = new User();
-        // user.setNickname(request.getParameter("nickname"));
-        // final HttpSession session = request.getSession();
-        // session.setAttribute("user", user);
-
-        // Cookie nickname = new Cookie("nickname", user.getNickname());
-
-        // response.addCookie(nickname);
-
-        // response.sendRedirect("chat.jsp");
 
         switch(request.getParameter("action")) {
             case "login":
@@ -57,7 +51,22 @@ public class SessionServlet extends HttpServlet {
         }
     }
 
-    public void loginUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    /**
+     * redirect all GET-Requests to this servlet quietly to the index page
+     */
+    @Override
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.sendRedirect("index.jsp");
+    }
+
+    /**
+     * 
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void loginUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("UserDB");
         EntityManager entityManager = factory.createEntityManager();
@@ -70,39 +79,42 @@ public class SessionServlet extends HttpServlet {
         try {
             Query query = entityManager.createQuery("from User where NICKNAME=:nick");
             query.setParameter("nick", request.getParameter("nickname"));
-            user = (User) query.getSingleResult();
-    
             entityTransaction.commit();
+            user = (User) query.getSingleResult();
+
             entityManager.close();
             factory.close();
-        }
-        catch (NoResultException e) {
-            PrintWriter out = response.getWriter();
-            response.setContentType("text/html");
-            response.setCharacterEncoding("UTF-8");
-            out.write("<h2><b>Nickname</b> not found, please try again!</h2><br>");
-            out.write("Back to <a href=\"index.jsp\" target=\"_self\">Login Page</a>.");
-        }
 
-        if(Hashing.sha256().hashString(request.getParameter("password"), StandardCharsets.UTF_8).toString()
-            .equals(user.getPassword())) {
-                
-            final HttpSession session = request.getSession();
-            session.setAttribute("user", user);
-            Cookie nickname = new Cookie("nickname", user.getNickname());
-            response.addCookie(nickname);
-            response.sendRedirect("chat.jsp");
+            if(Hashing.sha256().hashString(request.getParameter("password"), StandardCharsets.UTF_8).toString()
+                .equals(user.getPassword()) && request.getParameter("nickname").equals(user.getNickname())) {
+                    
+                final HttpSession session = request.getSession();
+                session.setAttribute("user", user);
+                Cookie nickname = new Cookie("nickname", user.getNickname());
+                response.addCookie(nickname);
+                response.sendRedirect("chat.jsp");
+            }
+            else {
+                response.sendRedirect("index.jsp?status=login_error");
+            }
         }
-        else {
-            PrintWriter out = response.getWriter();
-            response.setContentType("text/html");
-            response.setCharacterEncoding("UTF-8");
-            out.write("<h2>Wrong <b>Password</b>, please try again!</h2><br>");
-            out.write("Back to <a href=\"index.jsp\" target=\"_self\">Login Page</a>.");
+        catch (NullPointerException | NoResultException e) {
+            response.sendRedirect("index.jsp?status=login_error");
+        }
+        catch (Throwable e) {
+            // TODO
         }
     }
 
-    public void registerUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    /**
+     * 
+     * @param request
+     * @param response
+     * @return boolean
+     * @throws IOException
+     * @throws ServletException
+     */
+    public void registerUser(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
         String nickname = request.getParameter("nickname");
         String password = request.getParameter("password");
@@ -112,16 +124,7 @@ public class SessionServlet extends HttpServlet {
         EntityTransaction entityTransaction = entityManager.getTransaction();
         
         try {
-            entityTransaction.begin();
-            
-            // try {
-            //     Query query = entityManager.createQuery("from User where NICKNAME=:nick");
-            //     query.setParameter("nick", nickname);
-            //     query.getSingleResult();
-            // }
-            // catch (NoResultException e) {
-            // }
-            
+            entityTransaction.begin();            
             entityManager.persist(new User(nickname, Hashing.sha256().hashString(password, StandardCharsets.UTF_8).toString()));    
             entityTransaction.commit();
             entityManager.close();
@@ -130,18 +133,10 @@ public class SessionServlet extends HttpServlet {
         catch (PersistenceException e) {
             entityManager.close();
             factory.close();
-            PrintWriter out = response.getWriter();
-            response.setContentType("text/html");
-            response.setCharacterEncoding("UTF-8");
-            out.write("<h2>Username already taken, please try another one!</h2><br>");
-            out.write("Back to <a href=\"index.jsp\" target=\"_self\">Login Page</a>.");
+
+            response.sendRedirect("index.jsp?status=nickname_duplicate");
         }
-        finally {
-            PrintWriter out = response.getWriter();
-            response.setContentType("text/html");
-            response.setCharacterEncoding("UTF-8");
-            out.write("<h2>Registration <b>successfull</b>, you can now log in!</h2><br>");
-            out.write("Back to <a href=\"index.jsp\" target=\"_self\">Login Page</a>.");
-        }
+        
+        response.sendRedirect("index.jsp?status=register_successfull");
     }
 }

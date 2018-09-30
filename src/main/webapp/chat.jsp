@@ -1,8 +1,7 @@
-<!DOCTYPE html>
-
 <%@page language="java" contentType="UTF-8" %>
 <jsp:useBean id="user" scope="session" class="de.demoapps.webchat.classes.User" />
 
+<!DOCTYPE html>
 <html>
     <head>
         <title>

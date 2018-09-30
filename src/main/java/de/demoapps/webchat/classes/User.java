@@ -17,7 +17,7 @@ public class User implements Serializable {
     @Id
     @Column(name="ID")
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     
     @Column(name="NICKNAME")
     private String nickname;
@@ -40,7 +40,7 @@ public class User implements Serializable {
         this.settings = "enter=1;outFont=15;inFont=15;";
     }
 
-    public Long getID() {
+    public Integer getID() {
         return id;
     }
 
