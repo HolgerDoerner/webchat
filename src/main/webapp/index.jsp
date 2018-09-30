@@ -133,7 +133,7 @@ fieldset {
                 <br>
                 <fieldset class="login" id="login">
                     <legend>Login</legend>
-                    <form id="loginForm" action="sessionmanager" method="post">
+                    <form id="loginForm" action="usermanager" method="post">
                         <input type="hidden" name="action" value="login">
                         <input type="text" name="nickname" id="login_nickname" placeholder="Nickname" required="required" autocomplete="nickname">
                         <input type="password" name="password" id="login_password" placeholder="Password" required="required">
@@ -145,7 +145,7 @@ fieldset {
                 </fieldset>
                 <fieldset class="register" id="register">
                     <legend>Register</legend>
-                    <form id="registerForm" action="sessionmanager" method="post">
+                    <form id="registerForm" action="usermanager" method="post">
                         <input type="hidden" name="action" value="register">
                         <input type="text" name="nickname" id="register_nickname" placeholder="Nickname" minlength="4" maxlength="20" required="required" autocomplete="nickname">
                         <input type="password" name="password" id="register_password" placeholder="Password" minlength="8" maxlength="30" required="required" autocomplete="new-password">

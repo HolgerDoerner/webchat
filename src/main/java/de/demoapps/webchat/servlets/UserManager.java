@@ -3,7 +3,7 @@ package de.demoapps.webchat.servlets;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -23,19 +23,21 @@ import com.google.common.hash.Hashing;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 
 import de.demoapps.webchat.classes.User;
+import de.demoapps.webchat.classes.HibernateUtils;
 
 /**
  * 
  */
-@SessionScoped
-@WebServlet("/sessionmanager")
-public class SessionServlet extends HttpServlet {
+@ApplicationScoped
+@WebServlet("/usermanager")
+public class UserManager extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
+
+    SessionFactory sessionFactory = HibernateUtils.getSessionFactory();
+    Session session = sessionFactory.openSession();
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -68,6 +70,7 @@ public class SessionServlet extends HttpServlet {
      */
     public void loginUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+        // TODO: re-write to use Hibernate-native !
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("UserDB");
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction entityTransaction = entityManager.getTransaction();
@@ -102,7 +105,7 @@ public class SessionServlet extends HttpServlet {
             response.sendRedirect("index.jsp?status=login_error");
         }
         catch (Throwable e) {
-            // TODO
+            // TODO: implement a propper catch :-/
         }
     }
 
@@ -119,6 +122,7 @@ public class SessionServlet extends HttpServlet {
         String nickname = request.getParameter("nickname");
         String password = request.getParameter("password");
         
+        // TODO: re-write to use Hibernate-native !
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("UserDB");
         EntityManager entityManager = factory.createEntityManager();
         EntityTransaction entityTransaction = entityManager.getTransaction();
