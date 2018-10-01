@@ -95,7 +95,7 @@ fieldset {
                         <input type="text" name="nickname" id="login_nickname" placeholder="Nickname" required="required" autocomplete="nickname">
                         <input type="password" name="password" id="login_password" placeholder="Password" required="required" autocomplete="current-password">
                         <br>
-                        <input type="button" value="send" onclick=submitLogin()> <input type="reset">
+                        <input type="button" value="Send" onclick=submitLogin()> <input type="reset" value="Reset">
                     </form>
                     <br>
                     <center><span class="toggleRegister" id="toggleRegister" onclick=toggleRegister()>Sign up</span> for an account.</center>
@@ -108,7 +108,7 @@ fieldset {
                         <input type="password" name="password" id="register_password" placeholder="Password" minlength="8" maxlength="30" required="required" autocomplete="new-password">
                         <input type="password" name="password_2" id="register_password_2" placeholder="Retype Password" minlength="8" maxlength="30" required="required" autocomplete="new-password">
                         <br>
-                        <input type="submit"> <input type="reset">
+                        <input type="button" value="Send" onClick=submitRegister()> <input type="reset" value="Reset">
                     </form>
                     <br>
                     <center><span class="toggleRegister" id="toggleRegister" onclick=toggleRegister()>Log in</span> with an existing account.</center>

@@ -1,11 +1,8 @@
 package de.demoapps.webchat.servlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 
-import javax.enterprise.context.RequestScoped;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,6 +16,7 @@ import com.google.common.hash.Hashing;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import de.demoapps.webchat.classes.HibernateUtils;
@@ -67,18 +65,15 @@ public class UserManager extends HttpServlet {
     public void loginUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         User user = null;
-
-        System.out.println(request.getParameter("nickname") + " " + request.getParameter("password"));
+        Transaction transaction = session.beginTransaction();
         
         try {
-            session.getTransaction().begin();
-
             Query<?> query = session.createQuery("from User where NICKNAME=:nick");
             query.setParameter("nick", request.getParameter("nickname"));
 
-            user = (User) query.getSingleResult();
+            transaction.commit();
 
-            session.getTransaction().commit();
+            user = (User) query.getSingleResult();
 
             if(Hashing.sha256().hashString(request.getParameter("password"), StandardCharsets.UTF_8).toString()
                 .equals(user.getPassword()) && request.getParameter("nickname").equals(user.getNickname())) {
@@ -88,18 +83,17 @@ public class UserManager extends HttpServlet {
                 Cookie nickname = new Cookie("nickname", user.getNickname());
                 response.addCookie(nickname);
                 
-                response.sendRedirect("chat.jsp");
+                response.addHeader("redirect", "chat.jsp");
             }
             else {
-                //response.sendRedirect("index.jsp?status=login_error");
                 response.setContentType("text/plain");
                 response.setCharacterEncoding("UTF-8");
                 response.getWriter().write("Wrong Nickname and/or Password !!");
             }
         }
         catch (Throwable e) {
-            System.out.println("** ERROR: " + e.getMessage());
-            //response.sendRedirect("index.jsp?status=login_error");
+            if (transaction.isActive()) transaction.rollback();
+            
             response.setContentType("text/plain");
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write("Wrong Nickname and/or Password !!");
@@ -118,15 +112,19 @@ public class UserManager extends HttpServlet {
         String nickname = request.getParameter("nickname");
         String password = request.getParameter("password");
         
-        session.getTransaction().begin();
+        Transaction transaction = session.beginTransaction();
         
         try {
             session.save(new User(nickname, Hashing.sha256().hashString(password, StandardCharsets.UTF_8).toString()));
-            session.getTransaction().commit();
+            transaction.commit();
+
+            response.getWriter().write("Nickname successfully registered!! You can now log in!");
         }
         catch (PersistenceException e) {
-            response.sendRedirect("index.jsp?status=nickname_duplicate");
+            if (transaction.isActive()) transaction.rollback();
+
+            response.getWriter().write("Nickname already taken, please try another one!");
         }
-        response.sendRedirect("index.jsp?status=register_successfull");
+
     }
 }
