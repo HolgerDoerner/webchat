@@ -13,11 +13,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.google.common.hash.Hashing;
+import com.google.gson.Gson;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.jboss.logging.Logger;
+import org.jboss.logging.Logger.Level;
 
 import de.demoapps.webchat.classes.HibernateUtils;
 import de.demoapps.webchat.classes.User;
@@ -80,8 +83,11 @@ public class UserManager extends HttpServlet {
                     
                 final HttpSession session = request.getSession();
                 session.setAttribute("user", user);
-                Cookie nickname = new Cookie("nickname", user.getNickname());
-                response.addCookie(nickname);
+
+                response.addCookie(new Cookie("nickname", user.getNickname()));
+                response.addCookie(new Cookie("setting_enter", user.getSingleSetting("enter").toString()));
+                response.addCookie(new Cookie("setting_outputfontsize", user.getSingleSetting("outputfontsize").toString()));
+                response.addCookie(new Cookie("setting_inputfontsize", user.getSingleSetting("inputfontsize").toString()));
                 
                 response.addHeader("redirect", "chat.jsp");
             }

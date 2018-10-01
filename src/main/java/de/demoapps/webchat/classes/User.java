@@ -1,6 +1,8 @@
 package de.demoapps.webchat.classes;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,8 +11,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Parameter;
+import org.hibernate.annotations.Type;
+
 @Entity
-@Table(name="Users")
+@Table(name="test")
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
     
@@ -26,7 +31,9 @@ public class User implements Serializable {
     private String password;
 
     @Column(name="SETTINGS")
-    private String settings;
+    @Type(type="org.hibernate.type.SerializableToBlobType",
+        parameters={@Parameter(name="classname", value="java.util.HashMap")})
+    private Map<String, Integer> settings;
 
     public User () { 
 
@@ -37,7 +44,10 @@ public class User implements Serializable {
         this.nickname = nickname;
         this.password = password;
 
-        this.settings = "enter=1;outFont=15;inFont=15;";
+        this.settings = new HashMap<>();
+        settings.put("enter", 1);
+        settings.put("outputfontsize", 15);
+        settings.put("inputfontsize", 15);
     }
 
     public Integer getID() {
@@ -62,12 +72,20 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public String getSettings() {
+    public Map<String, Integer> getSettings() {
         return settings;
     }
 
-    public void setSettings(String setting) {
-        this.settings = setting;
+    public Integer getSingleSetting(String key) {
+        return settings.get(key);
+    }
+
+    public void setSettings(Map<String, Integer> settings) {
+        this.settings = settings;
+    }
+
+    public void setSingleSetting(String key, Integer value) {
+        this.settings.put(key, value);
     }
 
     @Override
