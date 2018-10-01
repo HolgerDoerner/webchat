@@ -1,16 +1,12 @@
 package de.demoapps.webchat.servlets;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
+import javax.enterprise.context.RequestScoped;
 import javax.persistence.NoResultException;
-import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
-import javax.persistence.Query;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -23,25 +19,25 @@ import com.google.common.hash.Hashing;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 
-import de.demoapps.webchat.classes.User;
 import de.demoapps.webchat.classes.HibernateUtils;
+import de.demoapps.webchat.classes.User;
 
 /**
  * 
  */
-@ApplicationScoped
 @WebServlet("/usermanager")
 public class UserManager extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
-    SessionFactory sessionFactory = HibernateUtils.getSessionFactory();
-    Session session = sessionFactory.openSession();
+    private SessionFactory sessionFactory = HibernateUtils.getSessionFactory();
+    private Session session = sessionFactory.openSession();
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        
         switch(request.getParameter("action")) {
             case "login":
                 loginUser(request, response);
@@ -58,7 +54,7 @@ public class UserManager extends HttpServlet {
      */
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.sendRedirect("index.jsp");
+        doPost(request, response);
     }
 
     /**
@@ -70,23 +66,19 @@ public class UserManager extends HttpServlet {
      */
     public void loginUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        // TODO: re-write to use Hibernate-native !
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory("UserDB");
-        EntityManager entityManager = factory.createEntityManager();
-        EntityTransaction entityTransaction = entityManager.getTransaction();
-        
-        entityTransaction.begin();
-
         User user = null;
+
+        System.out.println(request.getParameter("nickname") + " " + request.getParameter("password"));
         
         try {
-            Query query = entityManager.createQuery("from User where NICKNAME=:nick");
+            session.getTransaction().begin();
+
+            Query<?> query = session.createQuery("from User where NICKNAME=:nick");
             query.setParameter("nick", request.getParameter("nickname"));
-            entityTransaction.commit();
+
             user = (User) query.getSingleResult();
 
-            entityManager.close();
-            factory.close();
+            session.getTransaction().commit();
 
             if(Hashing.sha256().hashString(request.getParameter("password"), StandardCharsets.UTF_8).toString()
                 .equals(user.getPassword()) && request.getParameter("nickname").equals(user.getNickname())) {
@@ -95,17 +87,22 @@ public class UserManager extends HttpServlet {
                 session.setAttribute("user", user);
                 Cookie nickname = new Cookie("nickname", user.getNickname());
                 response.addCookie(nickname);
+                
                 response.sendRedirect("chat.jsp");
             }
             else {
-                response.sendRedirect("index.jsp?status=login_error");
+                //response.sendRedirect("index.jsp?status=login_error");
+                response.setContentType("text/plain");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write("Wrong Nickname and/or Password !!");
             }
         }
-        catch (NullPointerException | NoResultException e) {
-            response.sendRedirect("index.jsp?status=login_error");
-        }
         catch (Throwable e) {
-            // TODO: implement a propper catch :-/
+            System.out.println("** ERROR: " + e.getMessage());
+            //response.sendRedirect("index.jsp?status=login_error");
+            response.setContentType("text/plain");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write("Wrong Nickname and/or Password !!");
         }
     }
 
@@ -113,7 +110,6 @@ public class UserManager extends HttpServlet {
      * 
      * @param request
      * @param response
-     * @return boolean
      * @throws IOException
      * @throws ServletException
      */
@@ -122,25 +118,15 @@ public class UserManager extends HttpServlet {
         String nickname = request.getParameter("nickname");
         String password = request.getParameter("password");
         
-        // TODO: re-write to use Hibernate-native !
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory("UserDB");
-        EntityManager entityManager = factory.createEntityManager();
-        EntityTransaction entityTransaction = entityManager.getTransaction();
+        session.getTransaction().begin();
         
         try {
-            entityTransaction.begin();            
-            entityManager.persist(new User(nickname, Hashing.sha256().hashString(password, StandardCharsets.UTF_8).toString()));    
-            entityTransaction.commit();
-            entityManager.close();
-            factory.close();
+            session.save(new User(nickname, Hashing.sha256().hashString(password, StandardCharsets.UTF_8).toString()));
+            session.getTransaction().commit();
         }
         catch (PersistenceException e) {
-            entityManager.close();
-            factory.close();
-
             response.sendRedirect("index.jsp?status=nickname_duplicate");
         }
-        
         response.sendRedirect("index.jsp?status=register_successfull");
     }
 }

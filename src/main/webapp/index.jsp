@@ -71,50 +71,6 @@ fieldset {
 }
 </style>
 
-<script>
-    let toggleRegister;
-    let status;
-    let registerForm;
-
-    window.addEventListener('load', () => {
-
-        status = '<%= (request.getParameter("status") != "") ? request.getParameter("status") : null %>';
-        registerForm = document.getElementById('registerForm');
-
-        switch (status) {
-            case 'nickname_duplicate':
-                alert('Nickname already taken, please choose another one!');
-                break;
-
-            case 'register_successfull':
-                alert('Nickname successfull registered! You are now able to log in.');
-                break;
-
-            case 'login_error':
-                alert('Nickname and/or Password wrong, please try again!');
-                break;
-        
-            default:
-                break;
-        }
-
-        registerForm.addEventListener('submit', event => {
-            
-            if (document.getElementById('register_password').value !== document.getElementById('register_password_2').value) {
-                event.preventDefault();
-                alert("Passwords do not match!");
-                return;
-            }
-        })
-
-        toggleRegister = () => {
-
-            document.getElementById('login').classList.toggle('login-toggle');
-            document.getElementById('register').classList.toggle('register-toggle');
-        }
-    })
-</script>
-
 <html>
     <head>
         <title>
@@ -123,6 +79,7 @@ fieldset {
         <meta charset="UTF-8" lang="en">
         <link rel="shortcut icon" href="include/img/icon-512x512.png">
         <link rel="manifest" href="manifest.json">
+        <script src="include/script/index.js"></script>
     </head>
     <body>
         <div class="grid-container">
@@ -136,9 +93,9 @@ fieldset {
                     <form id="loginForm" action="usermanager" method="post">
                         <input type="hidden" name="action" value="login">
                         <input type="text" name="nickname" id="login_nickname" placeholder="Nickname" required="required" autocomplete="nickname">
-                        <input type="password" name="password" id="login_password" placeholder="Password" required="required">
+                        <input type="password" name="password" id="login_password" placeholder="Password" required="required" autocomplete="current-password">
                         <br>
-                        <input type="submit"> <input type="reset">
+                        <input type="button" value="send" onclick=submitLogin()> <input type="reset">
                     </form>
                     <br>
                     <center><span class="toggleRegister" id="toggleRegister" onclick=toggleRegister()>Sign up</span> for an account.</center>
