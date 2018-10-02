@@ -3,7 +3,7 @@ package de.demoapps.webchat.servlets;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.PersistenceException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -31,7 +31,7 @@ import de.demoapps.webchat.classes.User;
  * void registerUser()
  * void logoutUser()
  */
-@SessionScoped
+@ApplicationScoped
 @WebServlet("/usermanager")
 public class UserManager extends HttpServlet {
 
@@ -41,7 +41,7 @@ public class UserManager extends HttpServlet {
     private Session dbSession = sessionFactory.openSession();
 
     /**
-     * mein method to handle requests and responses.
+     * main method to handle requests and responses.
      * 
      * @param request
      * @param response

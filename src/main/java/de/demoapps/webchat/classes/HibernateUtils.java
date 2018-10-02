@@ -7,13 +7,13 @@ import org.hibernate.service.ServiceRegistry;
 
 public class HibernateUtils {
 
-    private static final SessionFactory sessionFactory = newSessionFactory();
+    // private static final SessionFactory sessionFactory = newSessionFactory();
 
     /**
      * 
      * @return SessionFactory
      */
-    private static SessionFactory newSessionFactory() {
+    public static SessionFactory getSessionFactory() {
 
         try {
             Configuration configuration = new Configuration();
@@ -33,7 +33,7 @@ public class HibernateUtils {
      * 
      * @return SessionFactory
      */
-    public static SessionFactory getSessionFactory() {
-        return sessionFactory;
-    }
+    // public static SessionFactory getSessionFactory() {
+    //     return sessionFactory;
+    // }
 }
