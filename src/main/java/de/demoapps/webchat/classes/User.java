@@ -15,7 +15,7 @@ import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 
 @Entity
-@Table(name="test")
+@Table(name="users")
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
     
