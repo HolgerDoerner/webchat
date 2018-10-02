@@ -50,7 +50,7 @@ let submitRegister = () => {
             ajax = new XMLHttpRequest();
     
             ajax.open('post', 'usermanager', true);
-            ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            ajax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
             
             ajax.onreadystatechange = responseHandler;
             

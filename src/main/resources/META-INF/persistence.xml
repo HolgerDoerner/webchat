@@ -10,8 +10,11 @@
   <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
   <class>de.demoapps.webchat.classes.User</class>
   <properties>
-    <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
-    <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/UserDB?serverTimezone=Europe/Berlin" />
+    <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />
+
+    <!-- production database -->
+    <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/UserDB?serverTimezone=Europe/Berlin&amp;verifyServerCertificate=false&amp;useSSL=true&amp;autoReconnect=true" />
+
     <property name="javax.persistence.jdbc.user" value="webchat" />
     <property name="javax.persistence.jdbc.password" value="DasB00t" />
     <property name="hibernate.show_sql" value="true" />

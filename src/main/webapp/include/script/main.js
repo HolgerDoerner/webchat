@@ -2,22 +2,19 @@ let chatOutput;
 let chatInput;
 let userList;
 let userList_legend;
-let smileyPopup;
-let imagePopup;
-let urlPopup;
 
 // for markdown-it provided over CDN
 let markdownIt;
 
 // read the cookie to get the username.
-let decodedCookie = decodeURIComponent(document.cookie);
-let cookie = decodedCookie.split(';');
-let nickname = cookie[0].split('=')[1];
+// let decodedCookie = decodeURIComponent(document.cookie);
+// let cookie = decodedCookie.split(';');
+// let nickname = cookie[0].split('=')[1];
 
 // if user is not logged in properly -> redirekt to login page
-if (!nickname) { 
-    window.location.replace('index.jsp')
-}
+// if (!nickname) { 
+//     window.location.replace('index.jsp')
+// }
 
 // create the websocket-connection to the server-endpoint.
 // TODO: change ws-adress bevor deploying to the server !!!!
@@ -25,43 +22,6 @@ let wsServer = `wss://10.100.5.15:8443/webchat/chat/${nickname}`; // production 
 //let wsServer = `wss://10.100.5.15:8446/webchat/chat/${nickname}`; // development work
 //let wsServer = `wss://192.168.178.100:8446/webchat/chat/${nickname}`; // development home
 let wSocket = new WebSocket(wsServer);
-
-// ------------------------------------------------------
-// initializes the values when page is fully loaded.
-// ------------------------------------------------------
-window.onload = () => {
-
-    // making markdown-it available (with plugin(s))
-    markdownIt = window.markdownit().use(window.markdownitEmoji);
-
-    chatOutput = document.getElementById('chatOutput');
-    chatInput = document.getElementById('chatInput');
-    userList = document.getElementById('userList');
-    userList_legend = document.getElementById('userList-legend');
-    smileyPopup = document.getElementById('smileyPopup-window');
-    imagePopup = document.getElementById('imagePopup-window');
-    urlPopup = document.getElementById('urlPopup-window');
-
-    // setting initial font-size of the in- and output
-    chatOutput.style.fontSize = '15px';
-    document.getElementById('showActualOutputFontSize').innerHTML = chatOutput.style.fontSize;
-    chatInput.style.fontSize = '15px';
-    document.getElementById('showActualInputFontSize').innerHTML = chatInput.style.fontSize;
-
-    // event-handler for sending messages with 'Enter'
-    chatInput.onkeypress = onKeyPress;
-
-    // request permission to display desktop-notifications.
-    //
-    // TODO: replace this implementation with a propper Service-Worker in the future...
-    //
-    if (window.Notification || window.webkitNotifications || navigator.mozNotification && Notification.permission !== 'granted') {
-        Notification.requestPermission();
-    }
-
-    // set initial height for input-box
-    chatInput.style.width = Number.parseInt(getComputedStyle(document.getElementById('input-container')).width) - 60 + 'px';
-}
 
 // ------------------------------------------------------
 // automaticxl set focus on input-box
@@ -246,18 +206,6 @@ let resetInput = () => {
 }
 
 // ------------------------------------------------------
-// shows message preview
-// ------------------------------------------------------
-let messagePreview = () => {
-
-    chatInput.classList.toggle('chatInput-text-toggle')
-    document.getElementById('chatInput-preview').classList.toggle('chatInput-preview-toggle')
-
-    document.getElementById('chatInput-preview').innerHTML = '';
-    document.getElementById('chatInput-preview').innerHTML = markdownIt.render(chatInput.innerText);
-}
-
-// ------------------------------------------------------
 // updates the userlist.
 // ------------------------------------------------------
 let updateUserlist = list => {
@@ -328,5 +276,39 @@ let toggleShow = id => {
     }
     else {
         document.getElementById(`messageToggle-${id}`).innerHTML = '&#x25B2;';
+    }
+}
+
+// ------------------------------------------------------
+// logs out the user and deletes session entitys
+// ------------------------------------------------------
+let logOut = () => {
+    let enter = document.getElementById('selectSendMethod').checked ? 1 : 0;
+    let outputfontsize = Number.parseInt(chatOutput.style.fontSize);
+    let inputfontsize = Number.parseInt(chatInput.style.fontSize);
+
+    try {
+        ajax = new XMLHttpRequest();
+        ajax.open('post', 'usermanager', true);
+        ajax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        ajax.onreadystatechange = responseHandler;
+        ajax.send(`action=logout&enter=${enter}&outputfontsize=${outputfontsize}&inputfontsize=${inputfontsize}`);
+    }
+    catch (error) {
+        alert(error);
+    }
+}
+
+// ------------------------------------------------------
+// response-handler for ajax-requests
+// ------------------------------------------------------
+let responseHandler = () => {
+    if (ajax.readyState == 4 && ajax.status == 200) {
+        if (ajax.getResponseHeader('redirect')) {
+            window.location.replace(ajax.getResponseHeader('redirect'));
+        }
+        else {
+            alert(ajax.responseText);
+        }
     }
 }

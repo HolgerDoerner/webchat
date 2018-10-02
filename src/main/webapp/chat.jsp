@@ -28,6 +28,53 @@
         <!--
             main JavaScript code.
         -->
+        <script>
+            // get the settings from the Session-Bean
+            let nickname = '<%= user.getNickname() %>';
+
+            if (!nickname) {
+                alert('Please log in first!');
+                window.location.replace('index.jsp');
+            }
+
+            let setting_enter = <%= (user.getSingleSetting("enter") == 1) ? true : false %>;
+            let setting_outputFontsize = <%= user.getSingleSetting("outputfontsize") %>;
+            let setting_inputFontsize = <%= user.getSingleSetting("inputfontsize") %>;
+
+            window.onload = () => {
+                // making markdown-it available (with plugin(s))
+                markdownIt = window.markdownit().use(window.markdownitEmoji);
+
+                chatOutput = document.getElementById('chatOutput');
+                chatInput = document.getElementById('chatInput');
+                userList = document.getElementById('userList');
+                userList_legend = document.getElementById('userList-legend');
+                smileyPopup = document.getElementById('smileyPopup-window');
+                imagePopup = document.getElementById('imagePopup-window');
+                urlPopup = document.getElementById('urlPopup-window');
+
+                // set initial settings
+                document.getElementById('selectSendMethod').checked = setting_enter;
+                chatOutput.style.fontSize = setting_outputFontsize + 'px';
+                document.getElementById('showActualOutputFontSize').innerHTML = chatOutput.style.fontSize;
+                chatInput.style.fontSize = setting_inputFontsize + 'px'
+                document.getElementById('showActualInputFontSize').innerHTML = chatInput.style.fontSize;
+
+                // event-handler for sending messages with 'Enter'
+                chatInput.onkeypress = onKeyPress;
+
+                // request permission to display desktop-notifications.
+                //
+                // TODO: replace this implementation with a propper Service-Worker in the future...
+                //
+                if (window.Notification || window.webkitNotifications || navigator.mozNotification && Notification.permission !== 'granted') {
+                    Notification.requestPermission();
+                }
+
+                // set initial height for input-box
+                chatInput.style.width = Number.parseInt(getComputedStyle(document.getElementById('input-container')).width) - 60 + 'px';
+            }
+        </script>
         <script src="include/script/main.js"></script>
     </head>
     <body>
@@ -43,7 +90,7 @@
                 <hr style="border: 0px">
                 <fieldset class="optionsFieldset">
                     <legend class="optionsLegend">
-                        <a href="index.jsp" target="_self" id="logout"><img class="optionsButton" id="logoutButton" src="include/img/logout-512x512.png" alt="Logout" title="Logout"></a>
+                        <img class="optionsButton" id="logoutButton" src="include/img/logout-512x512.png" alt="Logout" title="Logout" style="margin-right: 20px" onclick=logOut()>
                         <img class="optionsButton" id="optionsButton" src="include/img/options-512x512.png" alt="Options" title="Options" onclick=toggleOptions()>
                     </legend>
                     <div class="optionsContent" id="optionsContent">
@@ -55,7 +102,7 @@
                                 <td width="10px">
                                 </td>
                                 <td>
-                                    <input type="checkbox" name="selectSendMethod" id="selectSendMethod" checked="checked">
+                                    <input type="checkbox" name="selectSendMethod" id="selectSendMethod">
                                 </td>
                             </tr>
                             <tr>
@@ -103,8 +150,7 @@
                         <div id="chatInput-preview" class="chatInput-preview"></div>
                         <div style="display: inline-block; vertical-align: middle">
                             <input class="inputButtons" type="submit" id="submit" value="Send" onclick=sendMsg()><br>
-                            <input class="inputButtons" type="reset" id="reset" value="Reset" onclick=resetInput()><br>
-                            <!-- <input class="inputButtons" Type="button" id="preview" value="Preview" onclick=messagePreview()> -->
+                            <input class="inputButtons" type="reset" id="reset" value="Reset" onclick=resetInput()>
                         </div>
                     </div>
 
