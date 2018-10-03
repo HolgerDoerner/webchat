@@ -13,7 +13,7 @@ public class HibernateUtils {
      * 
      * @return SessionFactory
      */
-    public static SessionFactory getSessionFactory() {
+    public static final SessionFactory getSessionFactory() {
 
         try {
             Configuration configuration = new Configuration();

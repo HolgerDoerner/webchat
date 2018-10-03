@@ -30,16 +30,18 @@
         -->
         <script>
             // get the settings from the Session-Bean
-            let nickname = '<%= user.getNickname() %>';
+            <%
+                try {   
+                    out.println("let nickname = '" + user.getNickname() + "';");
 
-            if (!nickname) {
-                alert('Please log in first!');
-                window.location.replace('index.jsp');
-            }
-
-            let setting_enter = <%= (user.getSingleSetting("enter") == 1) ? true : false %>;
-            let setting_outputFontsize = <%= user.getSingleSetting("outputfontsize") %>;
-            let setting_inputFontsize = <%= user.getSingleSetting("inputfontsize") %>;
+                    out.println("let setting_enter = " + ((user.getSingleSetting("enter") == 1) ? true : false) + ";");
+                    out.println("let setting_outputFontsize = " + user.getSingleSetting("outputfontsize") + ";");
+                    out.println("let setting_inputFontsize = " + user.getSingleSetting("inputfontsize") + ";");
+                }
+                catch (NullPointerException e) {
+                    response.sendRedirect("index.jsp");
+                }
+            %>
 
             window.onload = () => {
                 // making markdown-it available (with plugin(s))

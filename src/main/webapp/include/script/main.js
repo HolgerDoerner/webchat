@@ -18,9 +18,9 @@ let markdownIt;
 
 // create the websocket-connection to the server-endpoint.
 // TODO: change ws-adress bevor deploying to the server !!!!
-let wsServer = `wss://10.100.5.15:8443/webchat/chat/${nickname}`; // production work
+//let wsServer = `wss://10.100.5.15:8443/webchat/chat/${nickname}`; // production work
 //let wsServer = `wss://10.100.5.15:8446/webchat/chat/${nickname}`; // development work
-//let wsServer = `wss://192.168.178.100:8446/webchat/chat/${nickname}`; // development home
+let wsServer = `wss://192.168.178.100:8446/webchat/chat/${nickname}`; // development home
 let wSocket = new WebSocket(wsServer);
 
 // ------------------------------------------------------
@@ -288,6 +288,11 @@ let logOut = () => {
     let inputfontsize = Number.parseInt(chatInput.style.fontSize);
 
     try {
+        //close websocket cleanly
+        wSocket.close();
+
+        // send logout-request to server
+        // send current status of the settings to server to save them.
         ajax = new XMLHttpRequest();
         ajax.open('post', 'usermanager', true);
         ajax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');

@@ -39,30 +39,31 @@ public class UserManager extends HttpServlet {
 
     private SessionFactory sessionFactory = HibernateUtils.getSessionFactory();
     private Session dbSession = sessionFactory.openSession();
+    private Transaction transaction = dbSession.beginTransaction();
 
     /**
      * main method to handle requests and responses.
      * 
-     * @param request
-     * @param response
+     * @param httpRequest
+     * @param httpResponse
      * @throws ServletException
      * @throws IOException
      */
     @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doPost(HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws ServletException, IOException {
         
         // get value for parameter "action" from request and call the proper methods.
-        switch(request.getParameter("action")) {
+        switch(httpRequest.getParameter("action")) {
             case "login":
-                loginUser(request, response);
+                loginUser(httpRequest, httpResponse);
                 break;
 
             case "register":
-                registerUser(request, response);
+                registerUser(httpRequest, httpResponse);
                 break;
 
             case "logout":
-                logoutUser(request, response);
+                logoutUser(httpRequest, httpResponse);
                 break;
         }
     }
@@ -70,77 +71,80 @@ public class UserManager extends HttpServlet {
     /**
      * redirect all GET-Requests to this servlet to doPost().
      * 
-     * @param request
-     * @param response
+     * @param httpRequest
+     * @param httpResponse
      * @throws ServletException
      * @throws IOException
      */
     @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doPost(request, response);
+    public void doGet(HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws ServletException, IOException {
+        doPost(httpRequest, httpResponse);
     }
 
     /**
      * lets users log-in to the chat.
      * 
-     * @param request
-     * @param response
+     * @param httpRequest
+     * @param httpResponse
      * @throws ServletException
      * @throws IOException
      */
-    public void loginUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void loginUser(HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws ServletException, IOException {
 
         User user = null;
-        Transaction transaction = dbSession.beginTransaction();
+
+        // Transaction transaction = dbSession.beginTransaction();
+        if (!transaction.isActive()) transaction.begin();
         
         try {
             Query<?> query = dbSession.createQuery("from User where NICKNAME=:nick");
-            query.setParameter("nick", request.getParameter("nickname"));
+            query.setParameter("nick", httpRequest.getParameter("nickname"));
 
             transaction.commit();
 
             user = (User) query.getSingleResult();
 
-            if(Hashing.sha256().hashString(request.getParameter("password"), StandardCharsets.UTF_8).toString()
-                .equals(user.getPassword()) && request.getParameter("nickname").equals(user.getNickname())) {
+            if(Hashing.sha256().hashString(httpRequest.getParameter("password"), StandardCharsets.UTF_8).toString()
+                .equals(user.getPassword()) && httpRequest.getParameter("nickname").equals(user.getNickname())) {
                 
                 // write the User-Bean into the session
-                final HttpSession httpSession = request.getSession();
+                final HttpSession httpSession = httpRequest.getSession();
                 httpSession.setAttribute("user", user);
                 
                 // redirect client to chat
-                response.addHeader("redirect", "chat.jsp");
+                httpResponse.addHeader("redirect", "chat.jsp");
             }
             else {
-                response.setContentType("text/plain");
-                response.setCharacterEncoding("UTF-8");
-                response.getWriter().write("Wrong Nickname and/or Password !!");
+                httpResponse.setContentType("text/plain");
+                httpResponse.setCharacterEncoding("UTF-8");
+                httpResponse.getWriter().write("Wrong Nickname and/or Password !!");
             }
         }
         catch (Throwable e) {
-            if (transaction.isActive()) transaction.rollback();
+            if (transaction.isActive() || transaction.getRollbackOnly()) transaction.rollback();
             
-            response.setContentType("text/plain");
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write("Wrong Nickname and/or Password !!");
+            httpResponse.setContentType("text/plain");
+            httpResponse.setCharacterEncoding("UTF-8");
+            httpResponse.getWriter().write("Wrong Nickname and/or Password !!");
         }
     }
 
     /**
      * registers a new user and makes entry in database.
      * 
-     * @param request
-     * @param response
+     * @param httpRequest
+     * @param httpResponse
      * @throws IOException
      * @throws ServletException
      */
-    public void registerUser(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    public void registerUser(HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws IOException, ServletException {
 
         // get values for nickname and password from request-parameters.
-        String nickname = request.getParameter("nickname");
-        String password = request.getParameter("password");
+        String nickname = httpRequest.getParameter("nickname");
+        String password = httpRequest.getParameter("password");
         
-        Transaction transaction = dbSession.beginTransaction();
+        // Transaction transaction = dbSession.beginTransaction();
+        if (!transaction.isActive()) transaction.begin();
         
         try {
             // make a new entry in database.
@@ -149,13 +153,13 @@ public class UserManager extends HttpServlet {
             transaction.commit();
 
             // notify user if registration was successfull
-            response.getWriter().write("Nickname successfully registered!! You can now log in!");
+            httpResponse.getWriter().write("Nickname successfully registered!! You can now log in!");
         }
         catch (PersistenceException e) {
             // on error, rollback the transaction and notify user
-            if (transaction.isActive()) transaction.rollback();
+            if (transaction.isActive() || transaction.getRollbackOnly()) transaction.rollback();
 
-            response.getWriter().write("Nickname already taken, please try another one!");
+            httpResponse.getWriter().write("Nickname already taken, please try another one!");
         }
 
     }
@@ -163,35 +167,36 @@ public class UserManager extends HttpServlet {
     /**
      * log out the user and save state of the settings in database.
      * 
-     * @param request
-     * @param response
+     * @param httpRequest
+     * @param httpResponse
      * @throws ServletException
      * @throws IOException
      */
-    public void logoutUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void logoutUser(HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws ServletException, IOException {
 
         // get user-id from session-bean
-        Integer id = ((User) request.getSession().getAttribute("user")).getID();
+        Integer id = ((User) httpRequest.getSession().getAttribute("user")).getID();
         
-        Transaction transaction = dbSession.beginTransaction();
+        // Transaction transaction = dbSession.beginTransaction();
+        if (!transaction.isActive()) transaction.begin();
         
         try {
             // load user from database and update settings
             User user = dbSession.get(User.class, id);
-            user.setSingleSetting("enter", Integer.parseInt(request.getParameter("enter")));
-            user.setSingleSetting("outputfontsize", Integer.parseInt(request.getParameter("outputfontsize")));
-            user.setSingleSetting("inputfontsize", Integer.parseInt(request.getParameter("inputfontsize")));
+            user.setSingleSetting("enter", Integer.parseInt(httpRequest.getParameter("enter")));
+            user.setSingleSetting("outputfontsize", Integer.parseInt(httpRequest.getParameter("outputfontsize")));
+            user.setSingleSetting("inputfontsize", Integer.parseInt(httpRequest.getParameter("inputfontsize")));
 
             dbSession.update(user);
             transaction.commit();
         
-            request.getSession().invalidate();
-            response.addHeader("redirect", "index.jsp");
+            httpRequest.getSession().invalidate();
+            httpResponse.addHeader("redirect", "index.jsp");
         }
         catch (PersistenceException e) {
-            if (transaction.isActive()) transaction.rollback();
+            if (transaction.isActive() || transaction.getRollbackOnly()) transaction.rollback();
 
-            response.getWriter().write(e.getMessage());
+            httpResponse.getWriter().write(e.getMessage());
         }
         
     }
