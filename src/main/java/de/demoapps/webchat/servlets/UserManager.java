@@ -41,6 +41,8 @@ public class UserManager extends HttpServlet {
     private Session dbSession = sessionFactory.openSession();
     private Transaction transaction = dbSession.beginTransaction();
 
+    public UserManager() { super(); }
+
     /**
      * main method to handle requests and responses.
      * 

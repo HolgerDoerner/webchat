@@ -18,9 +18,9 @@ let markdownIt;
 
 // create the websocket-connection to the server-endpoint.
 // TODO: change ws-adress bevor deploying to the server !!!!
-//let wsServer = `wss://10.100.5.15:8443/webchat/chat/${nickname}`; // production work
+let wsServer = `wss://10.100.5.15:8443/webchat/chat/${nickname}`; // production work
 //let wsServer = `wss://10.100.5.15:8446/webchat/chat/${nickname}`; // development work
-let wsServer = `wss://192.168.178.100:8446/webchat/chat/${nickname}`; // development home
+//let wsServer = `wss://192.168.178.100:8446/webchat/chat/${nickname}`; // development home
 let wSocket = new WebSocket(wsServer);
 
 // ------------------------------------------------------
