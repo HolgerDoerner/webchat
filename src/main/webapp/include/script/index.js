@@ -5,17 +5,6 @@ let ajax;
 window.onload = () => {
     registerForm = document.getElementById('registerForm');
     loginForm = document.getElementById('loginForm');
-
-
-registerForm.addEventListener('submit', event => {
-    
-    if (document.getElementById('register_password').value !== document.getElementById('register_password_2').value) {
-        event.preventDefault();
-        alert("Passwords do not match!");
-        return;
-    }
-})
-
 }
 
 let submitLogin = () => {

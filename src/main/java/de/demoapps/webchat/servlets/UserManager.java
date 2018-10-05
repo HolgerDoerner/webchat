@@ -53,6 +53,8 @@ public class UserManager extends HttpServlet {
      */
     @Override
     public void doPost(HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws ServletException, IOException {
+        // if session is closed (because of timeouts) open a new session
+        if (!dbSession.isConnected()) dbSession = sessionFactory.openSession();
         
         // get value for parameter "action" from request and call the proper methods.
         switch(httpRequest.getParameter("action")) {

@@ -6,20 +6,10 @@ let userList_legend;
 // for markdown-it provided over CDN
 let markdownIt;
 
-// read the cookie to get the username.
-// let decodedCookie = decodeURIComponent(document.cookie);
-// let cookie = decodedCookie.split(';');
-// let nickname = cookie[0].split('=')[1];
-
-// if user is not logged in properly -> redirekt to login page
-// if (!nickname) { 
-//     window.location.replace('index.jsp')
-// }
-
 // create the websocket-connection to the server-endpoint.
 // TODO: change ws-adress bevor deploying to the server !!!!
-let wsServer = `wss://10.100.5.15:8443/webchat/chat/${nickname}`; // production work
-//let wsServer = `wss://10.100.5.15:8446/webchat/chat/${nickname}`; // development work
+// let wsServer = `wss://10.100.5.15:8443/webchat/chat/${nickname}`; // production work
+let wsServer = `wss://10.100.5.15:8446/webchat/chat/${nickname}`; // development work
 //let wsServer = `wss://192.168.178.100:8446/webchat/chat/${nickname}`; // development home
 let wSocket = new WebSocket(wsServer);
 
