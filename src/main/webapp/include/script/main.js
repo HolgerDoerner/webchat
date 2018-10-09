@@ -10,7 +10,7 @@ let markdownIt;
 // TODO: change ws-adress bevor deploying to the server !!!!
 // let wsServer = `wss://10.100.5.15:8443/webchat/chat/${nickname}`; // production work
 let wsServer = `wss://10.100.5.15:8446/webchat/chat/${nickname}`; // development work
-//let wsServer = `wss://192.168.178.100:8446/webchat/chat/${nickname}`; // development home
+// let wsServer = `wss://192.168.178.100:8446/webchat/chat/${nickname}`; // development home
 let wSocket = new WebSocket(wsServer);
 
 // ------------------------------------------------------
@@ -171,9 +171,9 @@ let displayMessage = (message) => {
 
     let id = Math.floor(Math.random() * 5000);
 
-    let output = '<hr style="width: 100%; height: 20px; background-color: lightgrey; border: 0px; margin: 0px; padding: 0px">';
-    output += `<b style="color: grey">Message from <i style="color: orangered">${message.from}</i> on <i>${message.timestamp}</i> &nbsp; <span id="messageToggle-${id}" style="cursor: pointer" onclick=toggleShow(${id})>&#x25B2;</span></b>`;
-    output += `<div class="message" id="${id}">`;
+    // let output = '<hr style="width: 100%; height: 20px; background-color: #222222; border: 0px; margin: 0px; padding: 0px">';
+    let output = `<div class="message" id="${id}">`;
+    output += `<b style="color: grey">Message from <i style="color: orangered">${message.from}</i> on <i>${message.timestamp}</i> &nbsp; <span id="messageToggle-${id}" style="cursor: pointer" onclick=toggleShow(${id})>&#x25B2;</span></b><br>`;
     
     // translate the markdown-syntax to HTML
     output += markdownIt.render(message.content);

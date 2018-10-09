@@ -2,28 +2,28 @@
     font-family: 'Segoe UI', 'Lucida Grande', 'Ubuntu', 'sans-serif';
 }
 
-.item1 {
+/* .item1 {
     grid-area: header;
     background-color: darkgray;
     text-align: center;
     vertical-align: middle;
     text-shadow: 5px 5px 2px gray;
-}
+} */
 
 .item2 {
     grid-area: navigation;
-    background-color: lightgray;
+    background-color: #333333;
 }
 
 .item3 {
     grid-area: main;
-    background-color: lightgray;
+    background-color: #222222;
     overflow: auto;
 }
 
 .item4 {
     grid-area: footer;
-    background-color: lightgray;
+    background-color: #222222;
 }
 
 .grid-container {
@@ -34,16 +34,16 @@
     display: grid;
     grid-gap: 0px;
     grid-template-columns: 200px 1fr;
-    grid-template-rows: 100px 1fr 150px;
+    grid-template-rows: 1fr 150px;
     grid-template-areas: 
-        'header header'
+        /* 'header header' */
         'navigation main'
         'navigation footer';
 }
 
-.grid-container-toggle {
+/* .grid-container-toggle {
     grid-template-columns: 3em 1fr;
-}
+} */
 
 body {
     padding: 0px;
@@ -147,14 +147,15 @@ img.optionsButton {
     overflow-x: hidden;
     overflow-y: scroll;
     border: 0px;
+    color: whitesmoke;
 }
 
 div.message {
     height: max-content;
     padding: 10px;
-    margin: 5px 20px 0px 20px;
+    margin: 5px;
     font-size: inherit;
-    background-color: whitesmoke;
+    background-color: #333333;
     display: block;
 }
 

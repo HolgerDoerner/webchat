@@ -108,8 +108,8 @@ public class UserManager extends HttpServlet {
 
             user = (User) query.getSingleResult();
 
-            if(Hashing.sha256().hashString(httpRequest.getParameter("password"), StandardCharsets.UTF_8).toString()
-                .equals(user.getPassword()) && httpRequest.getParameter("nickname").equals(user.getNickname())) {
+            if(Hashing.sha256().hashString(httpRequest.getParameter("password"), StandardCharsets.UTF_8).toString().equals(user.getPassword())
+            && httpRequest.getParameter("nickname").equals(user.getNickname())) {
                 
                 // write the User-Bean into the session
                 final HttpSession httpSession = httpRequest.getSession();
