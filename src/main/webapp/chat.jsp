@@ -91,9 +91,8 @@
                 </fieldset>
                 <hr style="border: 0px">
                 <fieldset class="optionsFieldset">
-                    <legend class="optionsLegend">
-                        <img class="optionsButton" id="logoutButton" src="include/img/logout-512x512.png" alt="Logout" title="Logout" style="margin-right: 20px" onclick=logOut()>
-                        <img class="optionsButton" id="optionsButton" src="include/img/options-512x512.png" alt="Options" title="Options" onclick=toggleOptions()>
+                    <legend class="optionsLegend" onclick=toggleOptions()>
+                        <span id="optionsButton">&#x25BC;</span> Options
                     </legend>
                     <div class="optionsContent" id="optionsContent">
                         <table style="margin: 0px; padding: 0px; border: 0px; border-spacing: 0px; border-collapse: collapse">
@@ -125,6 +124,16 @@
                                 </td>
                                 <td>
                                     <b style="color: darkgrey; cursor: pointer" onclick="changeInputFontSize('-')">&#x25C0;</b> <b id="showActualInputFontSize"></b> <b style="color: darkgrey; cursor: pointer" onclick="changeInputFontSize('+')">&#x25B6;</b>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="logout">Logout:</label>
+                                </td>
+                                <td width="10px">
+                                </td>
+                                <td>
+                                    <b><a onclick=logOut()>LOGOUT</a></b>
                                 </td>
                             </tr>
                         </table>

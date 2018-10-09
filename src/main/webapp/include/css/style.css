@@ -2,14 +2,6 @@
     font-family: 'Segoe UI', 'Lucida Grande', 'Ubuntu', 'sans-serif';
 }
 
-/* .item1 {
-    grid-area: header;
-    background-color: darkgray;
-    text-align: center;
-    vertical-align: middle;
-    text-shadow: 5px 5px 2px gray;
-} */
-
 .item2 {
     grid-area: navigation;
     background-color: #333333;
@@ -22,7 +14,7 @@
 }
 
 .item4 {
-    grid-area: footer;
+    grid-area: input;
     background-color: #222222;
 }
 
@@ -36,14 +28,9 @@
     grid-template-columns: 200px 1fr;
     grid-template-rows: 1fr 150px;
     grid-template-areas: 
-        /* 'header header' */
         'navigation main'
-        'navigation footer';
+        'navigation input';
 }
-
-/* .grid-container-toggle {
-    grid-template-columns: 3em 1fr;
-} */
 
 body {
     padding: 0px;
@@ -97,22 +84,28 @@ a:hover, a:active {
     height: max-content;
     width: max-content;
     margin: 10px 0px 0px 0px;
-    padding: 0px 0px 0px 5px;
+    padding: 0px;
     border: 0px;
+    width: 100%;
 }
 
 .optionsLegend {
-    color: orangered;
-    font-size: 1em;
+    color: #333333;
+    background-color: #222222;
+    font-size: 1.2em;
     font-weight: bold;
     vertical-align: text-top;
+    margin: 0px;
+    padding: 5px;
+    width: 100%;
+    cursor: pointer;
 }
 
 .optionsContent {
     width: 100%;
     height: auto;
-    padding: 0px 0px 0px 10px;
-    margin: 0px;
+    padding: 0px;
+    margin: 5px 0px 0px 5px;
     resize: none;
     overflow: auto;
     border: 0px;
@@ -128,12 +121,6 @@ a:hover, a:active {
 .optionsContent input[type=checkbox] {
     transform: scale(1.2);
     color: orangered;
-}
-
-img.optionsButton {
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
 }
 /* #ENDREGION options-area */
 

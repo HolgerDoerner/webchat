@@ -9,17 +9,13 @@
   <version>1.2</version>
   <packaging>war</packaging>
 
-  <!-- <prerequisites>
-    <maven>3.0</maven>
-  </prerequisites> -->
-
   <name>Student WebChat</name>
   <url>https://10.100.5.15:8443/webchat</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
   </properties>
 
   <dependencies>
@@ -100,7 +96,7 @@
 
   <build>
     <finalName>webchat</finalName>
-    <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+    <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults -->
       <plugins>
         <plugin>
           <artifactId>maven-clean-plugin</artifactId>
