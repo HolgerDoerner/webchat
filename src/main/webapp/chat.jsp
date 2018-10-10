@@ -132,7 +132,7 @@
                                 <td width="10px">
                                 </td>
                                 <td>
-                                    <b><a onclick=logOut()>LOGOUT</a></b>
+                                    <b><a style="cursor: pointer" onclick=logOut()>LOGOUT</a></b>
                                 </td>
                             </tr>
                         </table>
