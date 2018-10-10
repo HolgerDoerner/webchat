@@ -37,6 +37,7 @@ body {
     margin: 0px;
     font-family: 'Segoe UI', 'Lucida Grande', 'Ubuntu', 'sans-serif';
     font-size: 15px;
+    color: #c0c0c0;
 }
 
 a, a:visited {
@@ -54,15 +55,21 @@ a:hover, a:active {
     height: max-content;
     width: max-content;
     margin: 10px 0px 0px 0px;
-    padding: 0px 0px 0px 5px;
+    padding: 0px;
     border: 0px;
+    width: 100%;
 }
 
 .userList-legend {
-    color: orangered;
+    background-color: #222222;
+    color: #336666;
     font-size: 1em;
     font-weight: bold;
     vertical-align: text-top;
+    margin: 0px;
+    padding: 5px;
+    width: 100%;
+    cursor: pointer;
 }
 
 .userListOutput-div {
@@ -74,8 +81,11 @@ a:hover, a:active {
     overflow: auto;
     border: 0px;
     font-weight: bold;
-    color: gray;
     display: inline-block;
+}
+
+.userListOutput-div-toggle {
+    display: none;
 }
 /* #ENDREGION userlist-area */
 
@@ -90,9 +100,9 @@ a:hover, a:active {
 }
 
 .optionsLegend {
-    color: #333333;
     background-color: #222222;
-    font-size: 1.2em;
+    color: #336666;
+    font-size: 1em;
     font-weight: bold;
     vertical-align: text-top;
     margin: 0px;
@@ -110,7 +120,6 @@ a:hover, a:active {
     overflow: auto;
     border: 0px;
     font-weight: normal;
-    color: black;
     display: none;
 }
 

@@ -81,12 +81,11 @@
     </head>
     <body>
         <div class="grid-container" id="grid-container">
-            <%-- <div class="item1">
-                <h1>#Student WebChat</h1>
-            </div> --%>
             <div class="item2">
                 <fieldset class="userList-fieldset">
-                    <legend class="userList-legend" id="userList-legend"></legend>
+                    <legend class="userList-legend" id="userList-legend" onclick=toggleUserlist()>
+                        <span id="userlistButton">&#x25B2;</span> Users (<span id="userCounter"></span>)
+                    </legend>
                     <div class="userListOutput-div" id="userList"></div>
                 </fieldset>
                 <hr style="border: 0px">
