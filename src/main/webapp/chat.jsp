@@ -74,7 +74,7 @@
                 }
 
                 // set initial height for input-box
-                chatInput.style.width = Number.parseInt(getComputedStyle(document.getElementById('input-container')).width) - 60 + 'px';
+                //chatInput.style.width = Number.parseInt(getComputedStyle(document.getElementById('input-container')).width) - 60 + 'px';
             }
         </script>
         <script src="include/script/main.js"></script>
@@ -143,26 +143,25 @@
                 <div class="chatOutput" id="chatOutput"></div>
             </div>
             <div class="item4">
-                <div class="chatInput-td">
-                    <div style="width: 95%;
+                <div class="chatInput-td" id="input-container">
+                    <%-- <div style="width: 95%;
                                 height: 120px;
                                 padding: 5px;
                                 margin: 0px;
-                                background-color: whitesmoke;
+                                background-color: #555555;
                                 border-top: 0px;
                                 border-left: 0px;
                                 border-right: 0px;
-                                border-bottom: 2px solid orangered;
+                                border-bottom: 0px;
                                 vertical-align: middle;
                                 white-space: nowrap"
-                                id="input-container">
+                                id="input-container"> --%>
                         <div id="chatInput" class="chatInput-text" contentEditable="true" autofocus></div>
-                        <div id="chatInput-preview" class="chatInput-preview"></div>
                         <div style="display: inline-block; vertical-align: middle">
                             <input class="inputButtons" type="submit" id="submit" value="Send" onclick=sendMsg()><br>
                             <input class="inputButtons" type="reset" id="reset" value="Reset" onclick=resetInput()>
                         </div>
-                    </div>
+                    <%-- </div> --%>
 
                     <!--
                     <small>

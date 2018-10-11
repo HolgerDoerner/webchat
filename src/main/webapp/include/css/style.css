@@ -62,7 +62,7 @@ a:hover, a:active {
 
 .userList-legend {
     background-color: #222222;
-    color: #336666;
+    color: #339999;
     font-size: 1em;
     font-weight: bold;
     vertical-align: text-top;
@@ -101,7 +101,7 @@ a:hover, a:active {
 
 .optionsLegend {
     background-color: #222222;
-    color: #336666;
+    color: #339999;
     font-size: 1em;
     font-weight: bold;
     vertical-align: text-top;
@@ -155,14 +155,11 @@ div.message {
     display: block;
 }
 
-div.message-toggle {
-    display: none;
-}
-
 div.message blockquote {
-    background-color: lightgray;
+    background-color: #555555;
     border-left: 5px solid gray;
     padding-left: 5px;
+    font-style: italic;
 }
 
 code {
@@ -170,7 +167,7 @@ code {
 }
 
 div.message p code {
-    background-color: lightgrey;
+    background-color: #555555;
     padding: 0px 4px 0px 4px;
     border-radius: 4px;
     border: 1px solid grey;
@@ -179,7 +176,7 @@ div.message p code {
 div.message pre {
     height: fit-content;
     width: fit-content;
-    background-color: lightgrey;
+    background-color: #555555;
     padding: 5px;
     margin-left: 20px;
 }
@@ -192,38 +189,35 @@ div.message img {
 div.message table {
     display: table;
 }
+
+div.message hr {
+    border: 1px solid #555555;
+}
 /* #ENDREGION output-area */
 
 /* #REGION input-area */
 .chatInput-td {
 	margin: 10px 0px 0px 0px;
     padding: 0px;
+    text-align: center;
+    min-width: fit-content;
+    max-width: 95%;
 }
 
-.chatInput-text, .chatInput-preview {
+.chatInput-text {
     height: 120px;
+    width: 80%;
     margin: 0px;
+    padding: 0px 0px 0px 5px;
     resize: none;
     overflow-x: auto;
     overflow-y: auto;
     font-family: 'Segoe UI', 'Lucida Grande', 'Ubuntu', 'sans-serif';
     font-size: 15px;
     border: 0px;
-    background-color: whitesmoke;
+    background-color: #555555;
     vertical-align: middle;
-    display: inline-block;
-}
-
-.chatInput-text-toggle {
-    display: none;
-}
-
-.chatInput-preview {
-    background-color: khaki;
-    display: none;
-}
-
-.chatInput-preview-toggle {
+    text-align: left;
     display: inline-block;
 }
 

@@ -5,6 +5,11 @@
     font-family: 'Segoe UI', 'Lucida Grande', 'Ubuntu', 'sans-serif';
 }
 
+body {
+    background-color: #222222;
+    color: #c0c0c0;
+}
+
 fieldset {
     border: 0px;
 }
@@ -42,12 +47,12 @@ fieldset {
     height: fit-content;
     font-size: 2em;
     font-weight: bold;
-    text-shadow: 5px 5px 2px lightgray;
+    text-shadow: 5px 5px 2px #333333;
 }
 
 .item2 {
     grid-area: content;
-    background-color: lightgray;
+    background-color: #333333;
 }
 
 .grid-container {
@@ -83,17 +88,17 @@ fieldset {
     </head>
     <body>
         <div class="grid-container">
-            <div class="item1">
-                #Student WebChat
+            <div class="item1" id="title">
             </div>
             <div class="item2">
                 <br>
                 <fieldset class="login" id="login">
-                    <legend>Login</legend>
+                    <%-- <legend>Login</legend> --%>
                     <form id="loginForm" action="usermanager" method="post">
                         <input type="hidden" name="action" value="login">
                         <input type="text" name="nickname" id="login_nickname" placeholder="Nickname" required="required" autocomplete="nickname">
                         <input type="password" name="password" id="login_password" placeholder="Password" required="required" autocomplete="current-password">
+                        <br>
                         <br>
                         <input type="button" value="Send" onclick=submitLogin()> <input type="reset" value="Reset">
                     </form>
@@ -101,12 +106,13 @@ fieldset {
                     <center><span class="toggleRegister" id="toggleRegister" onclick=toggleRegister()>Sign up</span> for an account.</center>
                 </fieldset>
                 <fieldset class="register" id="register">
-                    <legend>Register</legend>
+                    <%-- <legend>Register</legend> --%>
                     <form id="registerForm" action="usermanager" method="post">
                         <input type="hidden" name="action" value="register">
                         <input type="text" name="nickname" id="register_nickname" placeholder="Nickname" minlength="4" maxlength="20" required="required" autocomplete="nickname">
                         <input type="password" name="password" id="register_password" placeholder="Password" minlength="8" maxlength="30" required="required" autocomplete="new-password">
                         <input type="password" name="password_2" id="register_password_2" placeholder="Retype Password" minlength="8" maxlength="30" required="required" autocomplete="new-password">
+                        <br>
                         <br>
                         <input type="button" value="Send" onClick=submitRegister()> <input type="reset" value="Reset">
                     </form>

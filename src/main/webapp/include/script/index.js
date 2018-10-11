@@ -4,7 +4,23 @@ let ajax;
 
 window.onload = () => {
     registerForm = document.getElementById('registerForm');
+
+    registerForm.onkeypress = event => {
+        if (event.keyCode === 13) {
+            submitRegister();
+        }
+    }
+
     loginForm = document.getElementById('loginForm');
+
+    loginForm.onkeypress = event => {
+        if (event.keyCode === 13) {
+            submitLogin();
+        }
+    }
+
+    document.getElementById('title').innerHTML = '# Login';
+    document.getElementById('login_nickname').focus();
 }
 
 let submitLogin = () => {
@@ -65,4 +81,13 @@ let responseHandler = () => {
 let toggleRegister = () => {
     document.getElementById('login').classList.toggle('login-toggle');
     document.getElementById('register').classList.toggle('register-toggle');
+
+    if (document.getElementById('login').offsetHeight === 0 && document.getElementById('login').offsetWidth === 0) {
+        document.getElementById('title').innerHTML = '# Register';
+        document.getElementById('register_nickname').focus();
+    }
+    else {
+        document.getElementById('title').innerHTML = '# Login';
+        document.getElementById('login_nickname').focus();
+    }
 }
