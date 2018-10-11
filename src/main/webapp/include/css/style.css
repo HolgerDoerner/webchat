@@ -2,28 +2,20 @@
     font-family: 'Segoe UI', 'Lucida Grande', 'Ubuntu', 'sans-serif';
 }
 
-.item1 {
-    grid-area: header;
-    background-color: darkgray;
-    text-align: center;
-    vertical-align: middle;
-    text-shadow: 5px 5px 2px gray;
-}
-
 .item2 {
     grid-area: navigation;
-    background-color: lightgray;
+    background-color: #333333;
 }
 
 .item3 {
     grid-area: main;
-    background-color: lightgray;
+    background-color: #222222;
     overflow: auto;
 }
 
 .item4 {
-    grid-area: footer;
-    background-color: lightgray;
+    grid-area: input;
+    background-color: #222222;
 }
 
 .grid-container {
@@ -34,15 +26,10 @@
     display: grid;
     grid-gap: 0px;
     grid-template-columns: 200px 1fr;
-    grid-template-rows: 100px 1fr 150px;
+    grid-template-rows: 1fr 150px;
     grid-template-areas: 
-        'header header'
         'navigation main'
-        'navigation footer';
-}
-
-.grid-container-toggle {
-    grid-template-columns: 3em 1fr;
+        'navigation input';
 }
 
 body {
@@ -50,6 +37,7 @@ body {
     margin: 0px;
     font-family: 'Segoe UI', 'Lucida Grande', 'Ubuntu', 'sans-serif';
     font-size: 15px;
+    color: #c0c0c0;
 }
 
 a, a:visited {
@@ -67,15 +55,21 @@ a:hover, a:active {
     height: max-content;
     width: max-content;
     margin: 10px 0px 0px 0px;
-    padding: 0px 0px 0px 5px;
+    padding: 0px;
     border: 0px;
+    width: 100%;
 }
 
 .userList-legend {
-    color: orangered;
+    background-color: #222222;
+    color: #339999;
     font-size: 1em;
     font-weight: bold;
     vertical-align: text-top;
+    margin: 0px;
+    padding: 5px;
+    width: 100%;
+    cursor: pointer;
 }
 
 .userListOutput-div {
@@ -87,8 +81,11 @@ a:hover, a:active {
     overflow: auto;
     border: 0px;
     font-weight: bold;
-    color: gray;
     display: inline-block;
+}
+
+.userListOutput-div-toggle {
+    display: none;
 }
 /* #ENDREGION userlist-area */
 
@@ -97,27 +94,32 @@ a:hover, a:active {
     height: max-content;
     width: max-content;
     margin: 10px 0px 0px 0px;
-    padding: 0px 0px 0px 5px;
+    padding: 0px;
     border: 0px;
+    width: 100%;
 }
 
 .optionsLegend {
-    color: orangered;
+    background-color: #222222;
+    color: #339999;
     font-size: 1em;
     font-weight: bold;
     vertical-align: text-top;
+    margin: 0px;
+    padding: 5px;
+    width: 100%;
+    cursor: pointer;
 }
 
 .optionsContent {
     width: 100%;
     height: auto;
-    padding: 0px 0px 0px 10px;
-    margin: 0px;
+    padding: 0px;
+    margin: 5px 0px 0px 5px;
     resize: none;
     overflow: auto;
     border: 0px;
     font-weight: normal;
-    color: black;
     display: none;
 }
 
@@ -128,12 +130,6 @@ a:hover, a:active {
 .optionsContent input[type=checkbox] {
     transform: scale(1.2);
     color: orangered;
-}
-
-img.optionsButton {
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
 }
 /* #ENDREGION options-area */
 
@@ -147,25 +143,23 @@ img.optionsButton {
     overflow-x: hidden;
     overflow-y: scroll;
     border: 0px;
+    color: whitesmoke;
 }
 
 div.message {
     height: max-content;
     padding: 10px;
-    margin: 5px 20px 0px 20px;
+    margin: 5px;
     font-size: inherit;
-    background-color: whitesmoke;
+    background-color: #333333;
     display: block;
 }
 
-div.message-toggle {
-    display: none;
-}
-
 div.message blockquote {
-    background-color: lightgray;
+    background-color: #555555;
     border-left: 5px solid gray;
     padding-left: 5px;
+    font-style: italic;
 }
 
 code {
@@ -173,7 +167,7 @@ code {
 }
 
 div.message p code {
-    background-color: lightgrey;
+    background-color: #555555;
     padding: 0px 4px 0px 4px;
     border-radius: 4px;
     border: 1px solid grey;
@@ -182,7 +176,7 @@ div.message p code {
 div.message pre {
     height: fit-content;
     width: fit-content;
-    background-color: lightgrey;
+    background-color: #555555;
     padding: 5px;
     margin-left: 20px;
 }
@@ -195,38 +189,35 @@ div.message img {
 div.message table {
     display: table;
 }
+
+div.message hr {
+    border: 1px solid #555555;
+}
 /* #ENDREGION output-area */
 
 /* #REGION input-area */
 .chatInput-td {
 	margin: 10px 0px 0px 0px;
     padding: 0px;
+    text-align: center;
+    min-width: fit-content;
+    max-width: 95%;
 }
 
-.chatInput-text, .chatInput-preview {
+.chatInput-text {
     height: 120px;
+    width: 80%;
     margin: 0px;
+    padding: 0px 0px 0px 5px;
     resize: none;
     overflow-x: auto;
     overflow-y: auto;
     font-family: 'Segoe UI', 'Lucida Grande', 'Ubuntu', 'sans-serif';
     font-size: 15px;
     border: 0px;
-    background-color: whitesmoke;
+    background-color: #555555;
     vertical-align: middle;
-    display: inline-block;
-}
-
-.chatInput-text-toggle {
-    display: none;
-}
-
-.chatInput-preview {
-    background-color: khaki;
-    display: none;
-}
-
-.chatInput-preview-toggle {
+    text-align: left;
     display: inline-block;
 }
 

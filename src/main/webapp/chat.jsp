@@ -30,16 +30,18 @@
         -->
         <script>
             // get the settings from the Session-Bean
-            let nickname = '<%= user.getNickname() %>';
+            <%
+                try {   
+                    out.println("let nickname = '" + user.getNickname() + "';");
 
-            if (!nickname) {
-                alert('Please log in first!');
-                window.location.replace('index.jsp');
-            }
-
-            let setting_enter = <%= (user.getSingleSetting("enter") == 1) ? true : false %>;
-            let setting_outputFontsize = <%= user.getSingleSetting("outputfontsize") %>;
-            let setting_inputFontsize = <%= user.getSingleSetting("inputfontsize") %>;
+                    out.println("let setting_enter = " + ((user.getSingleSetting("enter") == 1) ? true : false) + ";");
+                    out.println("let setting_outputFontsize = " + user.getSingleSetting("outputfontsize") + ";");
+                    out.println("let setting_inputFontsize = " + user.getSingleSetting("inputfontsize") + ";");
+                }
+                catch (NullPointerException e) {
+                    response.sendRedirect("index.jsp");
+                }
+            %>
 
             window.onload = () => {
                 // making markdown-it available (with plugin(s))
@@ -72,26 +74,24 @@
                 }
 
                 // set initial height for input-box
-                chatInput.style.width = Number.parseInt(getComputedStyle(document.getElementById('input-container')).width) - 60 + 'px';
+                //chatInput.style.width = Number.parseInt(getComputedStyle(document.getElementById('input-container')).width) - 60 + 'px';
             }
         </script>
         <script src="include/script/main.js"></script>
     </head>
     <body>
         <div class="grid-container" id="grid-container">
-            <div class="item1">
-                <h1>#Student WebChat</h1>
-            </div>
             <div class="item2">
                 <fieldset class="userList-fieldset">
-                    <legend class="userList-legend" id="userList-legend"></legend>
+                    <legend class="userList-legend" id="userList-legend" onclick=toggleUserlist()>
+                        <span id="userlistButton">&#x25B2;</span> Users (<span id="userCounter"></span>)
+                    </legend>
                     <div class="userListOutput-div" id="userList"></div>
                 </fieldset>
                 <hr style="border: 0px">
                 <fieldset class="optionsFieldset">
-                    <legend class="optionsLegend">
-                        <img class="optionsButton" id="logoutButton" src="include/img/logout-512x512.png" alt="Logout" title="Logout" style="margin-right: 20px" onclick=logOut()>
-                        <img class="optionsButton" id="optionsButton" src="include/img/options-512x512.png" alt="Options" title="Options" onclick=toggleOptions()>
+                    <legend class="optionsLegend" onclick=toggleOptions()>
+                        <span id="optionsButton">&#x25BC;</span> Options
                     </legend>
                     <div class="optionsContent" id="optionsContent">
                         <table style="margin: 0px; padding: 0px; border: 0px; border-spacing: 0px; border-collapse: collapse">
@@ -125,6 +125,16 @@
                                     <b style="color: darkgrey; cursor: pointer" onclick="changeInputFontSize('-')">&#x25C0;</b> <b id="showActualInputFontSize"></b> <b style="color: darkgrey; cursor: pointer" onclick="changeInputFontSize('+')">&#x25B6;</b>
                                 </td>
                             </tr>
+                            <tr>
+                                <td>
+                                    <label for="logout">Logout:</label>
+                                </td>
+                                <td width="10px">
+                                </td>
+                                <td>
+                                    <b><a style="cursor: pointer" onclick=logOut()>LOGOUT</a></b>
+                                </td>
+                            </tr>
                         </table>
                     </div>
                 </fieldset>
@@ -133,26 +143,25 @@
                 <div class="chatOutput" id="chatOutput"></div>
             </div>
             <div class="item4">
-                <div class="chatInput-td">
-                    <div style="width: 95%;
+                <div class="chatInput-td" id="input-container">
+                    <%-- <div style="width: 95%;
                                 height: 120px;
                                 padding: 5px;
                                 margin: 0px;
-                                background-color: whitesmoke;
+                                background-color: #555555;
                                 border-top: 0px;
                                 border-left: 0px;
                                 border-right: 0px;
-                                border-bottom: 2px solid orangered;
+                                border-bottom: 0px;
                                 vertical-align: middle;
                                 white-space: nowrap"
-                                id="input-container">
+                                id="input-container"> --%>
                         <div id="chatInput" class="chatInput-text" contentEditable="true" autofocus></div>
-                        <div id="chatInput-preview" class="chatInput-preview"></div>
                         <div style="display: inline-block; vertical-align: middle">
                             <input class="inputButtons" type="submit" id="submit" value="Send" onclick=sendMsg()><br>
                             <input class="inputButtons" type="reset" id="reset" value="Reset" onclick=resetInput()>
                         </div>
-                    </div>
+                    <%-- </div> --%>
 
                     <!--
                     <small>

@@ -4,18 +4,23 @@ let ajax;
 
 window.onload = () => {
     registerForm = document.getElementById('registerForm');
+
+    registerForm.onkeypress = event => {
+        if (event.keyCode === 13) {
+            submitRegister();
+        }
+    }
+
     loginForm = document.getElementById('loginForm');
 
-
-registerForm.addEventListener('submit', event => {
-    
-    if (document.getElementById('register_password').value !== document.getElementById('register_password_2').value) {
-        event.preventDefault();
-        alert("Passwords do not match!");
-        return;
+    loginForm.onkeypress = event => {
+        if (event.keyCode === 13) {
+            submitLogin();
+        }
     }
-})
 
+    document.getElementById('title').innerHTML = '# Login';
+    document.getElementById('login_nickname').focus();
 }
 
 let submitLogin = () => {
@@ -76,4 +81,13 @@ let responseHandler = () => {
 let toggleRegister = () => {
     document.getElementById('login').classList.toggle('login-toggle');
     document.getElementById('register').classList.toggle('register-toggle');
+
+    if (document.getElementById('login').offsetHeight === 0 && document.getElementById('login').offsetWidth === 0) {
+        document.getElementById('title').innerHTML = '# Register';
+        document.getElementById('register_nickname').focus();
+    }
+    else {
+        document.getElementById('title').innerHTML = '# Login';
+        document.getElementById('login_nickname').focus();
+    }
 }

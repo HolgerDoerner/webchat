@@ -6,21 +6,11 @@ let userList_legend;
 // for markdown-it provided over CDN
 let markdownIt;
 
-// read the cookie to get the username.
-// let decodedCookie = decodeURIComponent(document.cookie);
-// let cookie = decodedCookie.split(';');
-// let nickname = cookie[0].split('=')[1];
-
-// if user is not logged in properly -> redirekt to login page
-// if (!nickname) { 
-//     window.location.replace('index.jsp')
-// }
-
 // create the websocket-connection to the server-endpoint.
 // TODO: change ws-adress bevor deploying to the server !!!!
 let wsServer = `wss://10.100.5.15:8443/webchat/chat/${nickname}`; // production work
-//let wsServer = `wss://10.100.5.15:8446/webchat/chat/${nickname}`; // development work
-//let wsServer = `wss://192.168.178.100:8446/webchat/chat/${nickname}`; // development home
+// let wsServer = `wss://10.100.5.15:8446/webchat/chat/${nickname}`; // development work
+// let wsServer = `wss://192.168.178.100:8446/webchat/chat/${nickname}`; // development home
 let wSocket = new WebSocket(wsServer);
 
 // ------------------------------------------------------
@@ -28,14 +18,6 @@ let wSocket = new WebSocket(wsServer);
 // ------------------------------------------------------
 window.onfocus = () => {
     chatInput.focus();
-}
-
-// ------------------------------------------------------
-// set new width of input-box when window gets resized
-// ------------------------------------------------------
-window.onresize = () => {
-    chatInput.style.width = Number.parseInt(getComputedStyle(document.getElementById('input-container')).width) - 60 + 'px';
-    document.getElementById('chatInput-preview').style.width = chatInput.style.width;
 }
 
 // ------------------------------------------------------
@@ -181,9 +163,9 @@ let displayMessage = (message) => {
 
     let id = Math.floor(Math.random() * 5000);
 
-    let output = '<hr style="width: 100%; height: 20px; background-color: lightgrey; border: 0px; margin: 0px; padding: 0px">';
-    output += `<b style="color: grey">Message from <i style="color: orangered">${message.from}</i> on <i>${message.timestamp}</i> &nbsp; <span id="messageToggle-${id}" style="cursor: pointer" onclick=toggleShow(${id})>&#x25B2;</span></b>`;
-    output += `<div class="message" id="${id}">`;
+    // let output = '<hr style="width: 100%; height: 20px; background-color: #222222; border: 0px; margin: 0px; padding: 0px">';
+    let output = `<div class="message" id="${id}">`;
+    output += `<b style="color: grey">Message from <i style="color: orangered">${message.from}</i> on <i>${message.timestamp}</i></b><br>`;
     
     // translate the markdown-syntax to HTML
     output += markdownIt.render(message.content);
@@ -213,7 +195,8 @@ let updateUserlist = list => {
     let users = list.split(';');
     users.pop(); // removes empty element at end of list
 
-    userList_legend.innerHTML = `<img alt="Userlist" title="Userlist" src="include/img/users1-512x512.png" width="30px" height="30px" style="float: left">&nbsp;&nbsp;${users.length}`;
+    // userList_legend.innerHTML = `<img alt="Userlist" title="Userlist" src="include/img/users1-512x512.png" width="30px" height="30px" style="float: left">&nbsp;&nbsp;${users.length}`;
+    document.getElementById('userCounter').innerHTML = users.length;
 
     userList.innerHTML = '';
 
@@ -223,11 +206,33 @@ let updateUserlist = list => {
 }
 
 // ------------------------------------------------------
+// toggle display of the userlist
+// ------------------------------------------------------
+let toggleUserlist = () => {
+
+    userList.classList.toggle('userListOutput-div-toggle');
+
+    if (userList.offsetHeight === 0 && userList.offsetWidth === 0) {
+        document.getElementById('userlistButton').innerHTML = '&#x25BC;';
+    }
+    else {
+        document.getElementById('userlistButton').innerHTML = '&#x25B2;';
+    }
+}
+
+// ------------------------------------------------------
 // toggle display of the options-menu
 // ------------------------------------------------------
 let toggleOptions = () => {
 
     document.getElementById('optionsContent').classList.toggle('optionsContent-toggle');
+
+    if (document.getElementById('optionsContent').offsetHeight === 0 && document.getElementById('optionsContent').offsetWidth === 0) {
+        document.getElementById('optionsButton').innerHTML = '&#x25BC;';
+    }
+    else {
+        document.getElementById('optionsButton').innerHTML = '&#x25B2;';
+    }
 }
 
 // ------------------------------------------------------
@@ -288,6 +293,11 @@ let logOut = () => {
     let inputfontsize = Number.parseInt(chatInput.style.fontSize);
 
     try {
+        //close websocket cleanly
+        wSocket.close();
+
+        // send logout-request to server
+        // send current status of the settings to server to save them.
         ajax = new XMLHttpRequest();
         ajax.open('post', 'usermanager', true);
         ajax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
